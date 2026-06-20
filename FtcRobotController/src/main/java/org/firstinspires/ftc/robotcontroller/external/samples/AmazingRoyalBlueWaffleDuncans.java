@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotcontroller.external.samples.externalhardware;
+package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "AmazingRoyalBlueWaffle")
-public class AmazingRoyalBlueWaffle extends LinearOpMode {
+public class AmazingRoyalBlueWaffleDuncans extends LinearOpMode {
     private DcMotor Intakemotor;
     private boolean toggle = false;
     private CRServo servo;
