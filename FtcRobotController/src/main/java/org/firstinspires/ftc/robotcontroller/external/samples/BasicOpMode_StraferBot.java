@@ -62,7 +62,7 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
 
 
 
-    @Override
+    //@Override
 
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -80,9 +80,9 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         bkLDrive.setDirection(DcMotor.Direction.REVERSE);
-        bkRDrive.setDirection(DcMotor.Direction.REVERSE);
+        bkRDrive.setDirection(DcMotor.Direction.FORWARD);
         ftLDrive.setDirection(DcMotor.Direction.FORWARD);
-        ftRDrive.setDirection(DcMotor.Direction.FORWARD);
+        ftRDrive.setDirection(DcMotor.Direction.REVERSE);
 
 
         // Wait for the game to start (driver presses START)
@@ -110,10 +110,10 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
             double strafe =  gamepad1.left_stick_x;
             double rotate =  gamepad1.right_stick_x;
 
-            ftLeftPower = -Range.clip(drive + strafe + rotate, -0.2, 0.2);
-            ftRightPower = Range.clip(drive - strafe - rotate, -0.2, 0.2);
-            bkLeftPower = -Range.clip(drive - strafe + rotate, -0.2, 0.2);
-            bkRightPower = Range.clip(drive + strafe - rotate, -0.2, 0.2);
+            ftLeftPower = -Range.clip(drive - strafe - rotate, -0.2, 0.2);
+            ftRightPower = Range.clip(drive + strafe + rotate, -0.2, 0.2);
+            bkLeftPower = -Range.clip(drive + strafe - rotate, -0.2, 0.2);
+            bkRightPower = Range.clip(drive - strafe + rotate, -0.2, 0.2);
 
             // Tank Mode uses one stick to control each wheel.
             // - is requires no math,but it is hard to drive forward slowly and keep straight.
