@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -37,7 +39,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 /*
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ * This file contains a minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
@@ -79,10 +81,11 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        bkLDrive.setDirection(DcMotor.Direction.REVERSE);
-        bkRDrive.setDirection(DcMotor.Direction.FORWARD);
+        bkLDrive.setDirection(DcMotor.Direction.FORWARD);
+        bkRDrive.setDirection(DcMotor.Direction.REVERSE);
         ftLDrive.setDirection(DcMotor.Direction.FORWARD);
         ftRDrive.setDirection(DcMotor.Direction.REVERSE);
+
 
 
         // Wait for the game to start (driver presses START)
@@ -94,7 +97,7 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
 
 
 
-            // Setup a variable for each drive wheel to save power level for telemetry
+            // Set up a variable for each drive wheel to save power level for telemetry
 
 
             double bkLeftPower;
@@ -110,13 +113,13 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
             double strafe =  gamepad1.left_stick_x;
             double rotate =  gamepad1.right_stick_x;
 
-            ftLeftPower = -Range.clip(drive - strafe - rotate, -0.2, 0.2);
-            ftRightPower = Range.clip(drive + strafe + rotate, -0.2, 0.2);
-            bkLeftPower = -Range.clip(drive + strafe - rotate, -0.2, 0.2);
-            bkRightPower = Range.clip(drive - strafe + rotate, -0.2, 0.2);
+            ftLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
+            ftRightPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
+            bkLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
+            bkRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
 
             // Tank Mode uses one stick to control each wheel.
-            // - is requires no math,but it is hard to drive forward slowly and keep straight.
+            // - requires no math,but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y;
             // rightPower = -gamepad1.right_stick_y;
 
