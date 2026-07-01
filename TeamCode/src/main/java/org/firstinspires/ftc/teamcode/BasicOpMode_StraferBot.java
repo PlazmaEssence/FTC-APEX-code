@@ -27,9 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
-
-import android.util.Log;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -76,8 +74,8 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
 
         ftLDrive  = hardwareMap.get(DcMotor.class, "FLD");
         ftRDrive = hardwareMap.get(DcMotor.class, "FRD");
-        bkRDrive = hardwareMap.get(DcMotor.class, "bkR");
-        bkLDrive = hardwareMap.get(DcMotor.class, "bkL");
+        bkRDrive = hardwareMap.get(DcMotor.class, "BRD");
+        bkLDrive = hardwareMap.get(DcMotor.class, "BLD");
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -110,7 +108,7 @@ public class BasicOpMode_StraferBot extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
-            double strafe =  gamepad1.left_stick_x;
+            double strafe =  gamepad1.left_stick_x ;
             double rotate =  gamepad1.right_stick_x;
 
             ftLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
