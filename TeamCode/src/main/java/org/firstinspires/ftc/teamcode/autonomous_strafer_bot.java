@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         ftRDrive.setPower(FORWARD_SPEED);
         ftLDrive.setPower(FORWARD_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 2.5)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }

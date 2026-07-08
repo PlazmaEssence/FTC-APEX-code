@@ -4,11 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "Starter bot code")
-public class starter_bot_code extends LinearOpMode {
+@TeleOp(name = "player2_starter-bot-code")
+public class player2_starter_bot extends LinearOpMode {
     private DcMotor intakeMotor;
     private boolean toggle = false;
     private boolean toggle2 = false;
@@ -39,11 +38,12 @@ public class starter_bot_code extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            if (gamepad1.xWasPressed()){
+            if (gamepad2.xWasPressed()){
+
                 toggle2 = !toggle2;
             }
 
-            if (gamepad1.a || toggle2) {
+            if (gamepad2.a || toggle2) {
                 intakePower = -1;
                 rightServoPower = -1;
                 leftServoPower = 1;
@@ -55,11 +55,11 @@ public class starter_bot_code extends LinearOpMode {
 
 
             double Power;
-            if (gamepad1.bWasPressed()){
+            if (gamepad2.bWasPressed()){
                 toggle = !toggle;
             }
 
-            if (gamepad1.y || toggle) {
+            if (gamepad2.y || toggle) {
 
                 rightServoPower = 1;
                 leftServoPower = -1;
@@ -101,8 +101,8 @@ servoRight.setPower(rightServoPower);
 
                 double drive = -gamepad1.left_stick_y;
                 double turn  =  gamepad1.right_stick_x;
-                leftPower    = Range.clip(drive + turn, -0.5, 0.5) ;
-                rightPower   = Range.clip(drive - turn, -0.5, 0.5) ;
+                leftPower    = Range.clip(drive + turn, -1, 1) ;
+                rightPower   = Range.clip(drive - turn, -1, 1) ;
 
 
                 // Send calculated power to wheels
