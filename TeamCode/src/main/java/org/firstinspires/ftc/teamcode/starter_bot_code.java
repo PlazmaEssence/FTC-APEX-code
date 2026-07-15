@@ -4,14 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Starter bot code")
 public class starter_bot_code extends LinearOpMode {
     private DcMotor intakeMotor;
     private boolean toggle = false;
-    private boolean toggle2 = false;
     private CRServo servoLeft;
     private CRServo servoRight;
     private DcMotor leftDrive = null;
@@ -25,35 +23,19 @@ public class starter_bot_code extends LinearOpMode {
 
 
 
-//    @Override
+    @Override
     public void runOpMode() {
 
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         servoLeft= hardwareMap.get(CRServo.class, "sL");
         servoRight= hardwareMap.get(CRServo.class, "sR");
-        leftDrive  = hardwareMap.get(DcMotor.class, "bLD");
-        rightDrive = hardwareMap.get(DcMotor.class, "bRD");
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive  = hardwareMap.get(DcMotor.class, "lD");
+        rightDrive = hardwareMap.get(DcMotor.class, "rD");
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
         while (opModeIsActive()) {
-
-            if (gamepad1.xWasPressed()){
-                toggle2 = !toggle2;
-            }
-
-            if (gamepad1.a || toggle2) {
-                intakePower = -1;
-                rightServoPower = -1;
-                leftServoPower = 1;
-            } else {
-                intakePower = 0;
-                rightServoPower = 0;
-                leftServoPower = 0;
-            }
-
-
             double Power;
             if (gamepad1.bWasPressed()){
                 toggle = !toggle;
@@ -62,7 +44,7 @@ public class starter_bot_code extends LinearOpMode {
             if (gamepad1.y || toggle) {
 
                 rightServoPower = 1;
-                leftServoPower = -1;
+                leftServoPower = 1;
                 intakePower = 1;
                 //Intakemotor.setPower(1);
                // servoLeft.setPower(1);
