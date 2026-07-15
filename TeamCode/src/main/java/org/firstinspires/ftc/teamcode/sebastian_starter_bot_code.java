@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "Starter bot code")
+@TeleOp(name = "test Starter bot code")
 public class sebastian_starter_bot_code extends LinearOpMode {
     private DcMotor intakeMotor;
-    private boolean toggle = false;
-    private boolean toggle2 = false;
+    private boolean toggleintakeforward = false;
+    private boolean toggleintakereverse = false;
     private CRServo servoLeft;
     private CRServo servoRight;
     private DcMotor leftDrive = null;
@@ -18,6 +18,8 @@ public class sebastian_starter_bot_code extends LinearOpMode {
     private double intakePower = 0;
     private double leftServoPower= 0;
     private double rightServoPower = 0;
+
+    private double driveMotorMaxPower = 1.0;
 
 
 
@@ -39,43 +41,33 @@ public class sebastian_starter_bot_code extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.xWasPressed()){
-                toggle2 = !toggle2;
-                toggle = false;
+                toggleintakereverse = !toggleintakereverse;
+                toggleintakeforward = false;
             }
 
-            if (gamepad1.a || toggle2) {
+            if (gamepad1.bWasPressed()){
+                toggleintakeforward = !toggleintakeforward ;
+                toggleintakereverse = false;
+            }
+
+            double Power;
+
+            if (gamepad1.a || toggleintakereverse) {
                 intakePower = -1;
                 rightServoPower = -1;
                 leftServoPower = 1;
-            } else {
-                intakePower = 0;
-                rightServoPower = 0;
-                leftServoPower = 0;
             }
-
-
-            double Power;
-            if (gamepad1.bWasPressed()){
-                toggle = !toggle;
-                toggle2 = false;
-            }
-
-            if (gamepad1.y || toggle) {
-
+            else if (gamepad1.y || toggleintakeforward){
+                intakePower = 1;
                 rightServoPower = 1;
                 leftServoPower = -1;
-                intakePower = 1;
-                //Intakemotor.setPower(1);
-               // servoLeft.setPower(1);
-               // servoRight.setPower(1);
-            } else {
+            }
+            else {
+                intakePower = 0;
                 rightServoPower = 0;
                 leftServoPower = 0;
-                intakePower = 0;
-              //  Intakemotor.setPower(0);
-                // servoLeft.setPower(0);
-              //  servoRight.setPower(0);
             }
+
 
 intakeMotor.setPower(intakePower);
 servoLeft.setPower(leftServoPower);
@@ -102,8 +94,8 @@ servoRight.setPower(rightServoPower);
 
                 double drive = -gamepad1.left_stick_y;
                 double turn  =  gamepad1.right_stick_x;
-                leftPower    = Range.clip(drive + turn, -0.5, 0.5) ;
-                rightPower   = Range.clip(drive - turn, -0.5, 0.5) ;
+                leftPower    = Range.clip(drive + turn, -driveMotorMaxPower, driveMotorMaxPower) ;
+                rightPower   = Range.clip(drive - turn, -driveMotorMaxPower, driveMotorMaxPower) ;
 
 
                 // Send calculated power to wheels

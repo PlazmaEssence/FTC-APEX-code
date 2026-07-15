@@ -25,7 +25,7 @@ public class starter_bot_code extends LinearOpMode {
 
 
 
-    @Override
+//    @Override
     public void runOpMode() {
 
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");

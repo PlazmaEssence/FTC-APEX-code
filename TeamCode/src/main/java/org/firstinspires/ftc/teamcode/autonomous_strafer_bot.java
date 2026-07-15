@@ -59,5 +59,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         bkRDrive.setPower(0);
         ftRDrive.setPower(0);
         ftLDrive.setPower(0);
+
+
+
+
+        bkLDrive.setPower(TURN_SPEED);
+        bkRDrive.setPower(-TURN_SPEED);
+        ftLDrive.setPower(TURN_SPEED);
+        ftRDrive.setPower(-TURN_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
+            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
     }
 }
