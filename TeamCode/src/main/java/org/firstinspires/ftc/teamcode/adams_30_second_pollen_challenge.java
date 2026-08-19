@@ -61,60 +61,30 @@ public class adams_30_second_pollen_challenge extends LinearOpMode{
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
-/*
-        void forward(double speed, long time) {
-            leftDrive.setPower(FORWARD_SPEED);
-            rightDrive.setPower(FORWARD_SPEED);
-            intakeMotor.setPower(INTAKE_SPEED);
-            servoLeft.setPower(leftServoPower);
-            servoRight.setPower(rightServoPower);
-        }
+        // Step through each leg of the path, ensuring that the OpMode has not been stopped along th
 
 
 
-
-
-
-
-        void forward(){
-*/
-
-
-        leftDrive.setPower(FORWARD_SPEED_full);
-        rightDrive.setPower(FORWARD_SPEED_full);
         intakeMotor.setPower(1);
         servoLeft.setPower(1);
         servoRight.setPower(1);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        leftDrive.setPower(0);
-        rightDrive.setPower(0);
+        movement(1,1,1300);
         sleep(500);
 
-        leftDrive.setPower(-1);
-        rightDrive.setPower(1);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.35)) {
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();}
+        movement(-1,-1,6500);
 
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
-
-            sleep(500);
+        sleep(500);
 
 
-            leftDrive.setPower(1);
-            rightDrive.setPower(1);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();}
+       movement(1,1,1300);
 
+    }
+    void movement(double Power_left,double Power_right,long time){
+
+        leftDrive.setPower(Power_left);
+        rightDrive.setPower(Power_right);
+        sleep(time);
         leftDrive.setPower(0);
         rightDrive.setPower(0);
-    }}
+        }
+    }
