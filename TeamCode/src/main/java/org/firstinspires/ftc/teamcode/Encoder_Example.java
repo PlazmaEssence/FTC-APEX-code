@@ -26,7 +26,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+/*
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -61,11 +61,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-
+/*
 @Autonomous(name="Robot: Motor Move By Encoder", group="Robot")
 public class Encoder_Example extends LinearOpMode {
 
-    /* Declare OpMode members. */
+    /* Declare OpMode members.
     private DcMotor         leftDrive   = null;
     private DcMotor         rightDrive  = null;
 
@@ -120,7 +120,7 @@ public class Encoder_Example extends LinearOpMode {
 //        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 //        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
-        encoderSpin(0.1, 1000, 5);
+        encoderSpin(0.3, 1076, 5);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -139,13 +139,20 @@ public class Encoder_Example extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             newTarget = leftDrive.getCurrentPosition() + (int)(ticks);
             leftDrive.setTargetPosition(newTarget);
+            newTarget = rightDrive.getCurrentPosition() + (int)(ticks);
+            rightDrive.setTargetPosition(newTarget);
 
             // Turn On RUN_TO_POSITION
+
+
             leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
             leftDrive.setPower(Math.abs(speed));
+            rightDrive.setPower(Math.abs(speed));
+
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -159,20 +166,22 @@ public class Encoder_Example extends LinearOpMode {
 
                 // Display it for the driver.
                 telemetry.addData("Running to",  " %7d", newTarget);
-                telemetry.addData("Currently at "+ String.valueOf(leftDrive.getCurrentPosition()),  " at %7d",
-                        leftDrive.getCurrentPosition());
-                telemetry.update();
-            }
+                telemetry.addData("Currently at "+ String.valueOf(leftDrive.getCurrentPosition()),
+            //           leftDrive.getCurrentPosition()), telemetry.addData("Currently at "+ String.valueOf(rightDrive.getCurrentPosition()),
+            //   rightDrive.getCurrentPosition();
+            //    telemetry.update();
+            //}
 
             // Stop all motion;
-            leftDrive.setPower(0);
+       //     leftDrive.setPower(0);
+        //    rightDrive.setPower(0);
 
             // Turn off RUN_TO_POSITION
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             sleep(250);   // optional pause after each move.
         }
-
+*/
     /*
      *  Method to perform a relative move, based on encoder counts.
      *  Encoders are not reset as the move is based on the current position.
@@ -232,5 +241,5 @@ public class Encoder_Example extends LinearOpMode {
 //
 //            sleep(250);   // optional pause after each move.
 //        }
-    }
-}
+//    }
+//}
