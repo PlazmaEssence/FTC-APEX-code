@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Robot: Adam", group="Robot")
 
-public class adams_30_second_pollen_challenge extends LinearOpMode{
-
+public class sebastian_30_second_pollen_challenge extends LinearOpMode {
 
 
     private DcMotor intakeMotor;
@@ -20,10 +19,10 @@ public class adams_30_second_pollen_challenge extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
-    private double leftServoPower= 1;
+    private double leftServoPower = 1;
     private double rightServoPower = 1;
 
-    private double lSP= -1;
+    private double lSP = -1;
     private double rSP = -1;
 
     private double driveMotorMaxPower = 1.0;
@@ -61,30 +60,44 @@ public class adams_30_second_pollen_challenge extends LinearOpMode{
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the OpMode has not been stopped along th
+        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
 
-
-        intakeMotor.setPower(1);
-        servoLeft.setPower(1);
-        servoRight.setPower(1);
-        movement(1,1,1300);
-        sleep(500);
-
-        movement(-1,-1,6500);
-
-        sleep(500);
-
-
-       movement(1,1,1300);
-
+        forward(0.5, 3000);
+        backwards(0.5, 750);
+        turn(-0.5,250);
+        forward(0.5,500);
+        turn(0.5,500);
+        forward(0.5,1500);
     }
-    void movement(double Power_left,double Power_right,long time){
 
-        leftDrive.setPower(Power_left);
-        rightDrive.setPower(Power_right);
+    void forward(double speed, long time) {
+        leftDrive.setPower(speed);
+        rightDrive.setPower(speed);
+        intakeMotor.setPower(INTAKE_SPEED);
+        servoLeft.setPower(leftServoPower);
+        servoRight.setPower(rightServoPower);
         sleep(time);
         leftDrive.setPower(0);
         rightDrive.setPower(0);
-        }
+        intakeMotor.setPower(0);
+        servoLeft.setPower(0);
+        servoRight.setPower(0);
     }
+
+    void backwards(double speed, long time) {
+        leftDrive.setPower(-speed);
+        rightDrive.setPower(-speed);
+        sleep(time);
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+
+    }
+    void turn(double speed, long time) {
+    leftDrive.setPower(speed);
+        rightDrive.setPower(-speed);
+        sleep(time);
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+    }
+}
