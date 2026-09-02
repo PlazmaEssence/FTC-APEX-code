@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+//@Override
 /*
  * This OpMode illustrates the concept of driving a path based on encoder counts.
  * The code is structured as a LinearOpMode
@@ -53,10 +51,12 @@ public class java_30_seconds extends LinearOpMode {
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 0.6;
-    static final double TURN_SPEED = 0.5;
+    static final double DRIVE_SPEED = 0.8;
+    static final double TURN_SPEED = 0.9;
 
-    @Override
+
+
+    //@Override
     public void runOpMode() {
 
         // Initialize the drive system variables.
@@ -81,15 +81,82 @@ public class java_30_seconds extends LinearOpMode {
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Starting at " + String.valueOf(leftDrive.getCurrentPosition()), "" + String.valueOf(leftDrive.getCurrentPosition()));
+        telemetry.addData("Starting at " + String.valueOf(leftDrive.getCurrentPosition()), "" + String.valueOf(rightDrive.getCurrentPosition()));
         telemetry.update();
 
         // Wait for the game to start (driver presses START)
         waitForStart();
+
+        encoderSpin(0.9, 538,9);
+
         while (opModeIsActive()) {
             telemetry.addData("mortor position",leftDrive.getCurrentPosition());
             telemetry.addData("mortor position",rightDrive.getCurrentPosition());
             telemetry.update();
+
+
+        }
+
+
+    }
+
+    public void encoderSpin(double speed,
+                            double ticks,
+                            double timeoutS) {
+        int newTarget;
+
+        // Ensure that the OpMode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newTarget = leftDrive.getCurrentPosition() + (int) (ticks);
+            leftDrive.setTargetPosition(newTarget);
+            newTarget = rightDrive.getCurrentPosition() + (int) (ticks);
+            rightDrive.setTargetPosition(newTarget);
+
+            // Turn On RUN_TO_POSITION
+
+
+
+
+            leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            leftDrive.setPower(Math.abs(speed));
+            rightDrive.setPower(Math.abs(speed));
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+                while (opModeIsActive() &&
+                        runtime.seconds() < timeoutS &&
+                        (leftDrive.isBusy() || rightDrive.isBusy())) {
+
+
+
+                // Display it for the driver.
+                telemetry.addData("Running to", " %7d", newTarget);
+//                telemetry.addData("Currently at "+ String.valueOf(leftDrive.getCurrentPosition()),
+//                       leftDrive.getCurrentPosition()), telemetry.addData("Currently at "+ String.valueOf(rightDrive.getCurrentPosition()),
+//               rightDrive.getCurrentPosition();
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+
+            //   Turn off RUN_TO_POSITION
+            leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            sleep(250);   // optional pause after each move.
         }
     }
 }
