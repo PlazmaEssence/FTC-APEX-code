@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+@Autonomous(name="Hoi_Boi", group="Robot")
 public class Hoi_Boi extends LinearOpMode {
+
     private DcMotor intakeMotor;
     //    private boolean toggle = false;
 //    private boolean toggle2 = false;
@@ -56,42 +60,42 @@ public class Hoi_Boi extends LinearOpMode {
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
         // Step 1:  Drive forward for 3 seconds
-        leftDrive.setPower(FORWARD_SPEED);
-        rightDrive.setPower(FORWARD_SPEED);
-        intakeMotor.setPower(INTAKE_SPEED);
-        servoLeft.setPower(leftServoSpeed);
-        servoRight.setPower(rightServoSpeed);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 7)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        set_all_motors_zero();
-
-        leftDrive.setPower(-FORWARD_SPEED);
-        rightDrive.setPower(-FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.5)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        set_all_motors_zero();
-
-
-        rightDrive.setPower(TURN_SPEED);
-        rightDrive.setPower(-TURN_SPEED);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
+//        leftDrive.setPower(FORWARD_SPEED);
+//        rightDrive.setPower(FORWARD_SPEED);
+//        intakeMotor.setPower(INTAKE_SPEED);
+//        servoLeft.setPower(leftServoSpeed);
+//        servoRight.setPower(rightServoSpeed);
+//        runtime.reset();
+//        while (opModeIsActive() && (runtime.seconds() < 7)) {
+//            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+//            telemetry.update();
+//        }
+//        set_all_motors_zero();
+//
+//        leftDrive.setPower(-FORWARD_SPEED);
+//        rightDrive.setPower(-FORWARD_SPEED);
+//
+//        runtime.reset();
+//        while (opModeIsActive() && (runtime.seconds() < 3.5)) {
+//            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+//            telemetry.update();
+//        }
+//        set_all_motors_zero();
 
 
-            intakeMotor.setPower(INTAKE_SPEED);
-            servoLeft.setPower(leftServoSpeed);
-            servoRight.setPower(rightServoSpeed);
-
-        } Drive_straight(FORWARD_SPEED,3.5);
+//        rightDrive.setPower(TURN_SPEED);
+//        rightDrive.setPower(-TURN_SPEED);
+//        runtime.reset();
+//        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
+//            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
+//            telemetry.update();
+//
+//
+//            intakeMotor.setPower(INTAKE_SPEED);
+//            servoLeft.setPower(leftServoSpeed);
+//            servoRight.setPower(rightServoSpeed);
+//
+//        } Drive_straight(FORWARD_SPEED,3.5);
         forward_and_back_to_position(1,1000,29.9);
 
 
@@ -151,17 +155,25 @@ public class Hoi_Boi extends LinearOpMode {
             runtime.reset();
             leftDrive.setPower(Math.abs(speed));
             rightDrive.setPower(Math.abs(speed));
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS))
-            telemetry.addData("Running to",  " %7d", newTarget);
-            telemetry.addData("Currently at ", leftDrive.getCurrentPosition());
+//            while (opModeIsActive() &&
+//                    (runtime.seconds() < timeoutS))
+//            telemetry.addData("Running to",  " %7d", newTarget);
+//            telemetry.addData("Currently at ", leftDrive.getCurrentPosition());
 
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    newTarget = leftDrive.getCurrentPosition() + (int)(-ticks);
+            leftDrive.setTargetPosition(newTarget);
+            newTarget = rightDrive.getCurrentPosition() + (int)(-ticks);
+            rightDrive.setTargetPosition(newTarget);
+            leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            runtime.reset();
+            leftDrive.setPower(Math.abs(speed));
+            rightDrive.setPower(Math.abs(speed));;
             sleep(250);
 
         }
-
 
 
 
