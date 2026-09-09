@@ -32,7 +32,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Robot: OK30 ", group="Robot")
-public class java_30_seconds extends LinearOpMode {
+public class sebastian extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftDrive = null;

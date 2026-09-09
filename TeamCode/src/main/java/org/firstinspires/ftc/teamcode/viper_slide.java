@@ -110,13 +110,13 @@ public class viper_slide extends LinearOpMode {
             //rightDrive.setTargetPosition(newTarget);
             // Turn On RUN_TO_POSITION
 
-            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // reset the timeout time and start motion.
             runtime.reset();
             leftDrive.setPower(Math.abs(speed));
-            rightDrive.setPower(Math.abs((speed));
+            //rightDrive.setPower(Math.abs((speed));
             //rightDrive.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -127,7 +127,7 @@ public class viper_slide extends LinearOpMode {
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     (leftDrive.isBusy())) {
-                (rightDrive.isBusy())) {
+                //(rightDrive.isBusy())) {
                 // Display it for the driver.
                 telemetry.addData("Running to",  " %7d", newTarget);
                 telemetry.addData("Currently at "+ String.valueOf(leftDrive.getCurrentPosition()),  " at %7d",

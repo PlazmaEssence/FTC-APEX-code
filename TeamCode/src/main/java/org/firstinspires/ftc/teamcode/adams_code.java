@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
     @Autonomous(name="Robot: Motor Adam", group="Robot")
@@ -28,7 +29,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
             // Initialize the drive system variables.
             leftDrive = hardwareMap.get(DcMotor.class, "bLD");
-            rightDrive = hardwareMap.get(DcMotor.class, "brD");
+            rightDrive = hardwareMap.get(DcMotor.class, "bRD");
             // rightDrive = hardwareMap.get(DcMotor.class, "bRD");
 //        intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
@@ -41,7 +42,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             // Note: The settings here assume direct drive on left and right wheels.
             // Gear Reduction or 90 Deg drives may require direction flips
             leftDrive.setDirection(DcMotor.Direction.FORWARD);
-            rightDrive.setDirection(DcMotor.Direction.FORWARD);
+            rightDrive.setDirection(DcMotor.Direction.REVERSE);
             leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             // rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -50,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             //rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            //rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // Send telemetry message to indicate successful Encoder reset
 
@@ -122,9 +123,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
                             telemetry.addData("Currently at ", leftDrive.getCurrentPosition());
                             telemetry.addData("Currently at ", rightDrive.getCurrentPosition());
 
-                                    //           leftDrive.getCurrentPosition()), telemetry.addData("Currently at "+ String.valueOf(rightDrive.getCurrentPosition()),
-                                    //   rightDrive.getCurrentPosition();
-                                    //    telemetry.update();
+
                                     //}
 
                                     // Stop all motion;
@@ -134,7 +133,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
                                     // Turn off RUN_TO_POSITION
                                     leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                             rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            sleep(250);   // optional pause after each move.
+                            sleep(250);   // optional pause after each move
+
 
             }
         }
