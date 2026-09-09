@@ -74,7 +74,7 @@ public class sebastian_encoder extends LinearOpMode {
         // Initialize the drive system variables.
         leftDrive = hardwareMap.get(DcMotor.class, "bLD");
         rightDrive = hardwareMap.get(DcMotor.class, "bRD");
-//        intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
+        intake = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
 
