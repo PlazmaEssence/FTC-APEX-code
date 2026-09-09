@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //@Override
@@ -32,11 +33,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Robot: OK30 ", group="Robot")
-public class java_30_seconds extends LinearOpMode {
+public class sebastian_encoder extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+
+    private DcMotor intake = null;
+
+    private CRServo leftservo = null;
+
+    private CRServo rightservo = null;
+
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -51,8 +59,12 @@ public class java_30_seconds extends LinearOpMode {
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 0.8;
+    static final double Drive_Speed = 0.8;
     static final double TURN_SPEED = 0.9;
+
+
+
+
 
 
 
@@ -71,6 +83,7 @@ public class java_30_seconds extends LinearOpMode {
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        intake.setDirection(DcMotor.Direction.FORWARD);
 
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
@@ -119,13 +132,22 @@ public class java_30_seconds extends LinearOpMode {
 
 
 
+
+
             leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
+
+
+
             // reset the timeout time and start motion.
             runtime.reset();
-            leftDrive.setPower(Math.abs(speed));
-            rightDrive.setPower(Math.abs(speed));
+            leftDrive.setPower(Drive_Speed);
+            rightDrive.setPower(Drive_Speed);
+            intake.setPower(1);
+            leftservo.setPower(1);
+            rightservo.setPower(1);
 
 
             // keep looping while we are still active, and there is time left, and both motors are running.
@@ -149,14 +171,18 @@ public class java_30_seconds extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Stop all motion;
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
 
             //   Turn off RUN_TO_POSITION
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            sleep(250);   // optional pause after each move.
+            sleep(255);   // optional pause after each move.
+
+            // Stop all motion;
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+            intake.setPower(0);
+            leftservo.setPower(0);
+            rightservo.setPower(0);
         }
     }
 }
