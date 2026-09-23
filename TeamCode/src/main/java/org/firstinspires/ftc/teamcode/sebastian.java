@@ -38,6 +38,8 @@ public class sebastian extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
+    private DcMotor intake = null;
+
     private ElapsedTime runtime = new ElapsedTime();
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -87,7 +89,9 @@ public class sebastian extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        encoderSpin(0.9, 538,9);
+        diveforward(0.9, 1076,9);
+
+        turn(0.8, 538, 9);
 
         while (opModeIsActive()) {
             telemetry.addData("mortor position",leftDrive.getCurrentPosition());
@@ -100,7 +104,7 @@ public class sebastian extends LinearOpMode {
 
     }
 
-    public void encoderSpin(double speed,
+    public void diveforward(double speed,
                             double ticks,
                             double timeoutS) {
         int newTarget;
@@ -117,10 +121,9 @@ public class sebastian extends LinearOpMode {
             // Turn On RUN_TO_POSITION
 
 
-
-
             leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -135,10 +138,9 @@ public class sebastian extends LinearOpMode {
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
 
-                while (opModeIsActive() &&
-                        runtime.seconds() < timeoutS &&
-                        (leftDrive.isBusy() || rightDrive.isBusy())) {
-
+            while (opModeIsActive() &&
+                    runtime.seconds() < timeoutS &&
+                    (leftDrive.isBusy() || rightDrive.isBusy())) {
 
 
                 // Display it for the driver.
@@ -149,14 +151,74 @@ public class sebastian extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Stop all motion;
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
 
             //   Turn off RUN_TO_POSITION
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             sleep(250);   // optional pause after each move.
+
+
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
         }
     }
-}
+
+        public void turn(double speed,
+        double ticks,
+        double timeoutS) {
+            int newTarget;
+
+            // Ensure that the OpMode is still active
+            if (opModeIsActive()) {
+
+                // Determine new target position, and pass to motor controller
+                newTarget = leftDrive.getCurrentPosition() + (int) (ticks);
+                leftDrive.setTargetPosition(newTarget);
+                newTarget = rightDrive.getCurrentPosition() + (int) (ticks);
+                rightDrive.setTargetPosition(newTarget);
+
+                // Turn On RUN_TO_POSITION
+
+
+                leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+                // reset the timeout time and start motion.
+                runtime.reset();
+                leftDrive.setPower(Math.abs(speed));
+                rightDrive.setPower(Math.abs(speed));
+
+
+                // keep looping while we are still active, and there is time left, and both motors are running.
+                // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+                // its target position, the motion will stop.  This is "safer" in the event that the robot will
+                // always end the motion as soon as possible.
+                // However, if you require that BOTH motors have finished their moves before the robot continues
+                // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+                while (opModeIsActive() &&
+                        runtime.seconds() < timeoutS &&
+                        (leftDrive.isBusy() || rightDrive.isBusy())) {
+
+
+                    // Display it for the driver.
+                    telemetry.addData("Running to", " %7d", newTarget);
+//                telemetry.addData("Currently at "+ String.valueOf(leftDrive.getCurrentPosition()),
+//                       leftDrive.getCurrentPosition()), telemetry.addData("Currently at "+ String.valueOf(rightDrive.getCurrentPosition()),
+//               rightDrive.getCurrentPosition();
+                    telemetry.update();
+                }
+
+
+                //   Turn off RUN_TO_POSITION
+                leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                sleep(250);   // optional pause after each move.
+
+
+                leftDrive.setPower(0);
+                rightDrive.setPower(0);
+            }
+            }
+        }
