@@ -41,34 +41,39 @@ public class math_is_the_best extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            if (gamepad2.xWasPressed()) {
+            if (gamepad1.xWasPressed()) {
+                gamepad1.x = true;
                 diveforward(538);
                 turn(269);
-                diveforward(269);
+
 
                 intakeMotor.setPower(1);
                 servoLeft.setPower(1);
                 servoRight.setPower(1);
 
             } else {
-                intakeMotor.setPower(0);
-                servoLeft.setPower(0);
-                servoRight.setPower(0);
-            }
 
-            double leftPower;
-            double rightPower;
-
-
-            double drive = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
-            leftPower = Range.clip(drive + turn, -0.5, 0.5);
-            rightPower = Range.clip(drive - turn, -0.5, 0.5);
+// todo btw the shoter will be under hand.
 
 
             // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+
+            if (!leftDrive.isBusy()&&!rightDrive.isBusy())
+                {
+                    double leftPower;
+                    double rightPower;
+
+
+                    double drive = -gamepad1.left_stick_y;
+                    double turn = gamepad1.right_stick_x;
+                    leftPower = Range.clip(drive + turn, -0.5, 0.5);
+                    rightPower = Range.clip(drive - turn, -0.5, 0.5);
+
+                    leftDrive.setPower(leftPower);
+                    rightDrive.setPower(rightPower);
+
+                }
+            }
         }
     }
 
@@ -92,6 +97,13 @@ public class math_is_the_best extends LinearOpMode {
 
             leftDrive.setPower(Math.abs(speed));
             rightDrive.setPower(Math.abs(speed));
+
+
+
+          //  intakeMotor.setPower(0);
+            //    servoLeft.setPower(0);
+            //    servoRight.setPower(0);
+
         }
     }
 
@@ -113,7 +125,12 @@ public class math_is_the_best extends LinearOpMode {
 
             leftDrive.setPower(Math.abs(speed));
             rightDrive.setPower(Math.abs(speed));
+
+
         }
     }
+
+
+
 }
 
