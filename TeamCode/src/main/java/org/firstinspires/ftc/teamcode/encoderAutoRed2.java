@@ -97,12 +97,6 @@ public class encoderAutoRed2 extends LinearOpMode {
         rightDrive.setPower(-FORWARD_SPEED);
 
 
-        zero_morter();
-
-
-        rightDrive.setPower(TURN_SPEED);
-        rightDrive.setPower(-TURN_SPEED);
-        runtime.reset();
 
 
 
@@ -231,7 +225,7 @@ public class encoderAutoRed2 extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             newTarget = leftDrive.getCurrentPosition() + (int) (ticks);
             leftDrive.setTargetPosition(newTarget);
-            newTarget = rightDrive.getCurrentPosition() + (int) (ticks);
+            newTarget = rightDrive.getCurrentPosition() - (int) (ticks);
             rightDrive.setTargetPosition(newTarget);
 
             // Turn On RUN_TO_POSITION
