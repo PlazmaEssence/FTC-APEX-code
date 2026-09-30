@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Robot: MATH", group="Robot")
-public class Math_will_always_be_the_best extends LinearOpMode {
+public class encoderAutoRed2 extends LinearOpMode {
     private DcMotor intakeMotor;
 
     private CRServo servoLeft;
@@ -91,33 +91,35 @@ public class Math_will_always_be_the_best extends LinearOpMode {
             runtime.reset();
 
         }
-        set_all_motors_zero();
+        zero_morter();
 
         leftDrive.setPower(-FORWARD_SPEED);
         rightDrive.setPower(-FORWARD_SPEED);
 
 
-        set_all_motors_zero();
+        zero_morter();
 
 
         rightDrive.setPower(TURN_SPEED);
         rightDrive.setPower(-TURN_SPEED);
         runtime.reset();
 
-        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
+
 
 
             intakeMotor.setPower(INTAKE_SPEED);
             servoLeft.setPower(leftServoSpeed);
             servoRight.setPower(rightServoSpeed);
 
-        }
+
+
+        diveforward(0.9, 267, 9);
+
+        turn(0.8, 269, 9);
 
         diveforward(0.9, 1076, 9);
 
-        turn(0.8, 538, 9);
+
 
 
 //                rightDrive.setPower(-TURN_SPEED);
@@ -129,8 +131,8 @@ public class Math_will_always_be_the_best extends LinearOpMode {
 //
 //                    leftDrive.setPower(FORWARD_SPEED);
 //                    rightDrive.setPower(FORWARD_SPEED);
-//                    intakeMotor.setPower(INTAKE_SPEED);
-//                    servoLeft.setPower(leftServoSpeed);
+//                   intakeMotor.setPower(INTAKE_SPEED);
+  //                 servoLeft.setPower(leftServoSpeed);
 //                    servoRight.setPower(rightServoSpeed);
 //                    runtime.reset();
 //                    while (opModeIsActive() && (runtime.seconds() < 7)) {
