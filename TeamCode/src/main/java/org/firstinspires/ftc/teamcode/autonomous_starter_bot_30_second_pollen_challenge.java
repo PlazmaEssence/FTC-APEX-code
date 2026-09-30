@@ -33,8 +33,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //    @Override
     public void runOpMode() {
 
-        leftDrive = hardwareMap.get(DcMotor.class, "bLD");
-        rightDrive = hardwareMap.get(DcMotor.class, "bRD");
+        leftDrive = hardwareMap.get(DcMotor.class, "leftDrive");
+        rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         servoLeft = hardwareMap.get(CRServo.class, "sL");
         servoRight = hardwareMap.get(CRServo.class, "sR");
@@ -65,22 +65,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         servoLeft.setPower(leftServoSpeed);
         servoRight.setPower(rightServoSpeed);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 7)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.2)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
         set_all_motors_zero();
-
-        leftDrive.setPower(-FORWARD_SPEED);
-        rightDrive.setPower(-FORWARD_SPEED);
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.5)) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        set_all_motors_zero();
-
 
         rightDrive.setPower(TURN_SPEED);
         rightDrive.setPower(-TURN_SPEED);
@@ -88,13 +77,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         while (opModeIsActive() && (runtime.seconds() < 1.3)) {
             telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
+}
+            set_all_motors_zero();
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 3)) {
+            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        set_all_motors_zero();
 
 
-            intakeMotor.setPower(INTAKE_SPEED);
-            servoLeft.setPower(leftServoSpeed);
-            servoRight.setPower(rightServoSpeed);
+        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
+            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
 
-        } Drive_straight(FORWARD_SPEED,3.5);
+
+        }
 
 
 //                rightDrive.setPower(-TURN_SPEED);
@@ -120,7 +119,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
        // }
     }
 
-    public void set_all_motors_zero(){
+    public void set_all_motors_zero() {
         leftDrive.setPower(0);
         rightDrive.setPower(0);
         intakeMotor.setPower(0);
@@ -128,11 +127,4 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         servoLeft.setPower(0);
 
     }
-
-    public void Drive_straight(double speed, double time){
-        leftDrive.setPower(speed);
-        rightDrive.setPower(speed);
-        sleep((long) (1000 * time));
-set_all_motors_zero();
     }
-}
