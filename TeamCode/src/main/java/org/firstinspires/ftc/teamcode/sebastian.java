@@ -89,11 +89,9 @@ public class sebastian extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        diveforward(0.9, 269,9);
+        diveforward(0.9, 1076,9);
 
-        turn(0.8, 269, 9);
-
-        diveforward(0.9, 176,9);
+        turn(0.8, 538, 9);
 
         while (opModeIsActive()) {
             telemetry.addData("mortor position",leftDrive.getCurrentPosition());
@@ -206,9 +204,9 @@ public class sebastian extends LinearOpMode {
 
                     // Display it for the driver.
                     telemetry.addData("Running to", " %7d", newTarget);
-          //telemetry.addData("Currently at " + String.valueOf(leftDrive.getCurrentPosition()),
-           //                 leftDrive.getCurrentPosition()), telemetry.addData("Currently at " + String.valueOf(rightDrive.getCurrentPosition()),
-          //                  rightDrive.getCurrentPosition())
+//                telemetry.addData("Currently at "+ String.valueOf(leftDrive.getCurrentPosition()),
+//                       leftDrive.getCurrentPosition()), telemetry.addData("Currently at "+ String.valueOf(rightDrive.getCurrentPosition()),
+//               rightDrive.getCurrentPosition();
                     telemetry.update();
                 }
 

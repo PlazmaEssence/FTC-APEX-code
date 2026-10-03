@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "duncan_player1_starter-bot-code")
 public class duncan_player1_starter_bot extends LinearOpMode {
-    private DcMotor intakeMotor;
+    private DcMotor intakeMotor = null;
     private boolean toggle = false;
     private boolean toggle2 = false;
     private CRServo servoLeft;
@@ -24,7 +24,7 @@ public class duncan_player1_starter_bot extends LinearOpMode {
 
 
     @Override
-    public void runOpMode(){} private ElapsedTime runtime = new ElapsedTime();
+    public void runOpMode()
     {
 
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
@@ -40,6 +40,7 @@ public class duncan_player1_starter_bot extends LinearOpMode {
 
             if (gamepad2.xWasPressed()) {
                 toggle2 = !toggle2;
+                forward_and_back_to_position(1, 1000, 29.9);
             }
 
             if (gamepad2.a || toggle2) {
@@ -67,14 +68,20 @@ public class duncan_player1_starter_bot extends LinearOpMode {
                 // servoLeft.setPower(1);
                 // servoRight.setPower(1);
 
-                if (gamepad2.xWasPressed()) {
-                    toggle = !toggle;
-                    gamepad1.x = true;
-                    forward_and_back_to_position(1,1000,29.9);
+                {
+                    if (gamepad2.xWasPressed()) {
+                        toggle = !toggle;
+                        gamepad1.x = true;
+                        forward_and_back_to_position(1, 1000, 29.9);
+                    } else {
+
+
+
+                    }
+
 
                 }
 
-            } else {
                 rightServoPower = 0;
                 leftServoPower = 0;
                 intakePower = 0;
@@ -130,15 +137,17 @@ public class duncan_player1_starter_bot extends LinearOpMode {
                                              double timeoutS) {
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = leftDrive.getCurrentPosition() + (int) (ticks);
+            newTarget = leftDrive.getCurrentPosition() + (int) (-ticks);
             leftDrive.setTargetPosition(newTarget);
-            newTarget = rightDrive.getCurrentPosition() + (int) (ticks);
+            newTarget = rightDrive.getCurrentPosition() + (int) (-ticks);
             rightDrive.setTargetPosition(newTarget);
             leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            runtime.reset();
             leftDrive.setPower(Math.abs(speed));
             rightDrive.setPower(Math.abs(speed));
+
+
+            sleep(250);
 //            while (opModeIsActive() &&
 //                    (runtime.seconds() < timeoutS))
 //            telemetry.addData("Running to",  " %7d", newTarget);
@@ -146,13 +155,12 @@ public class duncan_player1_starter_bot extends LinearOpMode {
 
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            newTarget = leftDrive.getCurrentPosition() + (int) (-ticks);
+            newTarget = leftDrive.getCurrentPosition() + (int) (ticks);
             leftDrive.setTargetPosition(newTarget);
-            newTarget = rightDrive.getCurrentPosition() + (int) (-ticks);
+            newTarget = rightDrive.getCurrentPosition() + (int) (ticks);
             rightDrive.setTargetPosition(newTarget);
             leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            runtime.reset();
             leftDrive.setPower(Math.abs(speed));
             rightDrive.setPower(Math.abs(speed));
             ;
