@@ -179,7 +179,7 @@ public class encoderblue extends LinearOpMode {
             }
 
 
-            public void moveleft
+
         }
     }
 
