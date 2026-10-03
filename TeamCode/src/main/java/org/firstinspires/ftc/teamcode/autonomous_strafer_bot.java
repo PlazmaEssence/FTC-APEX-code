@@ -3,16 +3,25 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Robot: Auto Drive By Time Test", group="Robot")
 
     public class autonomous_strafer_bot extends LinearOpMode {
-    private DcMotor bkLDrive = null;
-    private DcMotor bkRDrive = null;
-    private DcMotor ftLDrive = null;
-    private DcMotor ftRDrive = null;
+    private DcMotor intakeMotor;
+    private boolean toggleintakeforward = false;
+    private boolean toggleintakereverse = false;
+    private CRServo servoLeft;
+    private CRServo servoRight;
+    private DcMotor leftDrive = null;
+    private DcMotor rightDrive = null;
+    private double intakePower = 0;
+    private double leftServoPower= 0;
+    private double rightServoPower = 0;
+
+    private double driveMotorMaxPower = 1.0;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -23,18 +32,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
     @Override
     public void runOpMode() {
 
-        ftLDrive = hardwareMap.get(DcMotor.class, "FLD");
-        ftRDrive = hardwareMap.get(DcMotor.class, "FRD");
-        bkRDrive = hardwareMap.get(DcMotor.class, "BRD");
-        bkLDrive = hardwareMap.get(DcMotor.class, "BLD");
+        leftDrive = hardwareMap.get(DcMotor.class, "lD");
+        rightDrive = hardwareMap.get(DcMotor.class, "rD");
+
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        bkLDrive.setDirection(DcMotor.Direction.FORWARD);
-        bkRDrive.setDirection(DcMotor.Direction.REVERSE);
-        ftLDrive.setDirection(DcMotor.Direction.FORWARD);
-        ftRDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -46,15 +53,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
         // Step 1:  Drive forward for 3 seconds
-        bkLDrive.setPower(FORWARD_SPEED);
-        bkRDrive.setPower(FORWARD_SPEED);
-        ftRDrive.setPower(FORWARD_SPEED);
-        ftLDrive.setPower(FORWARD_SPEED);
+        leftDrive.setPower(FORWARD_SPEED);
+        rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.5)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
-        }
+        }/*
         bkLDrive.setPower(0);
         bkRDrive.setPower(0);
         ftRDrive.setPower(0);
@@ -71,6 +76,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         while (opModeIsActive() && (runtime.seconds() < 1.3)) {
             telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
+
+*/
         }
     }
-}
