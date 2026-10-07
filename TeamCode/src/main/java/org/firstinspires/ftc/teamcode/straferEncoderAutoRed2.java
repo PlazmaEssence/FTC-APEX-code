@@ -40,13 +40,13 @@ public class straferEncoderAutoRed2 extends LinearOpMode {
     //    @Override
     public void runOpMode() {
 
-        fLDrive = hardwareMap.get(DcMotor.class, "FLd");
-        fRDrive = hardwareMap.get(DcMotor.class, "FLd");
+        fLDrive = hardwareMap.get(DcMotor.class, "FLD");
+        fRDrive = hardwareMap.get(DcMotor.class, "FLD");
         bLDrive = hardwareMap.get(DcMotor.class, "BLD");
         bRDrive = hardwareMap.get(DcMotor.class, "BRD");
-        intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
-        servoLeft = hardwareMap.get(CRServo.class, "SL");
-        servoRight = hardwareMap.get(CRServo.class, "SR");
+      //  intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
+       // servoLeft = hardwareMap.get(CRServo.class, "SL");
+       // servoRight = hardwareMap.get(CRServo.class, "SR");
 
         bLDrive.setDirection(DcMotor.Direction.FORWARD);
         bRDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -100,17 +100,23 @@ public class straferEncoderAutoRed2 extends LinearOpMode {
         }
 
 
-        intakeMotor.setPower(INTAKE_SPEED);
-        servoLeft.setPower(leftServoSpeed);
-        servoRight.setPower(rightServoSpeed);
+       // intakeMotor.setPower(INTAKE_SPEED);
+       // servoLeft.setPower(leftServoSpeed);
+      //  servoRight.setPower(rightServoSpeed);
 
-        sleep((long) (10000 * time));
+       // sleep((long) (10000 * time));
 
         diveforward(0.9, 267, 9);
 
-        turn(0.8, 269, 9);
+        strafe_left(0.5, 538, 9);
 
-        diveforward(0.9, 1076, 9);
+        strafe_right(0.5, 538, 9);
+
+        //diveforward(0.9, 267, 9);
+
+    //    turn(0.8, 269, 9);
+
+     //   diveforward(0.9, 1076, 9);
 
         zero_morter();
 
@@ -123,9 +129,9 @@ public class straferEncoderAutoRed2 extends LinearOpMode {
         fRDrive.setPower(0);
         fLDrive.setPower(0);
         bRDrive.setPower(0);
-        intakeMotor.setPower(0);
-        servoRight.setPower(0);
-        servoLeft.setPower(0);
+       // intakeMotor.setPower(0);
+      //  servoRight.setPower(0);
+     //   servoLeft.setPower(0);
 
     }
 
@@ -341,12 +347,9 @@ public class straferEncoderAutoRed2 extends LinearOpMode {
         }
     }
 
-    public void strafe(double speed,
-                       double ticks,
-                       double timeoutS,
-                       double drive,
-                       double strafe,
-                       double rotate) {
+    public void strafe_left(double speed,
+                            double ticks,
+                            double timeoutS) {
 
         bLDrive.setPower(speed);
         bRDrive.setPower(speed);
@@ -361,9 +364,9 @@ public class straferEncoderAutoRed2 extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             newTarget = bLDrive.getCurrentPosition() + (int) (ticks);
             bLDrive.setTargetPosition(newTarget);
-            newTarget = fRDrive.getCurrentPosition() + (int) (ticks);
+            newTarget = fRDrive.getCurrentPosition() - (int) (ticks);
             fRDrive.setTargetPosition(newTarget);
-            newTarget = bRDrive.getCurrentPosition() + (int) (ticks);
+            newTarget = bRDrive.getCurrentPosition() - (int) (ticks);
             bRDrive.setTargetPosition(newTarget);
             newTarget = fLDrive.getCurrentPosition() + (int) (ticks);
             fLDrive.setTargetPosition(newTarget);
@@ -417,6 +420,82 @@ public class straferEncoderAutoRed2 extends LinearOpMode {
             fRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
+        }
+    }
+
+    public void strafe_right(double speed,
+                             double ticks,
+                             double timeoutS)
+                            // double drive,
+                             //double strafe,
+                            /* double rotate)*/ {
+
+        bLDrive.setPower(speed);
+        bRDrive.setPower(speed);
+        fLDrive.setPower(speed);
+        fRDrive.setPower(speed);
+
+        int newTarget;
+
+        // Ensure that the OpMode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newTarget = bLDrive.getCurrentPosition() - (int) (ticks);
+            bLDrive.setTargetPosition(newTarget);
+            newTarget = fRDrive.getCurrentPosition() + (int) (ticks);
+            fRDrive.setTargetPosition(newTarget);
+            newTarget = bRDrive.getCurrentPosition() + (int) (ticks);
+            bRDrive.setTargetPosition(newTarget);
+            newTarget = fLDrive.getCurrentPosition() - (int) (ticks);
+            fLDrive.setTargetPosition(newTarget);
+
+            // Turn On RUN_TO_POSITION
+
+
+            bLDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bRDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fLDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fRDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            bLDrive.setPower(Math.abs(speed));
+            bRDrive.setPower(Math.abs(speed));
+            fLDrive.setPower(Math.abs(speed));
+            fRDrive.setPower(Math.abs(speed));
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+            while (opModeIsActive() &&
+                    runtime.seconds() < timeoutS &&
+                    (bLDrive.isBusy() || bRDrive.isBusy() || fRDrive.isBusy() || fLDrive.isBusy())) {
+
+
+                // Display it for the driver.
+                telemetry.addData("Running to", " %7d", newTarget);
+                telemetry.addData("mortor position", bLDrive.getCurrentPosition());
+                telemetry.addData("mortor position", bRDrive.getCurrentPosition());
+                telemetry.addData("mortor position", fLDrive.getCurrentPosition());
+                telemetry.addData("mortor position", fRDrive.getCurrentPosition());
+                telemetry.update();
+
+            }
+
+//todo moters for the shoter  1620 rpm.
+
+            //   Turn off RUN_TO_POSITION
+            bLDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            bRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            fLDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            fRDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 }
