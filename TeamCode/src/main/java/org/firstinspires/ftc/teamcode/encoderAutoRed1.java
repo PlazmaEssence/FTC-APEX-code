@@ -130,11 +130,14 @@ public class encoderAutoRed1 extends LinearOpMode {
             backLeftDrive.setTargetPosition(newTarget);
             newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
             backRightDrive.setTargetPosition(newTarget);
+
+
             frontLeftDrive.setMode(runToPosition);
             frontRightDrive.setMode(runToPosition);
             backLeftDrive.setMode(runToPosition);
             backRightDrive.setMode(runToPosition);
             runtime.reset();
+
             frontLeftDrive.setPower(Math.abs(speed));
             frontRightDrive.setPower(Math.abs(speed));
             backLeftDrive.setPower(Math.abs(speed));
@@ -157,15 +160,18 @@ public class encoderAutoRed1 extends LinearOpMode {
                 backLeftDrive.setTargetPosition(newTarget);
                 newTarget = backRightDrive.getCurrentPosition() + (int)(ticks);
                 backRightDrive.setTargetPosition(newTarget);
+
                 frontLeftDrive.setMode(RUN_TO_POSITION);
                 frontRightDrive.setMode(RUN_TO_POSITION);
                 backLeftDrive.setMode(RUN_TO_POSITION);
                 backRightDrive.setMode(RUN_TO_POSITION);
                 runtime.reset();
+
                 frontLeftDrive.setPower(Math.abs(speed));
                 frontRightDrive.setPower(Math.abs(speed));
                 backLeftDrive.setPower(Math.abs(speed));
                 backRightDrive.setPower(Math.abs(speed));
+
                 while (opModeIsActive() &&
                         (runtime.seconds() < timeoutS) &&
                         (frontLeftDrive.isBusy())) {
@@ -173,6 +179,7 @@ public class encoderAutoRed1 extends LinearOpMode {
                     telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
                                 telemetry.update();}
                                  set_all_motors_zero();
+
                          frontLeftDrive.setPower(0);
                         frontRightDrive.setPower(0);
                     backLeftDrive.setPower(0);
