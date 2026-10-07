@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 @Autonomous(name="red_2", group="Robot")
 
 public class encoderAutoRed1 extends LinearOpMode {
@@ -23,6 +22,11 @@ public class encoderAutoRed1 extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
+   // final double strafe;
+
+   // {
+        //
+    //}
 //   todo private double intakePower = 0;
 //    private double leftServoPower = 0;
 //    private double rightServoPower = 0;
@@ -68,7 +72,7 @@ public class encoderAutoRed1 extends LinearOpMode {
 
         // Step 1:  Drive forward for 3 seconds
         forward(1, 1000, 10);
-        strafe(1,100000,10);
+        strafe(1,100000,10,50);
 
         set_all_motors_zero();
 //
@@ -140,8 +144,9 @@ public class encoderAutoRed1 extends LinearOpMode {
         }
 
     }   public void strafe ( double speed,
-        double ticks,
-        double timeoutS){
+                             double ticks,
+                             double timeoutS,
+                             double strafe){
             int newTarget;
             if (opModeIsActive()) {
                 newTarget = frontLeftDrive.getCurrentPosition() + (int)(ticks);
