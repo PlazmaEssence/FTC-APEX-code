@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="red_2", group="Robot")
+@Autonomous(name="red_1", group="Robot")
 
 public class encoderAutoRed1 extends LinearOpMode {
 //    todo private DcMotor intakeMotor;
@@ -51,7 +51,7 @@ public class encoderAutoRed1 extends LinearOpMode {
         backLeftDrive.setPower(FORWARD_SPEED);
         frontLeftDrive = hardwareMap.get(DcMotor.class, "FLD");
         frontRightDrive = hardwareMap.get(DcMotor.class, "FRD");
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "BLD");
+        backLeftDrive = hardwareMap.get(DcMotor.class, "BLD");
         backRightDrive = hardwareMap.get(DcMotor.class, "BRD");
 //       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
