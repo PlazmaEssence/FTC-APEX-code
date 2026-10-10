@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Robot: MATH", group="Robot")
+@Autonomous(name="Robot: do_not_use.", group="Robot")
+@Disabled
 public class encoderAutoRed2 extends LinearOpMode {
     private DcMotor intakeMotor;
 
