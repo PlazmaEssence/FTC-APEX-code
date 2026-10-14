@@ -9,11 +9,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //todo import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+//todo time shooter and encoders
 
 @Autonomous(name="red_1", group="Robot")
 
 public class encoderAutoRed1 extends LinearOpMode {
-//    todo private DcMotor intakeMotor;
+    //    todo private DcMotor intakeMotor;
     //    todo private boolean toggle = false;
 //    todo private boolean toggle2 = false;
 //    todo private CRServo servoLeft;
@@ -22,15 +23,14 @@ public class encoderAutoRed1 extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
-   // final double strafe;
+    // final double strafe;
 
-   // {
-        //
+    // {
+    //
     //}
 //   todo private double intakePower = 0;
 //    private double leftServoPower = 0;
 //    private double rightServoPower = 0;
-
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -45,10 +45,10 @@ public class encoderAutoRed1 extends LinearOpMode {
     //    @Override
     public void runOpMode() {
 
-        frontLeftDrive.setPower(FORWARD_SPEED);
-        frontRightDrive.setPower(FORWARD_SPEED);
-        backRightDrive.setPower(FORWARD_SPEED);
-        backLeftDrive.setPower(FORWARD_SPEED);
+//        frontLeftDrive.setPower(FORWARD_SPEED);
+//        frontRightDrive.setPower(FORWARD_SPEED);
+//        backRightDrive.setPower(FORWARD_SPEED);
+//        backLeftDrive.setPower(FORWARD_SPEED);
         frontLeftDrive = hardwareMap.get(DcMotor.class, "FLD");
         frontRightDrive = hardwareMap.get(DcMotor.class, "FRD");
         backLeftDrive = hardwareMap.get(DcMotor.class, "BLD");
@@ -56,6 +56,12 @@ public class encoderAutoRed1 extends LinearOpMode {
 //       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
+
+        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -65,14 +71,13 @@ public class encoderAutoRed1 extends LinearOpMode {
         telemetry.update();
 
 
-        // Wait for the game to start (driver presses START)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
-        // Step 1:  Drive forward for 3 seconds
-        forward(1, 1000, 10);
-        strafe(1,100000,10,50);
+        forward(0.5, 1000, 10);
+        strafeLeft(0.5, 500, 10, 50);
+        strafeRight(0.5, 500, 10, 50);
+        turn(0.5, 500, 10);
 
         set_all_motors_zero();
 //
@@ -120,69 +125,172 @@ public class encoderAutoRed1 extends LinearOpMode {
                         double ticks,
                         double timeoutS) {
         int newTarget;
-        DcMotor.RunMode runToPosition = RUN_TO_POSITION;
+        //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
+        if (opModeIsActive()) {
+            newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
+            frontLeftDrive.setTargetPosition(newTarget);
+            newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
+            frontRightDrive.setTargetPosition(newTarget);
+            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
+            backLeftDrive.setTargetPosition(newTarget);
+            newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
+            backRightDrive.setTargetPosition(newTarget);
+
+
+            frontLeftDrive.setMode(RUN_TO_POSITION);
+            frontRightDrive.setMode(RUN_TO_POSITION);
+            backLeftDrive.setMode(RUN_TO_POSITION);
+            backRightDrive.setMode(RUN_TO_POSITION);
+            runtime.reset();
+
+            frontLeftDrive.setPower(Math.abs(speed));
+            frontRightDrive.setPower(Math.abs(speed));
+            backLeftDrive.setPower(Math.abs(speed));
+            backRightDrive.setPower(Math.abs(speed));
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (frontLeftDrive.isBusy())) {
+                telemetry.addData("Running to", " %7d", newTarget);
+                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.update();
+
+
+            }
+            frontLeftDrive.setPower(0);
+            frontRightDrive.setPower(0);
+            backLeftDrive.setPower(0);
+            backRightDrive.setPower(0);
+            sleep(250);
+
+
+        }
+
+    }
+
+
+    public void strafeLeft(double speed,
+                           double ticks,
+                           double timeoutS,
+                           double strafe) {
+        int newTarget;
         if (opModeIsActive()) {
             newTarget = frontLeftDrive.getCurrentPosition() + (int) (ticks);
             frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
+            newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
             frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() + (int) (ticks);
+            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
             backLeftDrive.setTargetPosition(newTarget);
             newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
             backRightDrive.setTargetPosition(newTarget);
-            frontLeftDrive.setMode(runToPosition);
-            frontRightDrive.setMode(runToPosition);
-            backLeftDrive.setMode(runToPosition);
-            backRightDrive.setMode(runToPosition);
+
+            frontLeftDrive.setMode(RUN_TO_POSITION);
+            frontRightDrive.setMode(RUN_TO_POSITION);
+            backLeftDrive.setMode(RUN_TO_POSITION);
+            backRightDrive.setMode(RUN_TO_POSITION);
             runtime.reset();
+
             frontLeftDrive.setPower(Math.abs(speed));
             frontRightDrive.setPower(Math.abs(speed));
             backLeftDrive.setPower(Math.abs(speed));
             backRightDrive.setPower(Math.abs(speed));
 
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (frontLeftDrive.isBusy())) {
+                telemetry.addData("Running to", " %7d", newTarget);
+                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.update();
+            }
+            set_all_motors_zero();
 
+            frontLeftDrive.setPower(0);
+            frontRightDrive.setPower(0);
+            backLeftDrive.setPower(0);
+            backRightDrive.setPower(0);
+            sleep(250);
         }
-
-    }   public void strafe ( double speed,
-                             double ticks,
-                             double timeoutS,
-                             double strafe){
+        }
+        public void strafeRight ( double speed,
+        double ticks,
+        double timeoutS,
+        double strafe){
             int newTarget;
             if (opModeIsActive()) {
-                newTarget = frontLeftDrive.getCurrentPosition() + (int)(ticks);
+                newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
                 frontLeftDrive.setTargetPosition(newTarget);
-                newTarget = frontRightDrive.getCurrentPosition() + (int)(ticks);
+                newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
                 frontRightDrive.setTargetPosition(newTarget);
-                newTarget = backLeftDrive.getCurrentPosition() + (int)(ticks);
+                newTarget = backLeftDrive.getCurrentPosition() + (int) (ticks);
                 backLeftDrive.setTargetPosition(newTarget);
-                newTarget = backRightDrive.getCurrentPosition() + (int)(ticks);
+                newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
                 backRightDrive.setTargetPosition(newTarget);
+
                 frontLeftDrive.setMode(RUN_TO_POSITION);
                 frontRightDrive.setMode(RUN_TO_POSITION);
                 backLeftDrive.setMode(RUN_TO_POSITION);
                 backRightDrive.setMode(RUN_TO_POSITION);
                 runtime.reset();
+
                 frontLeftDrive.setPower(Math.abs(speed));
                 frontRightDrive.setPower(Math.abs(speed));
                 backLeftDrive.setPower(Math.abs(speed));
                 backRightDrive.setPower(Math.abs(speed));
+
                 while (opModeIsActive() &&
                         (runtime.seconds() < timeoutS) &&
                         (frontLeftDrive.isBusy())) {
-                    telemetry.addData("Running to",  " %7d", newTarget);
+                    telemetry.addData("Running to", " %7d", newTarget);
                     telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
-                                telemetry.update();}
-                                 set_all_motors_zero();
-                         frontLeftDrive.setPower(0);
-                        frontRightDrive.setPower(0);
-                    backLeftDrive.setPower(0);
-                    backRightDrive.setPower(0);
-                    sleep(250);
+                    telemetry.update();
+                }
+                set_all_motors_zero();
+
+                frontLeftDrive.setPower(0);
+                frontRightDrive.setPower(0);
+                backLeftDrive.setPower(0);
+                backRightDrive.setPower(0);
+                sleep(250);
             }
         }
+    public void turn ( double speed,
+                       double ticks,
+                       double timeoutS){
+        int newTarget;
+        if (opModeIsActive()) {
+            newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
+            frontLeftDrive.setTargetPosition(newTarget);
+            newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
+            frontRightDrive.setTargetPosition(newTarget);
+            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
+            backLeftDrive.setTargetPosition(newTarget);
+            newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
+            backRightDrive.setTargetPosition(newTarget);
+
+            frontLeftDrive.setMode(RUN_TO_POSITION);
+            frontRightDrive.setMode(RUN_TO_POSITION);
+            backLeftDrive.setMode(RUN_TO_POSITION);
+            backRightDrive.setMode(RUN_TO_POSITION);
+            runtime.reset();
+
+            frontLeftDrive.setPower(Math.abs(speed));
+            frontRightDrive.setPower(Math.abs(speed));
+            backLeftDrive.setPower(Math.abs(speed));
+            backRightDrive.setPower(Math.abs(speed));
+
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (frontLeftDrive.isBusy())) {
+                telemetry.addData("Running to", " %7d", newTarget);
+                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.update();
+            }
+            set_all_motors_zero();
+
+            frontLeftDrive.setPower(0);
+            frontRightDrive.setPower(0);
+            backLeftDrive.setPower(0);
+            backRightDrive.setPower(0);
+            sleep(250);
+        }
+        }
     }
-
-
-
-
-
