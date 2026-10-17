@@ -2,18 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-public class BiobuzzTeleopDuncan {
 
-    @TeleOp(name="TeleOpDuncan", group="Robot")
 
-    public class encoderAutoRed1 extends LinearOpMode {
+    @TeleOp(name="TeleOpDuncanTrying", group="Robot")
+
+    public class biobuzzTeleopDuncan extends LinearOpMode {
         //    todo private DcMotor intakeMotor;
         //    todo private boolean toggle = false;
 //    todo private boolean toggle2 = false;
@@ -58,10 +57,10 @@ public class BiobuzzTeleopDuncan {
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
 
-            frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-            frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-            backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-            backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+            frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+            frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+            backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+            backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
 
             // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -83,9 +82,25 @@ public class BiobuzzTeleopDuncan {
                     backRightDrive.setPower(0);
                     backLeftDrive.setPower(0);
                 }
+                double backLeftPower;
+                double backRightPower;
+                double frontLeftPower;
+                double frontRightPower;
+
                 double drive = -gamepad1.left_stick_y;
-                double strafe = gamepad1.left_stick_x;
+                double strafe = gamepad1.left_stick_y;
                 double rotate = gamepad1.right_stick_x;
+
+                frontLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
+                frontRightPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
+                backLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
+                backRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
+
+                backLeftDrive.setPower(backLeftPower);
+                backRightDrive.setPower(backRightPower);
+                frontLeftDrive.setPower(frontLeftPower);
+                frontRightDrive.setPower(frontRightPower);
+
 
             }
         }
@@ -96,15 +111,6 @@ public class BiobuzzTeleopDuncan {
             int newTarget;
             //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
             if (opModeIsActive()) {
-                newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
-                frontLeftDrive.setTargetPosition(newTarget);
-                newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
-                frontRightDrive.setTargetPosition(newTarget);
-                newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
-                backLeftDrive.setTargetPosition(newTarget);
-                newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
-                backRightDrive.setTargetPosition(newTarget);
-
                 newTarget = frontLeftDrive.getCurrentPosition() + (int) (ticks);
                 frontLeftDrive.setTargetPosition(newTarget);
                 newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
@@ -112,6 +118,15 @@ public class BiobuzzTeleopDuncan {
                 newTarget = backLeftDrive.getCurrentPosition() + (int) (ticks);
                 backLeftDrive.setTargetPosition(newTarget);
                 newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
+                backRightDrive.setTargetPosition(newTarget);
+sleep (250);
+                newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
+                frontLeftDrive.setTargetPosition(newTarget);
+                newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
+                frontRightDrive.setTargetPosition(newTarget);
+                newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
+                backLeftDrive.setTargetPosition(newTarget);
+                newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
                 backRightDrive.setTargetPosition(newTarget);
 
 
@@ -134,4 +149,4 @@ public class BiobuzzTeleopDuncan {
                 backLeftDrive.setPower(0);
                 backRightDrive.setPower(0);
                 sleep(250);
-            }}}}
+            }}}
