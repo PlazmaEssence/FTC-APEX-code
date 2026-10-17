@@ -73,11 +73,11 @@ public class encoderAutoRed1 extends LinearOpMode {
 
         waitForStart();
 
-
+sleep(10000);
         forward(0.5, 1000, 10);
-        strafeLeft(0.5, 500, 10, 50);
-        strafeRight(0.5, 500, 10, 50);
-        turn(0.5, 500, 10);
+        strafeRight(0.5, 2500, 10, 50);
+        //todo strafeRight(0.5, 500, 10, 50);
+        //todo turn(0.5, 500, 10);
 
         set_all_motors_zero();
 //
