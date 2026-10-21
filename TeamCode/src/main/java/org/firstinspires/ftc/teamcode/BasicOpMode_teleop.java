@@ -68,6 +68,9 @@ public class BasicOpMode_teleop extends LinearOpMode {
     private CRServo sorter2 = null;
     boolean toggle = false;
     boolean toggle2 = false;
+   boolean toggle3 = false;
+
+
     private DcMotor shooter1 = null;
     private DcMotor shooter2 = null;
     //@Override
@@ -90,16 +93,22 @@ public class BasicOpMode_teleop extends LinearOpMode {
         shooter1 = hardwareMap.get(DcMotor.class,"shooter1");
        shooter2 = hardwareMap.get(DcMotor.class,"shooter2");
        intakeS1 = hardwareMap.get(CRServo.class,"InS1");
+        intakeS2 = hardwareMap.get(CRServo.class,"InS2");
+        sorter1 = hardwareMap.get(CRServo.class,"sort1");
+        sorter2 = hardwareMap.get(CRServo.class,"sort2");
 
 
-
-       bkLDrive.setDirection(DcMotor.Direction.FORWARD);
+        bkLDrive.setDirection(DcMotor.Direction.FORWARD);
         bkRDrive.setDirection(DcMotor.Direction.REVERSE);
         ftLDrive.setDirection(DcMotor.Direction.FORWARD);
         ftRDrive.setDirection(DcMotor.Direction.REVERSE);
         intake.setDirection(DcMotor.Direction.FORWARD);
-        shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
-
+        intakeS1.setDirection(DcMotor.Direction.REVERSE);
+        intakeS2.setDirection(DcMotor.Direction.FORWARD);
+        shooter1.setDirection(DcMotor.Direction.FORWARD);
+        shooter2.setDirection(DcMotor.Direction.REVERSE);
+        sorter1.setDirection(DcMotor.Direction.FORWARD);
+        sorter2.setDirection(DcMotor.Direction.REVERSE);
         // Wait for the game to start (driver presses START)
         waitForStart();
         runtime.reset();
@@ -109,9 +118,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
 
 
-            // Set up a variable for each drive wheel to save power level for telemetry
-            double shooter1power;
-            double intakepower;
+            // Set up a variable for each drive wheel to save power level for telemetr
             double bkLeftPower;
             double bkRightPower;
             double ftLeftPower;
@@ -148,14 +155,14 @@ public class BasicOpMode_teleop extends LinearOpMode {
                     ftLeftPower, ftLeftPower,bkLeftPower,bkRightPower);
             telemetry.update();
         }
- if (gamepad1.rightBumperWasPressed()){
+ if (gamepad1.leftTriggerWasPressed()){
      toggle2 = !toggle2;
  }
       if (toggle2){
           shooter1.setPower(0.5);
       }
         else{
-            intake.setPower(0);
+            shooter1.setPower(0);
       }
 
          if(gamepad1.aWasPressed()){
@@ -168,6 +175,17 @@ public class BasicOpMode_teleop extends LinearOpMode {
             intake.setPower(0);
         }
 
+            if (gamepad1.rightTriggerWasPressed()){
+                toggle3 = !toggle3;
+            }
+
+            if (toggle3){
+                shooter2.setPower(0.5);
+            }
+
+             else{
+             shooter2.setPower(0);
+            }
 
 
 
@@ -176,5 +194,6 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
 
 
-    }
+
+                }
 }

@@ -19,10 +19,10 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
 //    todo private boolean toggle2 = false;
 //    todo private CRServo servoLeft;
 //    todo private CRServo servoRight;
-    private DcMotor frontLeftDrive = null;
-    private DcMotor frontRightDrive = null;
-    private DcMotor backLeftDrive = null;
-    private DcMotor backRightDrive = null;
+    private DcMotor fLD = null;
+    private DcMotor fRD = null;
+    private DcMotor bLD = null;
+    private DcMotor bRD = null;
     // final double strafe;
 
     // {
@@ -45,22 +45,22 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
     //    @Override
     public void runOpMode() {
 
-//        frontLeftDrive.setPower(FORWARD_SPEED);
-//        frontRightDrive.setPower(FORWARD_SPEED);
-//        backRightDrive.setPower(FORWARD_SPEED);
-//        backLeftDrive.setPower(FORWARD_SPEED);
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "FLD");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "FRD");
-        backLeftDrive = hardwareMap.get(DcMotor.class, "BLD");
-        backRightDrive = hardwareMap.get(DcMotor.class, "BRD");
+//        fLD.setPower(FORWARD_SPEED);
+//        fRD.setPower(FORWARD_SPEED);
+//        bRD.setPower(FORWARD_SPEED);
+//        bLD.setPower(FORWARD_SPEED);
+        fLD = hardwareMap.get(DcMotor.class, "FLD");
+        fRD = hardwareMap.get(DcMotor.class, "FRD");
+        bLD = hardwareMap.get(DcMotor.class, "BLD");
+        bRD = hardwareMap.get(DcMotor.class, "BRD");
 //       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
 
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        fLD.setDirection(DcMotor.Direction.FORWARD);
+        fRD.setDirection(DcMotor.Direction.REVERSE);
+        bLD.setDirection(DcMotor.Direction.FORWARD);
+        bRD.setDirection(DcMotor.Direction.REVERSE);
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -80,10 +80,10 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
 
         set_all_motors_zero();
 //
-//        frontLeftDrive.setPower(TURN_SPEED);
-//        frontRightDrive.setPower(-TURN_SPEED);
-//        backRightDrive.setPower(TURN_SPEED);
-//        backLeftDrive.setPower(-TURN_SPEED);
+//        fLD.setPower(TURN_SPEED);
+//        fRD.setPower(-TURN_SPEED);
+//        bRD.setPower(TURN_SPEED);
+//        bLD.setPower(-TURN_SPEED);
 //        runtime.reset();
 //                rightDrive.setPower(-TURN_SPEED);
 //                rightDrive.setPower(TURN_SPEED);
@@ -109,10 +109,10 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
     }
 
     public void set_all_motors_zero() {
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
+        fLD.setPower(0);
+        fRD.setPower(0);
+        bRD.setPower(0);
+        bLD.setPower(0);
 //        todo intakeMotor.setPower(0);
 //        todo servoRight.setPower(0);
 //        todo servoLeft.setPower(0);
@@ -126,39 +126,39 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
         int newTarget;
         //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
         if (opModeIsActive()) {
-            newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
-            frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
-            frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
-            backLeftDrive.setTargetPosition(newTarget);
-            newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
-            backRightDrive.setTargetPosition(newTarget);
+            newTarget = fLD.getCurrentPosition() - (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() - (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() - (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() - (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
 
-            frontLeftDrive.setMode(RUN_TO_POSITION);
-            frontRightDrive.setMode(RUN_TO_POSITION);
-            backLeftDrive.setMode(RUN_TO_POSITION);
-            backRightDrive.setMode(RUN_TO_POSITION);
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
             runtime.reset();
 
-            frontLeftDrive.setPower(Math.abs(speed));
-            frontRightDrive.setPower(Math.abs(speed));
-            backLeftDrive.setPower(Math.abs(speed));
-            backRightDrive.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeftDrive.isBusy())) {
+                    (fLD.isBusy())) {
                 telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
                 telemetry.update();
 
 
             }
-            frontLeftDrive.setPower(0);
-            frontRightDrive.setPower(0);
-            backLeftDrive.setPower(0);
-            backRightDrive.setPower(0);
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
 
 
@@ -173,39 +173,39 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
                            double strafe) {
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = frontLeftDrive.getCurrentPosition() + (int) (ticks);
-            frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
-            frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
-            backLeftDrive.setTargetPosition(newTarget);
-            newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
-            backRightDrive.setTargetPosition(newTarget);
+            newTarget = fLD.getCurrentPosition() + (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() - (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() - (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() + (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
-            frontLeftDrive.setMode(RUN_TO_POSITION);
-            frontRightDrive.setMode(RUN_TO_POSITION);
-            backLeftDrive.setMode(RUN_TO_POSITION);
-            backRightDrive.setMode(RUN_TO_POSITION);
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
             runtime.reset();
 
-            frontLeftDrive.setPower(Math.abs(speed));
-            frontRightDrive.setPower(Math.abs(speed));
-            backLeftDrive.setPower(Math.abs(speed));
-            backRightDrive.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
 
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeftDrive.isBusy())) {
+                    (fLD.isBusy())) {
                 telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
                 telemetry.update();
             }
             set_all_motors_zero();
 
-            frontLeftDrive.setPower(0);
-            frontRightDrive.setPower(0);
-            backLeftDrive.setPower(0);
-            backRightDrive.setPower(0);
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
         }
     }
@@ -215,39 +215,39 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
                               double strafe){
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
-            frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
-            frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() + (int) (ticks);
-            backLeftDrive.setTargetPosition(newTarget);
-            newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
-            backRightDrive.setTargetPosition(newTarget);
+            newTarget = fLD.getCurrentPosition() - (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() + (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() + (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() - (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
-            frontLeftDrive.setMode(RUN_TO_POSITION);
-            frontRightDrive.setMode(RUN_TO_POSITION);
-            backLeftDrive.setMode(RUN_TO_POSITION);
-            backRightDrive.setMode(RUN_TO_POSITION);
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
             runtime.reset();
 
-            frontLeftDrive.setPower(Math.abs(speed));
-            frontRightDrive.setPower(Math.abs(speed));
-            backLeftDrive.setPower(Math.abs(speed));
-            backRightDrive.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
 
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeftDrive.isBusy())) {
+                    (fLD.isBusy())) {
                 telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
                 telemetry.update();
             }
             set_all_motors_zero();
 
-            frontLeftDrive.setPower(0);
-            frontRightDrive.setPower(0);
-            backLeftDrive.setPower(0);
-            backRightDrive.setPower(0);
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
         }
     }
@@ -256,39 +256,39 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
                        double timeoutS){
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
-            frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
-            frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
-            backLeftDrive.setTargetPosition(newTarget);
-            newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
-            backRightDrive.setTargetPosition(newTarget);
+            newTarget = fLD.getCurrentPosition() - (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() + (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() - (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() + (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
-            frontLeftDrive.setMode(RUN_TO_POSITION);
-            frontRightDrive.setMode(RUN_TO_POSITION);
-            backLeftDrive.setMode(RUN_TO_POSITION);
-            backRightDrive.setMode(RUN_TO_POSITION);
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
             runtime.reset();
 
-            frontLeftDrive.setPower(Math.abs(speed));
-            frontRightDrive.setPower(Math.abs(speed));
-            backLeftDrive.setPower(Math.abs(speed));
-            backRightDrive.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
 
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeftDrive.isBusy())) {
+                    (fLD.isBusy())) {
                 telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
                 telemetry.update();
             }
             set_all_motors_zero();
 
-            frontLeftDrive.setPower(0);
-            frontRightDrive.setPower(0);
-            backLeftDrive.setPower(0);
-            backRightDrive.setPower(0);
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
         }
     }

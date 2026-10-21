@@ -4,7 +4,6 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -19,15 +18,6 @@ import com.qualcomm.robotcore.util.Range;
 //    todo private boolean toggle2 = false;
 //    todo private CRServo servoLeft;
 //    todo private CRServo servoRight;
-
-        private AnalogInput laserAnalog;
-
-        // Sensor scale: 3.3V corresponds to 1000 mm
-        private static final double MAX_VOLTS = 3.3;
-        private static final double MAX_DISTANCE_MM = 1000.0;
-
-        double target_distance;
-
         private DcMotor frontLeftDrive = null;
         private DcMotor frontRightDrive = null;
         private boolean toggle = false;
@@ -63,7 +53,6 @@ import com.qualcomm.robotcore.util.Range;
             frontRightDrive = hardwareMap.get(DcMotor.class, "FRD");
             backLeftDrive = hardwareMap.get(DcMotor.class, "BLD");
             backRightDrive = hardwareMap.get(DcMotor.class, "BRD");
-            laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
 //       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
@@ -78,27 +67,20 @@ import com.qualcomm.robotcore.util.Range;
             // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
             // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
             // Send telemetry message to signify robot waiting;
-            telemetry.addData("Status", "Ready to run");
+            telemetry.addData("Status", "Ready to run");    //
             telemetry.update();
-
-
 
 
             waitForStart();
             while (opModeIsActive()) {
-                double volts = laserAnalog.getVoltage();
-                double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
                 if (gamepad2.bWasPressed()) {
-                 //   toggle = !toggle;
-
+                    toggle = !toggle;
+                    forward_and_back(0.5, 200, 5);
                 } else {
                     frontLeftDrive.setPower(0);
                     frontRightDrive.setPower(0);
                     backRightDrive.setPower(0);
                     backLeftDrive.setPower(0);
-                }
-                if (distanceMM > 50){
-                    forward(1, 1, 0.00001);
                 }
                 double backLeftPower;
                 double backRightPower;
@@ -106,30 +88,38 @@ import com.qualcomm.robotcore.util.Range;
                 double frontRightPower;
 
                 double drive = -gamepad1.left_stick_y;
-                double strafe = gamepad1.left_stick_x;
+                double strafe = gamepad1.left_stick_y;
                 double rotate = gamepad1.right_stick_x;
 
-                frontLeftPower = Range.clip(drive + strafe - rotate, -1, 1);
-                frontRightPower = Range.clip(drive - strafe + rotate, -1, 1);
-                backLeftPower = Range.clip(drive - strafe - rotate, -1, 1);
-                backRightPower = Range.clip(drive + strafe + rotate, -1, 1);
+                frontLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
+                frontRightPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
+                backLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
+                backRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
 
                 backLeftDrive.setPower(backLeftPower);
                 backRightDrive.setPower(backRightPower);
                 frontLeftDrive.setPower(frontLeftPower);
                 frontRightDrive.setPower(frontRightPower);
-                telemetry.addData("Voltage (V)", "%.3f", volts);
-                telemetry.addData("Distance (mm)", "%.1f", distanceMM);
-                telemetry.update();
+
 
             }
         }
-        public void forward(double speed,
+
+        public void forward_and_back(double speed,
                             double ticks,
                             double timeoutS) {
             int newTarget;
             //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
             if (opModeIsActive()) {
+                newTarget = frontLeftDrive.getCurrentPosition() + (int) (ticks);
+                frontLeftDrive.setTargetPosition(newTarget);
+                newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
+                frontRightDrive.setTargetPosition(newTarget);
+                newTarget = backLeftDrive.getCurrentPosition() + (int) (ticks);
+                backLeftDrive.setTargetPosition(newTarget);
+                newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
+                backRightDrive.setTargetPosition(newTarget);
+sleep (250);
                 newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
                 frontLeftDrive.setTargetPosition(newTarget);
                 newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
@@ -145,11 +135,6 @@ import com.qualcomm.robotcore.util.Range;
                 backLeftDrive.setMode(RUN_TO_POSITION);
                 backRightDrive.setMode(RUN_TO_POSITION);
                 runtime.reset();
-
-                frontLeftDrive.setPower(Math.abs(speed));
-                frontRightDrive.setPower(Math.abs(speed));
-                backLeftDrive.setPower(Math.abs(speed));
-                backRightDrive.setPower(Math.abs(speed));
                 while (opModeIsActive() &&
                         (runtime.seconds() < timeoutS) &&
                         (frontLeftDrive.isBusy())) {
@@ -164,11 +149,4 @@ import com.qualcomm.robotcore.util.Range;
                 backLeftDrive.setPower(0);
                 backRightDrive.setPower(0);
                 sleep(250);
-
-
-            }
-
-        }
-
-    }
-
+            }}}

@@ -85,18 +85,13 @@ public class encoderAutoRed2 extends LinearOpMode {
             // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
             // Step 1:  Drive forward for 3 seconds
-            leftDrive.setPower(FORWARD_SPEED);
-            rightDrive.setPower(FORWARD_SPEED);
-            intakeMotor.setPower(INTAKE_SPEED);
-            servoLeft.setPower(leftServoSpeed);
-            servoRight.setPower(rightServoSpeed);
-            runtime.reset();
+
 
         }
         zero_morter();
 
-        leftDrive.setPower(-FORWARD_SPEED);
-        rightDrive.setPower(-FORWARD_SPEED);
+        //leftDrive.setPower(-FORWARD_SPEED);
+     //   rightDrive.setPower(-FORWARD_SPEED);
 
 
 
