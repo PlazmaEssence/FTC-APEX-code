@@ -113,14 +113,6 @@ import com.qualcomm.robotcore.util.Range;
                 frontLeftDrive.setPower(frontLeftPower);
                 frontRightDrive.setPower(frontRightPower);
 
-                if (distanceMM < 50) {
-                    forward(1, 0.1, 0.000000000000001);
-                } else {
-                    frontLeftDrive.setPower(0);
-                    frontRightDrive.setPower(0);
-                    backRightDrive.setPower(0);
-                    backLeftDrive.setPower(0);
-                }
             }
         }
 
