@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
     @TeleOp(name = "laserCounting")
     public class laserCounting extends LinearOpMode {
 
+        boolean sense;
         boolean toggle;
         private AnalogInput laserAnalog;
         private Servo servo = null;
@@ -36,20 +37,25 @@ import org.slf4j.LoggerFactory;
                 double volts = laserAnalog.getVoltage();
                 // Convert voltage to distance in millimeters (linear mapping)
                 double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
-
                 if (distanceMM < 250)
                     telemetry.addData("f aygi", "hello");
 
 
-                if (distanceMM > 250) {servo.setPosition(1);
-                    toggle = true;
-            } else {
-                    servo.setPosition(0);
-                    toggle = false;
-                }
-                if (toggle = true) {
+                if (distanceMM < 250) {
+                    servo.setPosition(1);
                     count += 1;
+                    sense = true;
+
+                    if (sense == true) {
+                        count += 1;
+                        servo.setPosition(1);
+                        if (sense == false);
+
+                    } else {
+                        sense = false;
+                    }
                 }
+
             // Telemetry
                 telemetry.addData("Voltage (V)", "%.3f", volts);
                 telemetry.addData("Distance (mm)", "%.1f", distanceMM);
