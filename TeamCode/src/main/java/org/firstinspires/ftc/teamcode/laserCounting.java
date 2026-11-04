@@ -55,6 +55,7 @@ import org.slf4j.LoggerFactory;
                         sense = false;
                     }
                 }
+                // todo if true cant be true again until it has been false.
 
             // Telemetry
                 telemetry.addData("Voltage (V)", "%.3f", volts);
