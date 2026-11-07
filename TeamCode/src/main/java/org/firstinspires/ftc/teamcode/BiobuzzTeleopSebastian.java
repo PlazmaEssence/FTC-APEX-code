@@ -8,11 +8,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-public class BiobuzzTeleopSebastian {
 
-    @TeleOp(name = "biobuzztelopsebastian", group = "Robot")
 
-    public class biobuzztelopsebastian extends LinearOpMode {
+    @TeleOp(name = "BiobuzzTeleopSebastian", group = "Robot")
+
+    public class BiobuzzTeleopSebastian extends LinearOpMode {
         //    todo private DcMotor intakeMotor;
         //    todo private boolean toggle = false;
 //    todo private boolean toggle2 = false;
@@ -73,16 +73,6 @@ public class BiobuzzTeleopSebastian {
             telemetry.update();
 
 
-            if (gamepad2.bWasPressed()) {
-                toggle = !toggle;
-                back_laser(0.5, 200, 5);
-            } else {
-                fLD.setPower(0);
-                fLD.setPower(0);
-                bRD.setPower(0);
-                bLD.setPower(0);
-            }
-
             if (distanceMM > 50) {
                 back_laser(0.5, 538, 20);
 
@@ -115,8 +105,8 @@ public class BiobuzzTeleopSebastian {
         }
 
         public void forward(double speed,
-                                     double ticks,
-                                     double timeoutS) {
+                            double ticks,
+                            double timeoutS) {
             int newTarget;
             //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
             if (opModeIsActive()) {
@@ -128,7 +118,6 @@ public class BiobuzzTeleopSebastian {
                 bLD.setTargetPosition(newTarget);
                 newTarget = bRD.getCurrentPosition() - (int) (ticks);
                 bRD.setTargetPosition(newTarget);
-
 
 
                 fLD.setMode(RUN_TO_POSITION);
@@ -198,7 +187,6 @@ public class BiobuzzTeleopSebastian {
                     telemetry.update();
                 }
                 set_all_motors_zero();
-                sleep(250);
 
 
             }
@@ -250,9 +238,10 @@ public class BiobuzzTeleopSebastian {
             fRD.setPower(0);
             bLD.setPower(0);
             bRD.setPower(0);
-            sleep(250);
-        }
 
+        }
     }
-}
+
+
+
         
