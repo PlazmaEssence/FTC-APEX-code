@@ -104,11 +104,10 @@ public class BasicOpMode_teleop extends LinearOpMode {
         ftRDrive.setDirection(DcMotor.Direction.REVERSE);
         intake.setDirection(DcMotor.Direction.FORWARD);
         intakeS1.setDirection(DcMotor.Direction.REVERSE);
-        intakeS2.setDirection(DcMotor.Direction.FORWARD);
         shooter1.setDirection(DcMotor.Direction.FORWARD);
         shooter2.setDirection(DcMotor.Direction.REVERSE);
-        sorter1.setDirection(DcMotor.Direction.FORWARD);
-        sorter2.setDirection(DcMotor.Direction.REVERSE);
+        sorter1.setDirection(DcMotorSimple.Direction.FORWARD);
+        sorter2.setDirection(DcMotorSimple.Direction.FORWARD);
         // Wait for the game to start (driver presses START)
         waitForStart();
         runtime.reset();
@@ -196,4 +195,9 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
 
                 }
+    public void shoter_1(double speed,
+                         double ticks,
+                         double timeoutS) {
+
+    }
 }

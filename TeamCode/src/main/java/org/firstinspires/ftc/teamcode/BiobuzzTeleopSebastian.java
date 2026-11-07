@@ -18,6 +18,7 @@ public class BiobuzzTeleopSebastian {
 //    todo private boolean toggle2 = false;
 //    todo private CRServo servoLeft;
 //    todo private CRServo servoRight;
+
         private DcMotor fLD = null;
         private DcMotor fRD = null;
         private boolean toggle = false;
@@ -74,16 +75,17 @@ public class BiobuzzTeleopSebastian {
 
             if (gamepad2.bWasPressed()) {
                 toggle = !toggle;
-                forward(0.5, 200, 5);
+                back_laser(0.5, 200, 5);
             } else {
                 fLD.setPower(0);
                 fLD.setPower(0);
                 bRD.setPower(0);
                 bLD.setPower(0);
             }
-            
+
             if (distanceMM > 50) {
-                forward(0.5, 538, 20);
+                back_laser(0.5, 538, 20);
+
             } else {
                 fLD.setPower(0);
                 fLD.setPower(0);
@@ -109,15 +111,10 @@ public class BiobuzzTeleopSebastian {
                 fLD.setPower(frontRightPower);
 
 
-            
-        
-    
-
-
-}
+            }
         }
 
-        public void forward_and_back(double speed,
+        public void forward(double speed,
                                      double ticks,
                                      double timeoutS) {
             int newTarget;
@@ -132,14 +129,6 @@ public class BiobuzzTeleopSebastian {
                 newTarget = bRD.getCurrentPosition() - (int) (ticks);
                 bRD.setTargetPosition(newTarget);
 
-                newTarget = fLD.getCurrentPosition() + (int) (ticks);
-                fLD.setTargetPosition(newTarget);
-                newTarget = fRD.getCurrentPosition() + (int) (ticks);
-                fRD.setTargetPosition(newTarget);
-                newTarget = bLD.getCurrentPosition() + (int) (ticks);
-                bLD.setTargetPosition(newTarget);
-                newTarget = bRD.getCurrentPosition() + (int) (ticks);
-                bRD.setTargetPosition(newTarget);
 
 
                 fLD.setMode(RUN_TO_POSITION);
@@ -213,53 +202,57 @@ public class BiobuzzTeleopSebastian {
 
 
             }
-            }
-        } public void back_laser(double speed,
-                              double ticks,
-                              double timeoutS) {
-        int newTarget;
-        //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
-        if (opModeIsActive()) {
-            newTarget = fLD.getCurrentPosition() - (int) (ticks);
-            fLD.setTargetPosition(newTarget);
-            newTarget = fRD.getCurrentPosition() - (int) (ticks);
-            fRD.setTargetPosition(newTarget);
-            newTarget = BLD.getCurrentPosition() - (int) (ticks);
-            bLD.setTargetPosition(newTarget);
-            newTarget = bLD.getCurrentPosition() - (int) (ticks);
-            bLD.setTargetPosition(newTarget);
+        }
+
+        public void back_laser(double speed,
+                               double ticks,
+                               double timeoutS) {
+            int newTarget;
+            //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
+            if (opModeIsActive()) {
+                newTarget = fLD.getCurrentPosition() - (int) (ticks);
+                fLD.setTargetPosition(newTarget);
+                newTarget = fRD.getCurrentPosition() - (int) (ticks);
+                fRD.setTargetPosition(newTarget);
+                newTarget = bLD.getCurrentPosition() - (int) (ticks);
+                bLD.setTargetPosition(newTarget);
+                newTarget = bLD.getCurrentPosition() - (int) (ticks);
+                bLD.setTargetPosition(newTarget);
 
 
-            fLD.setMode(RUN_TO_POSITION);
-            fRD.setMode(RUN_TO_POSITION);
-            bLD.setMode(RUN_TO_POSITION);
-            bLD.setMode(RUN_TO_POSITION);
-            runtime.reset();
+                fLD.setMode(RUN_TO_POSITION);
+                fRD.setMode(RUN_TO_POSITION);
+                bLD.setMode(RUN_TO_POSITION);
+                bLD.setMode(RUN_TO_POSITION);
+                runtime.reset();
 
-            fLD.setPower(Math.abs(speed));
-            fRD.setPower(Math.abs(speed));
-            bLD.setPower(Math.abs(speed));
-            bLD.setPower(Math.abs(speed));
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (fLD.isBusy())) {
-                telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", fLD.getCurrentPosition());
-                telemetry.update();
+                fLD.setPower(Math.abs(speed));
+                fRD.setPower(Math.abs(speed));
+                bLD.setPower(Math.abs(speed));
+                bLD.setPower(Math.abs(speed));
+                while (opModeIsActive() &&
+                        (runtime.seconds() < timeoutS) &&
+                        (fLD.isBusy())) {
+                    telemetry.addData("Running to", " %7d", newTarget);
+                    telemetry.addData("Currently at ", fLD.getCurrentPosition());
+                    telemetry.update();
 
+
+                }
+                fLD.setPower(0);
+                fRD.setPower(0);
+                bLD.setPower(0);
+                bLD.setPower(0);
+                sleep(250);
 
             }
             fLD.setPower(0);
             fRD.setPower(0);
             bLD.setPower(0);
-            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
-
         }
-        fLD.setPower(0);
-        fRD.setPower(0);
-        bLD.setPower(0);
-        bRD.setPower(0);
-        sleep(250);
-    }}
+
+    }
+}
         
