@@ -72,16 +72,6 @@ public class laserAnalogExample extends LinearOpMode {
             telemetry.addData("Voltage (V)", "%.3f", volts);
             telemetry.addData("Distance (mm)", "%.1f", distanceMM);
             telemetry.update();
-
-            {
-                if (distanceMM > 50) {
-                    telemetry.addData("Dist Is Greater Than 50",target_distance = 50);
-                    telemetry.update();
-                } else {
-                    telemetry.addData("Dist Is Less Than 50", 0);
-                    telemetry.update();
-                }
-            }
         }
     }
 }
