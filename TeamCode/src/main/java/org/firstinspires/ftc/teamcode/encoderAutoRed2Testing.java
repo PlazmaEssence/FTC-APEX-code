@@ -4,6 +4,7 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,8 +14,14 @@ public class encoderAutoRed2Testing {
     @Autonomous(name = "red_2Testing", group = "Robot")
 
     public class encoderAutoRed2Duncan extends LinearOpMode {
+        boolean sense = true;
+        boolean toggle;
+        int count = 0;
+
         private Servo sorter1;
         private Servo sorter2;
+        private AnalogInput laserAnalog;
+
         private DcMotor fLD = null;
         private DcMotor fRD = null;
         private DcMotor bLD = null;
@@ -34,7 +41,8 @@ public class encoderAutoRed2Testing {
 
         private ElapsedTime runtime = new ElapsedTime();
 
-
+        private static final double MAX_VOLTS = 3.3;
+        private static final double MAX_DISTANCE_MM = 1000.0;
         static final double FORWARD_SPEED = 0.5;
         static final double TURN_SPEED = 0.4;
 //    todo static final double INTAKE_SPEED = 1.0;
@@ -53,6 +61,7 @@ public class encoderAutoRed2Testing {
             intake = hardwareMap.get(DcMotor.class, "intake");
             sorter1 = hardwareMap.get(Servo.class, "sorter1");
             sorter2 = hardwareMap.get(Servo.class, "sorter2");
+            laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
             fLD = hardwareMap.get(DcMotor.class, "FLD");
             fRD = hardwareMap.get(DcMotor.class, "FRD");
             bLD = hardwareMap.get(DcMotor.class, "BLD");
@@ -66,21 +75,39 @@ public class encoderAutoRed2Testing {
             bLD.setDirection(DcMotor.Direction.FORWARD);
             bRD.setDirection(DcMotor.Direction.REVERSE);
             pollen.setDirection(DcMotor.Direction.FORWARD);
-
-
-            // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-            // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-            // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-            // Send telemetry message to signify robot waiting;
+            intake.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("Status", "Ready to run");    //
             telemetry.update();
             waitForStart();
+            double volts = laserAnalog.getVoltage();
+            double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
+                if (distanceMM < 250) {
+
+                    if (sense == true) {
+                        count += 1;
+                        sense = false;
+                    }
+                    if (sense == false);
+
+                } else {
+                    sense = true;
+
+                }
+            telemetry.addData("Voltage (V)", "%.3f", volts);
+            telemetry.addData("Distance (mm)", "%.1f", distanceMM);
+            telemetry.addData("Count",count);
+            telemetry.update();
+            telemetry.addData("count", "");
+
             pollen.setPower(1);
-            sleep(500);
+            sleep(5000);
             set_all_motors_zero();
             strafeLeft(0.5, 1000, 10, 50);
             turn(1, 1000, 1);
+            intake.setPower(1);
             forward(1 ,500 , 1);
+            sleep(1000);
+            intake.setPower(0);
             forward(1 ,-500 , 1);
             turn(1, -1000, 1);
             forward(0.5, 4000, 10);
@@ -88,31 +115,6 @@ public class encoderAutoRed2Testing {
             set_all_motors_zero();
 //
 //        fLD.setPower(TURN_SPEED);
-//        fRD.setPower(-TURN_SPEED);
-//        bRD.setPower(TURN_SPEED);
-//        bLD.setPower(-TURN_SPEED);
-//        runtime.reset();
-//                rightDrive.setPower(-TURN_SPEED);
-//                rightDrive.setPower(TURN_SPEED);
-//                runtime.reset();
-//                while (opModeIsActive() && (runtime.seconds() < 2.6)) {
-//                    telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-//                    telemetry.update();
-//
-//                    leftDrive.setPower(FORWARD_SPEED);
-//                    rightDrive.setPower(FORWARD_SPEED);
-//                    intakeMotor.setPower(INTAKE_SPEED);
-//                    servoLeft.setPower(leftServoSpeed);
-//                    servoRight.setPower(rightServoSpeed);
-//                    runtime.reset();
-//                    while (opModeIsActive() && (runtime.seconds() < 7)) {
-//                        telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-//                        telemetry.update();
-//                    }
-//                    set_all_motors_zero();
-
-            //}
-            // }
         }
 
         public void set_all_motors_zero() {
@@ -120,6 +122,9 @@ public class encoderAutoRed2Testing {
             fRD.setPower(0);
             bRD.setPower(0);
             bLD.setPower(0);
+            pollen.setPower(0);
+            nectar.setPower(0);
+            intake.setPower(0);
 //        todo intakeMotor.setPower(0);
 //        todo servoRight.setPower(0);
 //        todo servoLeft.setPower(0);
@@ -251,7 +256,6 @@ public class encoderAutoRed2Testing {
                     telemetry.update();
                 }
                 set_all_motors_zero();
-
                 fLD.setPower(0);
                 fRD.setPower(0);
                 bLD.setPower(0);

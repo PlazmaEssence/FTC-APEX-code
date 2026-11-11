@@ -102,7 +102,6 @@ import com.qualcomm.robotcore.util.Range;
                 double drive = -gamepad1.left_stick_y;
                 double strafe = gamepad1.left_stick_x;
                 double rotate = gamepad1.right_stick_x;
-
                 frontLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
                 frontRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
                 backLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
@@ -115,7 +114,6 @@ import com.qualcomm.robotcore.util.Range;
 
             }
         }
-
         public void forward(double speed,
                             double ticks,
                             double timeoutS) {

@@ -6,14 +6,21 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="red_Duncan2", group="Robot")
 
 public class encoderAutoRed2Duncan extends LinearOpMode {
+    boolean sense = true;
+    boolean toggle;
+    int count = 4;
+
     private Servo sorter1;
     private Servo sorter2;
+    private AnalogInput laserAnalog;
+
     private DcMotor fLD = null;
     private DcMotor fRD = null;
     private DcMotor bLD = null;
@@ -24,12 +31,16 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     static final double FORWARD_SPEED = 0.5;
     static final double TURN_SPEED = 0.4;
+    private static final double MAX_VOLTS = 3.3;
+    private static final double MAX_DISTANCE_MM = 1000.0;
+
     public void runOpMode() {
         pollen = hardwareMap.get(DcMotor.class, "pollen");
         nectar = hardwareMap.get(DcMotor.class, "nectar");
         intake = hardwareMap.get(DcMotor.class, "intake");
         sorter1 = hardwareMap.get(Servo.class, "sorter1");
         sorter2 = hardwareMap.get(Servo.class, "sorter2");
+        laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
         fLD = hardwareMap.get(DcMotor.class, "FLD");
         fRD = hardwareMap.get(DcMotor.class, "FRD");
         bLD = hardwareMap.get(DcMotor.class, "BLD");
@@ -41,14 +52,40 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
         pollen.setDirection(DcMotor.Direction.FORWARD);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
+
+
         waitForStart();
+
+        double volts = laserAnalog.getVoltage();
+        double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
+        if (distanceMM < 150)
+            telemetry.addData("count", "");
+        if (distanceMM < 150)
+        {
+
+            if (sense == true) {
+                count += 1;
+                sense = false;
+                //   servo.setPosition(1);
+            }
+            if (sense == false);
+
+        } else {
+            sense = true;
+
+        }
+        telemetry.addData("Voltage (V)", "%.3f", volts);
+        telemetry.addData("Distance (mm)", "%.1f", distanceMM);
+        telemetry.addData("Count",count);
+        telemetry.update();
+
         pollen.setPower(1);
         sleep(500);
         set_all_motors_zero();
         strafeLeft(0.5, 1000, 10, 50);
         forward(0.5, 4000, 10);
         strafeLeft(0.5, 750, 10, 50);
-set_all_motors_zero();
+        set_all_motors_zero();
     }
     public void set_all_motors_zero() {
         fLD.setPower(0);
