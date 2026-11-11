@@ -80,7 +80,7 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
 
         waitForStart();
         pollen.setPower(1);
-        sleep(5);
+        sleep(500);
         set_all_motors_zero();
         strafeLeft(0.5, 1000, 10, 50);
         forward(0.5, 4000, 10);
