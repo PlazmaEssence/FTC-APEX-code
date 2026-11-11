@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //todo import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //todo time shooter and encoders
 
@@ -19,10 +20,15 @@ public class encoderAutoRed1 extends LinearOpMode {
 //    todo private boolean toggle2 = false;
 //    todo private CRServo servoLeft;
 //    todo private CRServo servoRight;
+    private Servo sorter1;
+    private Servo sorter2;
     private DcMotor frontLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
+    private DcMotor pollen = null;
+    private DcMotor nectar = null;
+    private DcMotor intake = null;
     // final double strafe;
 
     // {
@@ -49,6 +55,11 @@ public class encoderAutoRed1 extends LinearOpMode {
 //        frontRightDrive.setPower(FORWARD_SPEED);
 //        backRightDrive.setPower(FORWARD_SPEED);
 //        backLeftDrive.setPower(FORWARD_SPEED);
+        pollen = hardwareMap.get(DcMotor.class, "pollen");
+        nectar = hardwareMap.get(DcMotor.class, "nectar");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        sorter1 = hardwareMap.get(Servo.class, "sorter1");
+        sorter2 = hardwareMap.get(Servo.class, "sorter2");
         frontLeftDrive = hardwareMap.get(DcMotor.class, "FLD");
         frontRightDrive = hardwareMap.get(DcMotor.class, "FRD");
         backLeftDrive = hardwareMap.get(DcMotor.class, "BLD");
@@ -74,6 +85,8 @@ public class encoderAutoRed1 extends LinearOpMode {
         waitForStart();
 
 sleep(10000);
+        pollen.setPower(1);
+        sleep(500);
         forward(0.5, 1000, 10);
         strafeRight(0.5, 2500, 10, 50);
         //todo strafeRight(0.5, 500, 10, 50);
