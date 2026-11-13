@@ -102,7 +102,7 @@ import com.qualcomm.robotcore.util.Range;
             // Wait for PLAY
             waitForStart();
             // Main loop
-            while (opModeIsActive()) {
+
                 while (opModeIsActive()) {
 
 
@@ -137,106 +137,106 @@ import com.qualcomm.robotcore.util.Range;
                     // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
                     // Send telemetry message to signify robot waiting;
 
-                }
+//todo check if it is 0 or 1
+                    pollenSorterServo.setPosition(0);
+                    nectarSorterServo.setPosition(0);
 
-                pollenSorterServo.setPosition(0);
-                nectarSorterServo.setPosition(0);
-
-                // Read sensor voltage (0.0–3.3V)
-                double volts = laserAnalog.getVoltage();
-                // Convert voltage to distance in millimeters (linear mapping)
-                double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
-                if (distanceMM < 250)
-                    telemetry.addData("count", "");
+                    // Read sensor voltage (0.0–3.3V)
+                    double volts = laserAnalog.getVoltage();
+                    // Convert voltage to distance in millimeters (linear mapping)
+                    double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
+                    if (distanceMM < 250)
+                        telemetry.addData("count", "");
 
 
-                if (distanceMM < 250) {
-                    if (sense == true) {
-                        count += 1;
-                        sense = false;
+                    if (distanceMM < 250) {
+                        if (sense == true) {
+                            count += 1;
+                            sense = false;
+
+                        }
+                        if (sense == false) ;
+
+                    } else {
+                        sense = true;
 
                     }
-                    if (sense == false) ;
 
-                } else {
-                    sense = true;
+                    if (count == 4) {
+                        intakeS1.setPosition(1);
+                    } else {
+                        intakeS1.setPosition(0);
+                    }
+                    telemetry.addData("Voltage (V)", "%.3f", volts);
+                    telemetry.addData("Distance (mm)", "%.1f", distanceMM);
+                    telemetry.addData("Count", count);
+                    telemetry.update();
 
+
+                    if (gamepad2.aWasPressed()) {
+                        intakemotor(0.8, 538, 1);
+
+                    } else {
+                        set_intake_zero();
+
+                    }
+
+                    if (gamepad1.rightBumperWasPressed()) {
+                        toggle2 = !toggle2;
+
+                    }
+                    if (toggle2) {// 4984
+                        pollenShooter1(0.6, 28, 1);
+
+
+
+                    } else {
+                        set_pollenShooter_zero();
+
+
+                    }
+                    if (gamepad1.leftTriggerWasPressed()) {
+                        toggle5 = !toggle5;
+                    }
+
+                    if (toggle5) {
+                        pollenShooter.setPower(0.5);
+
+                    } else {
+
+                        set_pollenShooter_zero();
+                    }
+
+                    if (gamepad1.rightTriggerWasPressed()) {
+                        toggle3 = !toggle3;
+                    }
+
+                    if (toggle3) {
+                        nectarShooter.setPower(0.5);
+
+                    } else {
+
+                        nectarShooter.setPower(0);
+
+
+                    }
+
+                    if (gamepad1.leftBumperWasPressed()) {
+
+                        toggle4 = !toggle4;
+                    }
+
+                    if (toggle4) {
+                        necterShooter1(0.6, 28, 1);
+
+                        servonecter();
+
+                    } else {
+
+                        setNectarzero();
+                    }
                 }
 
-                if (count == 4) {
-                    intakeS1.setPosition(1);
-                } else {
-                    intakeS1.setPosition(0);
-                }
-                telemetry.addData("Voltage (V)", "%.3f", volts);
-                telemetry.addData("Distance (mm)", "%.1f", distanceMM);
-                telemetry.addData("Count", count);
-                telemetry.update();
-
-
-                if (gamepad2.aWasPressed()) {
-                    intakemotor(0.8, 538, 1);
-
-                } else {
-                    set_intake_zero();
-
-                }
-
-                if (gamepad1.rightBumperWasPressed()) {
-                    toggle2 = !toggle2;
-
-                }
-                if (toggle2) {// 4984
-                    pollenShooter1(0.6, 28, 1);
-                    servoPollen();
-
-                } else {
-                    set_pollenShooter_zero();
-
-
-                }
-                if (gamepad1.leftTriggerWasPressed()) {
-                    toggle5 = !toggle5;
-                }
-
-                if (toggle5) {
-                    pollenShooter.setPower(0.5);
-
-                } else {
-
-                    set_pollenShooter_zero();
-            }
-
-                if (gamepad1.rightTriggerWasPressed()) {
-                    toggle3 = !toggle3;
-                }
-
-                if (toggle3) {
-                    nectarShooter.setPower(0.5);
-
-                } else {
-
-                    nectarShooter.setPower(0);
-
-
-
-
-                }
-
-                if (gamepad1.leftBumperWasPressed()) {
-
-                    toggle4 = !toggle4;
-                }
-
-                if (toggle4) {
-                   necterShooter1(0.6,28,1);
-                   servonecter();
-
-                } else {
-
-                  setNectarzero();
-                }
-            }
         }
 
 
@@ -283,16 +283,7 @@ import com.qualcomm.robotcore.util.Range;
             }
         }//todo servopollen
             public void servoPollen() {
-                if (pollenShooterq == true) {
-                    pollenSorterServo.setPosition(1);
 
-                    pollenShooterq = false;
-
-                }
-
-                if (pollenShooterq == false) {
-                    pollenSorterServo.setPosition(0);
-                }
             }
 
                 public void setNectarzero () {
@@ -302,8 +293,15 @@ import com.qualcomm.robotcore.util.Range;
 
                 public void servonecter() {
 
+                    if (nectarshooterq == true) {
+                        nectarSorterServo.setPosition(1);
+                        nectarshooterq = false;
 
+                    }
 
+                    if (nectarshooterq == false) {
+                        nectarSorterServo.setPosition(0);
+                    }
                 }
 
 
@@ -344,14 +342,39 @@ import com.qualcomm.robotcore.util.Range;
                 telemetry.addData("Running to", " %7d", newTarget);
                 telemetry.addData("Currently at ", pollenShooter.getCurrentPosition());
                 telemetry.update();
+
             }
 
 
 
-            pollenShooterq = true;
+
+
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (pollenShooter.isBusy())) {
+                telemetry.addData("Running to", " %7d", newTarget);
+                telemetry.addData("Currently at ", pollenShooter.getCurrentPosition());
+                telemetry.update();
+
+
+                    pollenSorterServo.setPosition(1);
+
+            }
+
+
+
+
+            }
+
+
+                pollenSorterServo.setPosition(0);
+
+
+
+
             set_pollenShooter_zero();
         }
-    }
+
 
 
         public void necterShooter1(double speed,
@@ -379,23 +402,13 @@ import com.qualcomm.robotcore.util.Range;
                     nectarshooterq = true;
                 }
 
-                if (nectarshooterq == true) {
-                    nectarSorterServo.setPosition(1);
-
-                    nectarshooterq = false;
-
-                }
-
-                if (nectarshooterq == false) {
-                    nectarSorterServo.setPosition(0);
-
 
 
 
 
                 set_pollenShooter_zero();
             }
-            
+
     }
 
         public void turn(double speed,
