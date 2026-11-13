@@ -173,7 +173,7 @@ import com.qualcomm.robotcore.util.Range;
                     telemetry.update();
 
 
-                    if (gamepad2.aWasPressed()) {
+                    if (gamepad1.aWasPressed()) {
                         intakemotor(0.8, 538, 1);
 
                     } else {
@@ -181,7 +181,7 @@ import com.qualcomm.robotcore.util.Range;
 
                     }
 
-                    if (gamepad1.rightBumperWasPressed()) {
+                    if (gamepad2.rightBumperWasPressed()) {
                         toggle2 = !toggle2;
 
                     }
@@ -195,7 +195,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
                     }
-                    if (gamepad1.leftTriggerWasPressed()) {
+                    if (gamepad2.leftTriggerWasPressed()) {
                         toggle5 = !toggle5;
                     }
 
@@ -207,7 +207,7 @@ import com.qualcomm.robotcore.util.Range;
                         set_pollenShooter_zero();
                     }
 
-                    if (gamepad1.rightTriggerWasPressed()) {
+                    if (gamepad2.rightTriggerWasPressed()) {
                         toggle3 = !toggle3;
                     }
 
@@ -221,7 +221,7 @@ import com.qualcomm.robotcore.util.Range;
 
                     }
 
-                    if (gamepad1.leftBumperWasPressed()) {
+                    if (gamepad2.leftBumperWasPressed()) {
 
                         toggle4 = !toggle4;
                     }
