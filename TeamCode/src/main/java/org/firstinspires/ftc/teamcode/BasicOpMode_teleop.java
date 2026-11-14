@@ -66,7 +66,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
     private Servo intakeS = null;
 
     boolean toggle7 = false;
-    double power = 0.8;
+    double power = 1;
 
     private Servo sorter1 = null;
     private Servo sorter2 = null;
@@ -177,7 +177,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
 
         if (gamepad2.yWasPressed()) {
-            power = 0.8;
+            power = 1;
         }
 
 
