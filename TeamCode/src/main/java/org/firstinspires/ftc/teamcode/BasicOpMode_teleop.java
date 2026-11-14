@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -62,17 +63,25 @@ public class BasicOpMode_teleop extends LinearOpMode {
     private DcMotor ftLDrive = null;
     private DcMotor ftRDrive = null;
     private DcMotor intake = null;
-    private CRServo intakeS1 = null;
-    private CRServo intakeS2 = null;
-    private CRServo sorter1 = null;
-    private CRServo sorter2 = null;
+    private Servo intakeS = null;
+
+    boolean toggle7 = false;
+    double power = 0.8;
+
+    private Servo sorter1 = null;
+    private Servo sorter2 = null;
     boolean toggle = false;
     boolean toggle2 = false;
-   boolean toggle3 = false;
-
+    boolean toggle3 = false;
+    boolean toggle4 = false;
 
     private DcMotor shooter1 = null;
     private DcMotor shooter2 = null;
+
+    boolean toggle5 = false;
+
+    boolean toggle6 = false;
+    boolean toggle8 = false;
     //@Override
 
     public void runOpMode() {
@@ -85,17 +94,16 @@ public class BasicOpMode_teleop extends LinearOpMode {
         //Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        intake = hardwareMap.get(DcMotor.class,"intake");
-        ftLDrive  = hardwareMap.get(DcMotor.class, "FLD");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        ftLDrive = hardwareMap.get(DcMotor.class, "FLD");
         ftRDrive = hardwareMap.get(DcMotor.class, "FRD");
         bkRDrive = hardwareMap.get(DcMotor.class, "BRD");
         bkLDrive = hardwareMap.get(DcMotor.class, "BLD");
-        shooter1 = hardwareMap.get(DcMotor.class,"shooter1");
-       shooter2 = hardwareMap.get(DcMotor.class,"shooter2");
-       intakeS1 = hardwareMap.get(CRServo.class,"InS1");
-        intakeS2 = hardwareMap.get(CRServo.class,"InS2");
-        sorter1 = hardwareMap.get(CRServo.class,"sort1");
-        sorter2 = hardwareMap.get(CRServo.class,"sort2");
+        shooter1 = hardwareMap.get(DcMotor.class, "pollen");
+        shooter2 = hardwareMap.get(DcMotor.class, "nectar");
+        intakeS = hardwareMap.get(Servo.class, "InS1");
+        sorter1 = hardwareMap.get(Servo.class, "sorter1");
+        sorter2 = hardwareMap.get(Servo.class, "sorter2");
 
 
         bkLDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -103,19 +111,17 @@ public class BasicOpMode_teleop extends LinearOpMode {
         ftLDrive.setDirection(DcMotor.Direction.FORWARD);
         ftRDrive.setDirection(DcMotor.Direction.REVERSE);
         intake.setDirection(DcMotor.Direction.FORWARD);
-        intakeS1.setDirection(DcMotor.Direction.REVERSE);
-        intakeS2.setDirection(DcMotor.Direction.FORWARD);
+        intakeS.setDirection(Servo.Direction.REVERSE);
         shooter1.setDirection(DcMotor.Direction.FORWARD);
         shooter2.setDirection(DcMotor.Direction.REVERSE);
-        sorter1.setDirection(DcMotor.Direction.FORWARD);
-        sorter2.setDirection(DcMotor.Direction.REVERSE);
+        sorter1.setDirection(Servo.Direction.FORWARD);
+        sorter2.setDirection(Servo.Direction.REVERSE);
         // Wait for the game to start (driver presses START)
         waitForStart();
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
 
 
             // Set up a variable for each drive wheel to save power level for telemetr
@@ -129,20 +135,26 @@ public class BasicOpMode_teleop extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
-            double strafe =  gamepad1.left_stick_x ;
-            double rotate =  gamepad1.right_stick_x;
+            double strafe = gamepad1.left_stick_x;
+            double rotate = gamepad1.right_stick_x;
 
             ftLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
             ftRightPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
             bkLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
             bkRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
 
-            // Tank Mode uses one stick to control each wheel.
-            // - requires no math,but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y;
-            // rightPower = -gamepad1.right_stick_y;
+            if (gamepad1.rightTriggerWasPressed()){
+                toggle6 = !toggle6;
+            }
 
-            // Send calculated power to wheels
+            if (toggle6){
+                bkLeftPower = bkLeftPower/2;
+                bkRightPower = bkRightPower/2;
+            ftRightPower = ftRightPower/2;
+            ftLeftPower = ftLeftPower/2;
+            }
+
+
             bkLDrive.setPower(bkLeftPower);
             bkRDrive.setPower(bkRightPower);
             ftLDrive.setPower(ftLeftPower);
@@ -151,41 +163,94 @@ public class BasicOpMode_teleop extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "front left (%.2f)," +
-                    " front right (%.2f), back left (%.2f), back right (%.2f)",
-                    ftLeftPower, ftLeftPower,bkLeftPower,bkRightPower);
+                            " front right (%.2f), back left (%.2f), back right (%.2f)",
+                    ftLeftPower, ftLeftPower, bkLeftPower, bkRightPower);
             telemetry.update();
         }
- if (gamepad1.leftTriggerWasPressed()){
-     toggle2 = !toggle2;
- }
-      if (toggle2){
-          shooter1.setPower(0.5);
-      }
-        else{
-            shooter1.setPower(0);
-      }
-
-         if(gamepad1.aWasPressed()){
-             toggle = !toggle;
-         }
-        if (toggle){
-            intake.setPower(0.5);
+        if (gamepad2.dpadUpWasPressed()) {
+            power += 0.05;
         }
-        else{
+
+        if (gamepad2.dpadDownWasPressed()) {
+            power -= 0.05;
+        }
+
+
+        if (gamepad2.yWasPressed()) {
+            power = 0.8;
+        }
+
+
+        if (gamepad2.leftBumperWasPressed()) {
+            toggle2 = !toggle2;
+        }
+        if (toggle2) {
+            shooter1.setPower(power);
+        } else {
+            shooter1.setPower(0);
+        }
+        if (gamepad2.leftTriggerWasPressed()) {
+            sorter2.setPosition(gamepad2.left_trigger);
+        } else {
+            sorter2.setPosition(0);
+        }
+
+        if (gamepad2.aWasPressed()) {
+            toggle = !toggle;
+        }
+        if (toggle) {
+            intake.setPower(0.5);
+        } else {
             intake.setPower(0);
         }
 
-            if (gamepad1.rightTriggerWasPressed()){
-                toggle3 = !toggle3;
-            }
+        if (gamepad2.rightBumperWasPressed()) {
+            toggle3 = !toggle3;
+        }
 
-            if (toggle3){
-                shooter2.setPower(0.5);
-            }
+        if (toggle3) {
+            shooter2.setPower(power);
+        } else {
+            shooter2.setPower(0);
+        }
 
-             else{
-             shooter2.setPower(0);
-            }
+        if (gamepad2.rightTriggerWasPressed()) ;
+        {
+            sorter1.setPosition(gamepad2.right_trigger/2.3);
+        }
+
+        if (toggle4) {
+            sorter1.setPosition(1);
+        } else {
+            sorter1.setPosition(0);
+        }
+
+
+        if (gamepad2.leftStickButtonWasPressed()) {
+            toggle7 = !toggle7;
+        }
+
+        if (toggle7) {
+            intakeS.setPosition(0.8);
+        }
+
+        if (gamepad2.right_stick_button) {
+            toggle8 = !toggle8;
+        }
+
+        if (toggle8) {
+            intakeS.setPosition(0.5);
+
+
+        }
+
+        if (gamepad2.bWasPressed()){
+            toggle6 = !toggle6;
+        }
+
+     if(toggle6) {
+         intakeS.setPosition(0.2);
+     }
 
 
 
@@ -193,7 +258,8 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
 
 
+    }
 
 
-                }
+
 }
