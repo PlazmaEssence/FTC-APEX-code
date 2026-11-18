@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -61,13 +62,15 @@ public class BasicOpMode_teleop extends LinearOpMode {
     private DcMotor bkLDrive = null;
     private DcMotor bkRDrive = null;
     private DcMotor ftLDrive = null;
+
+   private AnalogInput count;
     private DcMotor ftRDrive = null;
     private DcMotor intake = null;
     private Servo intakeS = null;
 
     boolean toggle7 = false;
     double power = 1;
-
+    int number = 0;
     private Servo sorter1 = null;
     private Servo sorter2 = null;
     boolean toggle = false;
@@ -83,6 +86,9 @@ public class BasicOpMode_teleop extends LinearOpMode {
     boolean toggle6 = false;
     boolean toggle8 = false;
     //@Override
+    private static final double MAX_VOLTS = 3.3;
+    private static final double MAX_DISTANCE_MM = 1000.0;
+
 
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -95,21 +101,21 @@ public class BasicOpMode_teleop extends LinearOpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         intake = hardwareMap.get(DcMotor.class, "intake");
-        ftLDrive = hardwareMap.get(DcMotor.class, "FLD");
-        ftRDrive = hardwareMap.get(DcMotor.class, "FRD");
-        bkRDrive = hardwareMap.get(DcMotor.class, "BRD");
-        bkLDrive = hardwareMap.get(DcMotor.class, "BLD");
-        shooter1 = hardwareMap.get(DcMotor.class, "pollen");
-        shooter2 = hardwareMap.get(DcMotor.class, "nectar");
+        ftLDrive = hardwareMap.get(DcMotor.class, "fld");
+        ftRDrive = hardwareMap.get(DcMotor.class, "frd");
+        bkRDrive = hardwareMap.get(DcMotor.class, "brd");
+        bkLDrive = hardwareMap.get(DcMotor.class, "bld");
+        shooter1 = hardwareMap.get(DcMotor.class, "pS");
+        shooter2 = hardwareMap.get(DcMotor.class, "nS");
         intakeS = hardwareMap.get(Servo.class, "InS1");
-        sorter1 = hardwareMap.get(Servo.class, "sorter1");
-        sorter2 = hardwareMap.get(Servo.class, "sorter2");
-
+        sorter1 = hardwareMap.get(Servo.class, "sorterP");
+        sorter2 = hardwareMap.get(Servo.class, "sorterN");
+        count = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
 
         bkLDrive.setDirection(DcMotor.Direction.FORWARD);
         bkRDrive.setDirection(DcMotor.Direction.REVERSE);
-        ftLDrive.setDirection(DcMotor.Direction.FORWARD);
-        ftRDrive.setDirection(DcMotor.Direction.REVERSE);
+        ftLDrive.setDirection(DcMotor.Direction.REVERSE);
+        ftRDrive.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotor.Direction.FORWARD);
         intakeS.setDirection(Servo.Direction.REVERSE);
         shooter1.setDirection(DcMotor.Direction.FORWARD);
@@ -124,7 +130,45 @@ public class BasicOpMode_teleop extends LinearOpMode {
         while (opModeIsActive()) {
 
 
+            double volts = count.getVoltage();
+            // Convert voltage to distance in millimeters (linear mapping)
+            double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
+            if (distanceMM < 250)
+                telemetry.addData("count", "");
+
+
+            if (distanceMM < 250) {
+
+                if (toggle5 == true) {
+                    number += 1;
+                    toggle5 = false;
+                    //   servo.setPosition(1);
+                }
+                if (toggle5 == false);
+
+            } else {
+                toggle5 = true;
+
+            }
+
+            if (number == 4) {
+                intakeS.setPosition(1);
+                intakeS.setPosition(0);
+            } else {
+                intakeS.setPosition(0);
+            }
+
+            // todo if true cant be true again until it has been false.
+
+            // Telemetry
+            telemetry.addData("Voltage (V)", "%.3f", volts);
+            telemetry.addData("Distance (mm)", "%.1f", distanceMM);
+            telemetry.addData("Count",count);
+            telemetry.update();
+
             // Set up a variable for each drive wheel to save power level for telemetr
+
+
             double bkLeftPower;
             double bkRightPower;
             double ftLeftPower;
@@ -167,6 +211,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
                     ftLeftPower, ftLeftPower, bkLeftPower, bkRightPower);
             telemetry.update();
         }
+
         if (gamepad2.dpadUpWasPressed()) {
             power += 0.05;
         }
@@ -199,7 +244,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
             toggle = !toggle;
         }
         if (toggle) {
-            intake.setPower(0.5);
+            intake.setPower(0.8);
         } else {
             intake.setPower(0);
         }

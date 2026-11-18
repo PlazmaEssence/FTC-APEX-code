@@ -64,7 +64,7 @@ import com.qualcomm.robotcore.util.Range;
        double strafe;
       double  rotate;
 
-
+       // boolean toggle = false;
         private DcMotor pollenShooter = null;
         private DcMotor nectarShooter = null;
 
@@ -80,15 +80,18 @@ import com.qualcomm.robotcore.util.Range;
 
             intake = hardwareMap.get(DcMotor.class, "intake");
             laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
-            intakeS1 = hardwareMap.get(Servo.class, "intakeS1");
-            fLD = hardwareMap.get(DcMotor.class, "FLD");
-            fRD = hardwareMap.get(DcMotor.class, "FRD");
-            bLD = hardwareMap.get(DcMotor.class, "BLD");
-            bRD = hardwareMap.get(DcMotor.class, "BRD");
+            intakeS1 = hardwareMap.get(Servo.class, "InS1");
+            fLD = hardwareMap.get(DcMotor.class, "fld");
+            fRD = hardwareMap.get(DcMotor.class, "frd");
+            bLD = hardwareMap.get(DcMotor.class, "bld");
+            bRD = hardwareMap.get(DcMotor.class, "brd");
             pollenShooter = hardwareMap.get(DcMotor.class, "pS");
             nectarShooter = hardwareMap.get(DcMotor.class, "nS");
-            pollenSorterServo = hardwareMap.get(Servo.class, "sort1");
-            nectarSorterServo = hardwareMap.get(Servo.class, "sort2");
+            pollenSorterServo = hardwareMap.get(Servo.class, "sorterP");
+            nectarSorterServo = hardwareMap.get(Servo.class, "sorterN");
+
+
+
 
 
             fLD.setDirection(DcMotor.Direction.FORWARD);
@@ -234,6 +237,20 @@ import com.qualcomm.robotcore.util.Range;
                 slowmotor();
 
             }else{
+
+
+            if(gamepad2.bWasPressed()){
+                toggle = !toggle;
+            }
+
+            if(toggle){
+                intakeS1.setPosition(0.8);
+            }
+
+
+
+
+
                 fLP = Range.clip(drive - strafe - rotate, -0.9, 0.9);
                 fRP = Range.clip(drive + strafe + rotate, -0.9, 0.9);
                 bLP = Range.clip(drive + strafe - rotate, -0.9, 0.9);
