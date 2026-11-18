@@ -102,6 +102,7 @@ double Down = 1;
             gate.setPosition(Down);
             if (count == 4) {
 
+
                 gate.setPosition(Up);
             } else { gate.setPosition(Down);}
             double volts = laserAnalog.getVoltage();
