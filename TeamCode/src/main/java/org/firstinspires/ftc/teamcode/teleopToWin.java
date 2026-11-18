@@ -32,27 +32,32 @@ double Down = 1;
     private static final double MAX_DISTANCE_MM = 1000.0;
 
     public void runOpMode() {
-        pollen = hardwareMap.get(DcMotor.class, "pollen");
-        nectar = hardwareMap.get(DcMotor.class, "nectar");
-        intake = hardwareMap.get(DcMotor.class, "intake");
-        sorter1 = hardwareMap.get(Servo.class, "sorter1");
-        sorter2 = hardwareMap.get(Servo.class, "sorter2");
-        gate = hardwareMap.get(Servo.class, "gate");
-        laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
-        fLD = hardwareMap.get(DcMotor.class, "FLD");
-        fRD = hardwareMap.get(DcMotor.class, "FRD");
-        bLD = hardwareMap.get(DcMotor.class, "BLD");
-        bRD = hardwareMap.get(DcMotor.class, "BRD");
-        fLD.setDirection(DcMotor.Direction.FORWARD);
-        fRD.setDirection(DcMotor.Direction.REVERSE);
-        bLD.setDirection(DcMotor.Direction.FORWARD);
-        bRD.setDirection(DcMotor.Direction.REVERSE);
-        pollen.setDirection(DcMotor.Direction.FORWARD);
-        intake.setDirection(DcMotor.Direction.FORWARD);
-        telemetry.addData("Status", "Ready to run");    //
-        telemetry.update();
-        waitForStart();
-        while (opModeIsActive()) {
+        tel();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public void sense(){
             double volts = laserAnalog.getVoltage();
             double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
             if (distanceMM < 250) {
@@ -67,6 +72,8 @@ double Down = 1;
                 sense = true;
 
             }
+        }
+        public void movement(){
             if (gamepad2.left_trigger > 0) {
                 pollen.setPower(0.8);
                 sorter1.setPosition(1);
@@ -91,35 +98,64 @@ double Down = 1;
                 gate.setPosition(Up);
             } else {
                 intake.setPower(0);}
-                gate.setPosition(Down);
-if (count == 4) {
-    gate.setPosition(Up);
-} else { gate.setPosition(Down);}
-                double backLeftPower;
-                double backRightPower;
-                double frontLeftPower;
-                double frontRightPower;
+            gate.setPosition(Down);
+            if (count == 4) {
+                gate.setPosition(Up);
+            } else { gate.setPosition(Down);}
+            double volts = laserAnalog.getVoltage();
+            double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
+            double backLeftPower;
+            double backRightPower;
+            double frontLeftPower;
+            double frontRightPower;
 
-                double drive = -gamepad1.left_stick_y;
-                double strafe = gamepad1.left_stick_x;
-                double rotate = gamepad1.right_stick_x;
+            double drive = -gamepad1.left_stick_y;
+            double strafe = gamepad1.left_stick_x;
+            double rotate = gamepad1.right_stick_x;
 
-                frontLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
-                frontRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
-                backLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
-                backRightPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
+            frontLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
+            frontRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
+            backLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
+            backRightPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
 
-                bLD.setPower(backLeftPower);
-                bRD.setPower(backRightPower);
-                fRD.setPower(frontLeftPower);
-                fLD.setPower(frontRightPower);
+            bLD.setPower(backLeftPower);
+            bRD.setPower(backRightPower);
+            fRD.setPower(frontLeftPower);
+            fLD.setPower(frontRightPower);
 
-                telemetry.addData("Voltage (V)", "%.3f", volts);
-                telemetry.addData("Distance (mm)", "%.1f", distanceMM);
-                telemetry.addData("Count", count);
-                telemetry.update();
-                telemetry.addData("count", "");
-
+            telemetry.addData("Voltage (V)", "%.3f", volts);
+            telemetry.addData("Distance (mm)", "%.1f", distanceMM);
+            telemetry.addData("Count", count);
+            telemetry.update();
+            telemetry.addData("count", "");
+        }
+        public void initStuff() {
+            pollen = hardwareMap.get(DcMotor.class, "pollen");
+            nectar = hardwareMap.get(DcMotor.class, "nectar");
+            intake = hardwareMap.get(DcMotor.class, "intake");
+            sorter1 = hardwareMap.get(Servo.class, "sorter1");
+            sorter2 = hardwareMap.get(Servo.class, "sorter2");
+            gate = hardwareMap.get(Servo.class, "gate");
+            laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
+            fLD = hardwareMap.get(DcMotor.class, "FLD");
+            fRD = hardwareMap.get(DcMotor.class, "FRD");
+            bLD = hardwareMap.get(DcMotor.class, "BLD");
+            bRD = hardwareMap.get(DcMotor.class, "BRD");
+            fLD.setDirection(DcMotor.Direction.FORWARD);
+            fRD.setDirection(DcMotor.Direction.REVERSE);
+            bLD.setDirection(DcMotor.Direction.FORWARD);
+            bRD.setDirection(DcMotor.Direction.REVERSE);
+            pollen.setDirection(DcMotor.Direction.FORWARD);
+            intake.setDirection(DcMotor.Direction.FORWARD);
+            telemetry.addData("Status", "Ready to run");    //
+            telemetry.update();
+        }
+        public void tel(){
+            initStuff();
+            waitForStart();
+            while (opModeIsActive()) {
+                sense();
+                movement();
             }
         }
     }
