@@ -87,6 +87,7 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
         strafeLeft(0.5, 750, 10, 50);
         set_all_motors_zero();
     }
+
     public void set_all_motors_zero() {
         fLD.setPower(0);
         fRD.setPower(0);

@@ -298,6 +298,7 @@ public class encoderAutoRed2Testing {
                 }
                 set_all_motors_zero();
 
+
                 fLD.setPower(0);
                 fRD.setPower(0);
                 bLD.setPower(0);
