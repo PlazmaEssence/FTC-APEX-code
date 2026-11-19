@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear OpMode")
+@TeleOp(name="Basic: teleop", group="Linear OpMode")
 //@Disabled
 public class BasicOpMode_teleop extends LinearOpMode {
 
@@ -63,7 +63,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
     private DcMotor bkRDrive = null;
     private DcMotor ftLDrive = null;
 
-   private AnalogInput count;
+    private AnalogInput count;
     private DcMotor ftRDrive = null;
     private DcMotor intake = null;
     private Servo intakeS = null;
@@ -71,15 +71,15 @@ public class BasicOpMode_teleop extends LinearOpMode {
     boolean toggle7 = false;
     double power = 1;
     int number = 0;
-    private Servo sorter1 = null;
-    private Servo sorter2 = null;
+    private Servo sorterP = null;
+    private Servo sorterN = null;
     boolean toggle = false;
     boolean toggle2 = false;
     boolean toggle3 = false;
     boolean toggle4 = false;
 
-    private DcMotor shooter1 = null;
-    private DcMotor shooter2 = null;
+    private DcMotor shooterP = null;
+    private DcMotor shooterN = null;
 
     boolean toggle5 = false;
 
@@ -105,23 +105,23 @@ public class BasicOpMode_teleop extends LinearOpMode {
         ftRDrive = hardwareMap.get(DcMotor.class, "frd");
         bkRDrive = hardwareMap.get(DcMotor.class, "brd");
         bkLDrive = hardwareMap.get(DcMotor.class, "bld");
-        shooter1 = hardwareMap.get(DcMotor.class, "pS");
-        shooter2 = hardwareMap.get(DcMotor.class, "nS");
+        shooterP = hardwareMap.get(DcMotor.class, "pS");
+        shooterN = hardwareMap.get(DcMotor.class, "nS");
         intakeS = hardwareMap.get(Servo.class, "InS1");
-        sorter1 = hardwareMap.get(Servo.class, "sorterP");
-        sorter2 = hardwareMap.get(Servo.class, "sorterN");
+        sorterP = hardwareMap.get(Servo.class, "sorterP");
+        sorterN = hardwareMap.get(Servo.class, "sorterN");
         count = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
 
         bkLDrive.setDirection(DcMotor.Direction.FORWARD);
-        bkRDrive.setDirection(DcMotor.Direction.REVERSE);
+        bkRDrive.setDirection(DcMotor.Direction.FORWARD);
         ftLDrive.setDirection(DcMotor.Direction.REVERSE);
         ftRDrive.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotor.Direction.FORWARD);
         intakeS.setDirection(Servo.Direction.REVERSE);
-        shooter1.setDirection(DcMotor.Direction.FORWARD);
-        shooter2.setDirection(DcMotor.Direction.REVERSE);
-        sorter1.setDirection(Servo.Direction.FORWARD);
-        sorter2.setDirection(Servo.Direction.REVERSE);
+        shooterP.setDirection(DcMotor.Direction.REVERSE);
+        shooterN.setDirection(DcMotor.Direction.FORWARD);
+        sorterP.setDirection(Servo.Direction.FORWARD);
+        sorterN.setDirection(Servo.Direction.REVERSE);
         // Wait for the game to start (driver presses START)
         waitForStart();
         runtime.reset();
@@ -137,14 +137,14 @@ public class BasicOpMode_teleop extends LinearOpMode {
                 telemetry.addData("count", "");
 
 
-            if (distanceMM < 250) {
+            if (distanceMM < 190) {
 
                 if (toggle5 == true) {
                     number += 1;
                     toggle5 = false;
                     //   servo.setPosition(1);
                 }
-                if (toggle5 == false);
+                if (toggle5 == false) ;
 
             } else {
                 toggle5 = true;
@@ -152,18 +152,15 @@ public class BasicOpMode_teleop extends LinearOpMode {
             }
 
             if (number == 4) {
-                intakeS.setPosition(1);
-                intakeS.setPosition(0);
-            } else {
-                intakeS.setPosition(0);
-            }
 
+                intakeS.setPosition(0.2);
+            }
             // todo if true cant be true again until it has been false.
 
             // Telemetry
             telemetry.addData("Voltage (V)", "%.3f", volts);
             telemetry.addData("Distance (mm)", "%.1f", distanceMM);
-            telemetry.addData("Count",count);
+            telemetry.addData("Count", count);
             telemetry.update();
 
             // Set up a variable for each drive wheel to save power level for telemetr
@@ -182,20 +179,20 @@ public class BasicOpMode_teleop extends LinearOpMode {
             double strafe = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
 
-            ftLeftPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
-            ftRightPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
-            bkLeftPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
-            bkRightPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
+            ftLeftPower = Range.clip(drive + strafe + rotate, -0.9, 0.9);
+            ftRightPower = Range.clip(drive - strafe - rotate, -0.9, 0.9);
+            bkLeftPower = Range.clip(drive - strafe + rotate, -0.9, 0.9);
+            bkRightPower = Range.clip(drive + strafe - rotate, -0.9, 0.9);
 
-            if (gamepad1.rightTriggerWasPressed()){
+            if (gamepad1.rightTriggerWasPressed()) {
                 toggle6 = !toggle6;
             }
 
-            if (toggle6){
-                bkLeftPower = bkLeftPower/2;
-                bkRightPower = bkRightPower/2;
-            ftRightPower = ftRightPower/2;
-            ftLeftPower = ftLeftPower/2;
+            if (toggle6) {
+                bkLeftPower = bkLeftPower / 2;
+                bkRightPower = bkRightPower / 2;
+                ftRightPower = ftRightPower / 2;
+                ftLeftPower = ftLeftPower / 2;
             }
 
 
@@ -210,101 +207,95 @@ public class BasicOpMode_teleop extends LinearOpMode {
                             " front right (%.2f), back left (%.2f), back right (%.2f)",
                     ftLeftPower, ftLeftPower, bkLeftPower, bkRightPower);
             telemetry.update();
+
+
+            if (gamepad2.dpadUpWasPressed()) {
+                power += 0.05;
+            }
+
+            if (gamepad2.dpadDownWasPressed()) {
+                power -= 0.05;
+            }
+
+
+            if (gamepad2.yWasPressed()) {
+                power = 1;
+            }
+
+
+            if (gamepad2.leftBumperWasPressed()) {
+                toggle2 = !toggle2;
+            }
+            if (toggle2) {
+                shooterP.setPower(power);
+            } else {
+                shooterP.setPower(0);
+            }
+
+
+            if (gamepad2.left_trigger > 0) {
+                sorterP.setPosition(0.2);
+            } else {
+                sorterP.setPosition(0.8);
+            }
+
+
+            if (gamepad2.aWasPressed()) {
+                toggle = !toggle;
+            }
+            if (toggle) {
+                intake.setPower(0.8);
+            } else {
+                intake.setPower(0);
+            }
+
+            if (gamepad2.rightBumperWasPressed()) {
+                toggle3 = !toggle3;
+            }
+
+            if (toggle3) {
+                shooterN.setPower(power);
+            } else {
+                shooterN.setPower(0);
+            }
+
+            if (gamepad2.right_trigger > 0) {
+                sorterN.setPosition(0.2);
+            } else {
+                sorterN.setPosition(0.9);
+            }
+
+                if (gamepad2.leftStickButtonWasPressed()) {
+                    toggle7 = !toggle7;
+                }
+
+                if (toggle7) {
+                    intakeS.setPosition(0.8);
+                }
+
+
+                if (gamepad2.right_stick_button) {
+                    toggle8 = !toggle8;
+                }
+
+                if (toggle8) {
+                    intakeS.setPosition(0.5);
+
+
+                }
+
+
+                if (gamepad2.bWasPressed()) {
+                    toggle6 = !toggle6;
+                }
+
+                if (toggle6) {
+                    intakeS.setPosition(0.2);
+                }
+
+
+            }
+
+
         }
-
-        if (gamepad2.dpadUpWasPressed()) {
-            power += 0.05;
-        }
-
-        if (gamepad2.dpadDownWasPressed()) {
-            power -= 0.05;
-        }
-
-
-        if (gamepad2.yWasPressed()) {
-            power = 1;
-        }
-
-
-        if (gamepad2.leftBumperWasPressed()) {
-            toggle2 = !toggle2;
-        }
-        if (toggle2) {
-            shooter1.setPower(power);
-        } else {
-            shooter1.setPower(0);
-        }
-        if (gamepad2.leftTriggerWasPressed()) {
-            sorter2.setPosition(gamepad2.left_trigger);
-        } else {
-            sorter2.setPosition(0);
-        }
-
-        if (gamepad2.aWasPressed()) {
-            toggle = !toggle;
-        }
-        if (toggle) {
-            intake.setPower(0.8);
-        } else {
-            intake.setPower(0);
-        }
-
-        if (gamepad2.rightBumperWasPressed()) {
-            toggle3 = !toggle3;
-        }
-
-        if (toggle3) {
-            shooter2.setPower(power);
-        } else {
-            shooter2.setPower(0);
-        }
-
-        if (gamepad2.rightTriggerWasPressed()) ;
-        {
-            sorter1.setPosition(gamepad2.right_trigger/2.3);
-        }
-
-        if (toggle4) {
-            sorter1.setPosition(1);
-        } else {
-            sorter1.setPosition(0);
-        }
-
-
-        if (gamepad2.leftStickButtonWasPressed()) {
-            toggle7 = !toggle7;
-        }
-
-        if (toggle7) {
-            intakeS.setPosition(0.8);
-        }
-
-        if (gamepad2.right_stick_button) {
-            toggle8 = !toggle8;
-        }
-
-        if (toggle8) {
-            intakeS.setPosition(0.5);
-
-
-        }
-
-        if (gamepad2.bWasPressed()){
-            toggle6 = !toggle6;
-        }
-
-     if(toggle6) {
-         intakeS.setPosition(0.2);
-     }
-
-
-
-
-
-
-
     }
-
-
-
-}
