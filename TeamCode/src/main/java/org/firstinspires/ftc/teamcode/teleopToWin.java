@@ -14,8 +14,8 @@ public class teleopToWin extends LinearOpMode {
     boolean sense = true;
     boolean toggle;
     int count = 0;
-double Up = 0;
-double Down = 1;
+double Up = 0.8;
+double Down = 0.5;
     private Servo sorter1;
     private Servo gate;
     private Servo sorter2;
@@ -77,19 +77,19 @@ double Down = 1;
         public void movement(){
             if (gamepad2.left_trigger > 0) {
                 pollen.setPower(0.8);
-                sorter1.setPosition(1);
+                sorter1.setPosition(0.2);
 
             } else {
                 pollen.setPower(0);
-                sorter1.setPosition(0);
+                sorter1.setPosition(0.8);
             }
             if (gamepad2.right_trigger > 0) {
                 nectar.setPower(0.8);
-                sorter2.setPosition(1);
+                sorter2.setPosition(0.2);
 
             } else {
                 nectar.setPower(0);
-                sorter2.setPosition(0);
+                sorter2.setPosition(0.9);
             }
             if (gamepad2.bWasPressed()) {
                 toggle = !toggle;
@@ -102,8 +102,8 @@ double Down = 1;
             gate.setPosition(Down);
             if (count == 4) {
 
-                gate.setPosition(Up);
-            } else { gate.setPosition(Down);}
+                gate.setPosition(Down);
+            } else { gate.setPosition(Up);}
             double volts = laserAnalog.getVoltage();
             double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
             double backLeftPower;
@@ -135,20 +135,24 @@ double Down = 1;
             pollen = hardwareMap.get(DcMotor.class, "pollen");
             nectar = hardwareMap.get(DcMotor.class, "nectar");
             intake = hardwareMap.get(DcMotor.class, "intake");
-            sorter1 = hardwareMap.get(Servo.class, "sorter1");
-            sorter2 = hardwareMap.get(Servo.class, "sorter2");
-            gate = hardwareMap.get(Servo.class, "gate");
+            sorter1 = hardwareMap.get(Servo.class, "pS");
+            sorter2 = hardwareMap.get(Servo.class, "nS");
+            gate = hardwareMap.get(Servo.class, "InS1");
             laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
-            fLD = hardwareMap.get(DcMotor.class, "FLD");
-            fRD = hardwareMap.get(DcMotor.class, "FRD");
-            bLD = hardwareMap.get(DcMotor.class, "BLD");
-            bRD = hardwareMap.get(DcMotor.class, "BRD");
-            fLD.setDirection(DcMotor.Direction.FORWARD);
-            fRD.setDirection(DcMotor.Direction.REVERSE);
+            fLD = hardwareMap.get(DcMotor.class, "fld");
+            fRD = hardwareMap.get(DcMotor.class, "frd");
+            bLD = hardwareMap.get(DcMotor.class, "bld");
+            bRD = hardwareMap.get(DcMotor.class, "brd");
+            fLD.setDirection(DcMotor.Direction.REVERSE);
+            fRD.setDirection(DcMotor.Direction.FORWARD);
             bLD.setDirection(DcMotor.Direction.FORWARD);
-            bRD.setDirection(DcMotor.Direction.REVERSE);
+            bRD.setDirection(DcMotor.Direction.FORWARD);
             pollen.setDirection(DcMotor.Direction.FORWARD);
             intake.setDirection(DcMotor.Direction.FORWARD);
+            gate.setDirection(Servo.Direction.REVERSE);
+            nectar.setDirection(DcMotor.Direction.FORWARD);
+            sorter1.setDirection(Servo.Direction.FORWARD);
+            sorter2.setDirection(Servo.Direction.REVERSE);
             telemetry.addData("Status", "Ready to run");    //
             telemetry.update();
         }

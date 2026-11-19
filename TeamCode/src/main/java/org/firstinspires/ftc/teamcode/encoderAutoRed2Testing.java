@@ -7,11 +7,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class encoderAutoRed2Testing {
-    @Disabled
     @Autonomous(name = "red_2Testing", group = "Robot")
 
     public class encoderAutoRed2Duncan extends LinearOpMode {
@@ -57,24 +57,24 @@ public class encoderAutoRed2Testing {
 //        fRD.setPower(FORWARD_SPEED);
 //        bRD.setPower(FORWARD_SPEED);
 //        bLD.setPower(FORWARD_SPEED);
-            pollen = hardwareMap.get(DcMotor.class, "pollen");
-            nectar = hardwareMap.get(DcMotor.class, "nectar");
+            pollen = hardwareMap.get(DcMotor.class, "pS");
+            nectar = hardwareMap.get(DcMotor.class, "nS");
             intake = hardwareMap.get(DcMotor.class, "intake");
-            sorter1 = hardwareMap.get(Servo.class, "sorter1");
-            sorter2 = hardwareMap.get(Servo.class, "sorter2");
+            sorter1 = hardwareMap.get(Servo.class, "sorterP");
+            sorter2 = hardwareMap.get(Servo.class, "sorterN");
             laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
-            fLD = hardwareMap.get(DcMotor.class, "FLD");
-            fRD = hardwareMap.get(DcMotor.class, "FRD");
-            bLD = hardwareMap.get(DcMotor.class, "BLD");
-            bRD = hardwareMap.get(DcMotor.class, "BRD");
+            fLD = hardwareMap.get(DcMotor.class, "fld");
+            fRD = hardwareMap.get(DcMotor.class, "frd");
+            bLD = hardwareMap.get(DcMotor.class, "bld");
+            bRD = hardwareMap.get(DcMotor.class, "brd");
 //       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
 
-            fLD.setDirection(DcMotor.Direction.FORWARD);
-            fRD.setDirection(DcMotor.Direction.REVERSE);
+            fLD.setDirection(DcMotor.Direction.REVERSE);
+            fRD.setDirection(DcMotor.Direction.FORWARD);
             bLD.setDirection(DcMotor.Direction.FORWARD);
-            bRD.setDirection(DcMotor.Direction.REVERSE);
+            bRD.setDirection(DcMotor.Direction.FORWARD);
             pollen.setDirection(DcMotor.Direction.FORWARD);
             intake.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("Status", "Ready to run");    //

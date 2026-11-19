@@ -3,47 +3,79 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-@Disabled
 @Autonomous(name="red_1", group="Robot")
 
 public class encoderAutoRed1 extends LinearOpMode {
+    boolean sense = true;
+    boolean toggle;
+    int count = 0;
     private Servo sorter1;
     private Servo sorter2;
     private DcMotor frontLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
+    private AnalogInput laserAnalog;
     private DcMotor pollen = null;
     private DcMotor nectar = null;
     private DcMotor intake = null;
     private ElapsedTime runtime = new ElapsedTime();
 
-
+    private static final double MAX_VOLTS = 3.3;
+    private static final double MAX_DISTANCE_MM = 1000.0;
     static final double FORWARD_SPEED = 0.5;
     static final double TURN_SPEED = 0.4;
     public void runOpMode() {
-        pollen = hardwareMap.get(DcMotor.class, "pollen");
-        nectar = hardwareMap.get(DcMotor.class, "nectar");
+        pollen = hardwareMap.get(DcMotor.class, "pS");
+        nectar = hardwareMap.get(DcMotor.class, "nS");
         intake = hardwareMap.get(DcMotor.class, "intake");
-        sorter1 = hardwareMap.get(Servo.class, "sorter1");
-        sorter2 = hardwareMap.get(Servo.class, "sorter2");
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "FLD");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "FRD");
-        backLeftDrive = hardwareMap.get(DcMotor.class, "BLD");
-        backRightDrive = hardwareMap.get(DcMotor.class, "BRD");
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        sorter1 = hardwareMap.get(Servo.class, "sorterP");
+        sorter2 = hardwareMap.get(Servo.class, "sorterN");
+        laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
+        backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
+        backRightDrive = hardwareMap.get(DcMotor.class, "brd");
+//       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
+//        servoLeft = hardwareMap.get(CRServo.class, "sL");
+//        servoRight = hardwareMap.get(CRServo.class, "sR");
+
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        pollen.setDirection(DcMotor.Direction.FORWARD);
+        intake.setDirection(DcMotor.Direction.FORWARD);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
 
         waitForStart();
-sleep(10000);
+        double volts = laserAnalog.getVoltage();
+        double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
+        if (distanceMM < 250) {
+
+            if (sense == true) {
+                count += 1;
+                sense = false;
+            }
+            if (sense == false);
+
+        } else {
+            sense = true;
+
+        }
+        telemetry.addData("Voltage (V)", "%.3f", volts);
+        telemetry.addData("Distance (mm)", "%.1f", distanceMM);
+        telemetry.addData("Count",count);
+        telemetry.update();
+        telemetry.addData("count", "");
+
+        sleep(10000);
         pollen.setPower(1);
         sleep(500);
         forward(0.5, 1000, 10);
