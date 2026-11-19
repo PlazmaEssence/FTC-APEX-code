@@ -55,11 +55,12 @@ import com.qualcomm.robotcore.util.Range;
         double fLP;
         double fRP;
 
-        boolean Toggle1 = false;
-        boolean toggle2 = false;
+        boolean tNS = false;
+        boolean tShootP = false;
         boolean toggle3 = false;
         boolean toggle4 = false;
-        boolean toggle5 = false;
+        boolean pShootmanual = false;
+        boolean tPS = false;
         double drive;
        double strafe;
       double  rotate;
@@ -91,16 +92,13 @@ import com.qualcomm.robotcore.util.Range;
             nectarSorterServo = hardwareMap.get(Servo.class, "sorterN");
 
 
-
-
-
-            fLD.setDirection(DcMotor.Direction.FORWARD);
-            fRD.setDirection(DcMotor.Direction.REVERSE);
+            fLD.setDirection(DcMotor.Direction.REVERSE);
+            fRD.setDirection(DcMotor.Direction.FORWARD);
             bLD.setDirection(DcMotor.Direction.FORWARD);
-            bRD.setDirection(DcMotor.Direction.REVERSE);
+            bRD.setDirection(DcMotor.Direction.FORWARD);
             intake.setDirection(DcMotor.Direction.FORWARD);
-            pollenShooter.setDirection(DcMotor.Direction.FORWARD);
-            nectarShooter.setDirection(DcMotor.Direction.REVERSE);
+            pollenShooter.setDirection(DcMotor.Direction.REVERSE);
+            nectarShooter.setDirection(DcMotor.Direction.FORWARD);
             //pollenSorterServo.setDirection(DcMotorSimple.Direction.FORWARD);
             //nectarSorterServo.setDirection(DcMotorSimple.Direction.FORWARD);
             waitForStart();
@@ -114,15 +112,9 @@ import com.qualcomm.robotcore.util.Range;
             while (opModeIsActive()) {
 
 
-
-
                 drive = -gamepad1.left_stick_y;
-                 strafe = gamepad1.left_stick_x;
+                strafe = gamepad1.left_stick_x;
                 rotate = gamepad1.right_stick_x;
-
-
-
-
 
 
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -137,18 +129,18 @@ import com.qualcomm.robotcore.util.Range;
                 // Send telemetry message to signify robot waiting;
 
 //todo check if it is 0 or 1
-                pollenSorterServo.setPosition(0);
-                nectarSorterServo.setPosition(0);
+                pollenSorterServo.setPosition(0.2);
+                nectarSorterServo.setPosition(0.8);
 
                 // Read sensor voltage (0.0–3.3V)
                 double volts = laserAnalog.getVoltage();
                 // Convert voltage to distance in millimeters (linear mapping)
                 double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
-                if (distanceMM < 250)
+                if (distanceMM < 1)
                     telemetry.addData("count", "");
 
 
-                if (distanceMM < 250) {
+                if (distanceMM < 1) {
                     if (sense == true) {
                         count += 1;
                         sense = false;
@@ -162,9 +154,9 @@ import com.qualcomm.robotcore.util.Range;
                 }
 
                 if (count == 4) {
-                    intakeS1.setPosition(1);
+                    intakeS1.setPosition(0.8);
                 } else {
-                    intakeS1.setPosition(0);
+                    intakeS1.setPosition(0.2);
                 }
                 telemetry.addData("Voltage (V)", "%.3f", volts);
                 telemetry.addData("Distance (mm)", "%.1f", distanceMM);
@@ -173,7 +165,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
                 if (gamepad1.aWasPressed()) {
-                    intakemotor(0.8, 538, 1);
+                    intakemotor(5, 208, 2);
 
                 } else {
                     set_intake_zero();
@@ -181,11 +173,11 @@ import com.qualcomm.robotcore.util.Range;
                 }
 
                 if (gamepad2.rightBumperWasPressed()) {
-                    toggle2 = !toggle2;
+                    tShootP = !tShootP;
 
                 }
-                if (toggle2) {// 4984
-                    pollenShooter1(0.6, 2800, 3);
+                if (tShootP) {// 4984
+                    pollenShooter1(1, 28, 2);
 
 
                 } else {
@@ -194,10 +186,10 @@ import com.qualcomm.robotcore.util.Range;
 
                 }
                 if (gamepad2.leftTriggerWasPressed()) {
-                    toggle5 = !toggle5;
+                    pShootmanual = !pShootmanual;
                 }
 
-                if (toggle5) {
+                if (pShootmanual) {
                     pollenShooter.setPower(0.5);
 
                 } else {
@@ -232,37 +224,52 @@ import com.qualcomm.robotcore.util.Range;
 
                     setNectarzero();
                 }
+
+                if (gamepad1.right_trigger > 0.5) {
+                    slowmotor();
+
+                } else {
+
+
+                    if (gamepad2.bWasPressed()) {
+                        toggle = !toggle;
+                    }
+
+                    if (toggle) {
+                        intakeS1.setPosition(0.8);
+                    }
+
+
+                    fLP = Range.clip(drive - strafe - rotate, -0.9, 0.9);
+                    fRP = Range.clip(drive + strafe + rotate, -0.9, 0.9);
+                    bLP = Range.clip(drive + strafe - rotate, -0.9, 0.9);
+                    bRP = Range.clip(drive - strafe + rotate, -0.9, 0.9);
+
+                    bLD.setPower(bLP);
+                    bRD.setPower(bRP);
+                    fLD.setPower(fLP);
+                    fRD.setPower(fRP);
+
+                }
+
+                if (gamepad2.yWasPressed()) {
+                    tNS = !tNS;
+                }
+                if (tNS) {
+                    nectarSorterServo.setPosition(0);
+                } else {
+                    nectarSorterServo.setPosition(1);
+                }
+
+                if (gamepad2.xWasPressed()) {
+                    tPS = !tPS;
+                }
+                if (tPS) {
+                    pollenSorterServo.setPosition(0);
+                } else {
+                    pollenSorterServo.setPosition(1);
+                }
             }
-            if (gamepad1.right_trigger > 0.5) {
-                slowmotor();
-
-            }else{
-
-
-            if(gamepad2.bWasPressed()){
-                toggle = !toggle;
-            }
-
-            if(toggle){
-                intakeS1.setPosition(0.8);
-            }
-
-
-
-
-
-                fLP = Range.clip(drive - strafe - rotate, -0.9, 0.9);
-                fRP = Range.clip(drive + strafe + rotate, -0.9, 0.9);
-                bLP = Range.clip(drive + strafe - rotate, -0.9, 0.9);
-                bRP = Range.clip(drive - strafe + rotate, -0.9, 0.9);
-
-                bLD.setPower(bLP);
-                bRD.setPower(bRP);
-                fLD.setPower(fLP);
-                fRD.setPower(fRP);
-
-            }
-        }
 
 
 // TODO       public void forward(double speed,
@@ -305,28 +312,30 @@ import com.qualcomm.robotcore.util.Range;
 //                bLD.setPower(0);
 //                bRD.setPower(0);
 
-      //      }
-       // }//todo servopollen
-
-        public void slowmotor() {
-
-            fLP = Range.clip(drive - strafe - rotate, -0.5, 0.5);
-            fRP = Range.clip(drive + strafe + rotate, -0.5, 0.5);
-            bLP = Range.clip(drive + strafe - rotate, -0.5, 0.5);
-            bRP = Range.clip(drive - strafe + rotate, -0.5, 0.5);
-
+            //      }
+            // }//todo servopollen
         }
+        
+
+            public void slowmotor () {
+
+                fLP = Range.clip(drive - strafe - rotate, -0.5, 0.5);
+                fRP = Range.clip(drive + strafe + rotate, -0.5, 0.5);
+                bLP = Range.clip(drive + strafe - rotate, -0.5, 0.5);
+                bRP = Range.clip(drive - strafe + rotate, -0.5, 0.5);
+
+            }
+        
 
         public void setNectarzero() {
             nectarShooter.setPower(0);
         }
 
 
-        public void servonecter() {
 
 
 
-        }
+
 
 
         public void set_all_motors_zero() {
@@ -347,90 +356,141 @@ import com.qualcomm.robotcore.util.Range;
         }
 
         public void pollenShooter1(double speed,
-
                                    double ticks,
                                    double timeoutS) {
-            int newTarget;
+
             if (opModeIsActive()) {
+                int newTarget;
+                //todo    if (opModeIsActive()) {
                 newTarget = pollenShooter.getCurrentPosition() - (int) (ticks);
+                if (opModeIsActive()) {
+                    newTarget = pollenShooter.getCurrentPosition() + (int) (ticks);
+                    pollenShooter.setTargetPosition(newTarget);
+
+                    pollenShooter.setMode(RUN_TO_POSITION);
+                    runtime.reset();
+
+                    pollenShooter.setPower(Math.abs(speed));
 
 
-                pollenShooter.setMode(RUN_TO_POSITION);
-                runtime.reset();
+                    while (opModeIsActive() &&
+                            (runtime.seconds() < timeoutS) &&
+                            (pollenShooter.isBusy())) {
+                        telemetry.addData("Running to", " %7d", newTarget);
+                        telemetry.addData("Currently at ", pollenShooter.getCurrentPosition());
+                        telemetry.update();
 
-                pollenShooter.setPower(Math.abs(speed));
+
+                    }
+                    pollenSorterServo.setPosition(0);
+                    runtime.reset();
+
+                    while (opModeIsActive() &&
+                            (runtime.seconds() < timeoutS) &&
+                            (nectarShooter.isBusy())) {
+                        telemetry.addData("Running to", " %7d", newTarget);
+                        telemetry.addData("Currently at ", nectarShooter.getCurrentPosition());
+                        telemetry.update();
 
 
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (pollenShooter.isBusy())) {
-                    telemetry.addData("Running to", " %7d", newTarget);
-                    telemetry.addData("Currently at ", pollenShooter.getCurrentPosition());
-                    telemetry.update();
+                    }
+
 
                 }
+
                 pollenSorterServo.setPosition(1);
-                runtime.reset();
 
 
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (pollenShooter.isBusy())) {
-                    telemetry.addData("Running to", " %7d", newTarget);
-                    telemetry.addData("Currently at ", pollenShooter.getCurrentPosition());
-                    telemetry.update();
-
-
-
-
-                }
-
-
+                set_pollenShooter_zero();
             }
-
-
-            pollenSorterServo.setPosition(0);
-
-
-            set_pollenShooter_zero();
         }
+
 
 
         public void necterShooter1(double speed,
                                    double ticks,
                                    double timeoutS) {
             if (opModeIsActive()) {
-            int newTarget;
-            //todo    if (opModeIsActive()) {
+                int newTarget;
+                //todo    if (opModeIsActive()) {
                 newTarget = nectarShooter.getCurrentPosition() - (int) (ticks);
+                if (opModeIsActive()) {
+                    newTarget = nectarShooter.getCurrentPosition() + (int) (ticks);
+                    nectarShooter.setTargetPosition(newTarget);
+
+                    nectarShooter.setMode(RUN_TO_POSITION);
+                    runtime.reset();
+
+                    nectarShooter.setPower(Math.abs(speed));
 
 
-                nectarShooter.setMode(RUN_TO_POSITION);
-                runtime.reset();
+                    while (opModeIsActive() &&
+                            (runtime.seconds() < timeoutS) &&
+                            (nectarShooter.isBusy())) {
+                        telemetry.addData("Running to", " %7d", newTarget);
+                        telemetry.addData("Currently at ", nectarShooter.getCurrentPosition());
+                        telemetry.update();
 
-                nectarShooter.setPower(Math.abs(speed));
+
+                    }
+                    nectarSorterServo.setPosition(0);
+                    runtime.reset();
+
+                    while (opModeIsActive() &&
+                            (runtime.seconds() < timeoutS) &&
+                            (nectarShooter.isBusy())) {
+                        telemetry.addData("Running to", " %7d", newTarget);
+                        telemetry.addData("Currently at ", nectarShooter.getCurrentPosition());
+                        telemetry.update();
 
 
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (nectarShooter.isBusy())) {
-                    telemetry.addData("Running to", " %7d", newTarget);
-                    telemetry.addData("Currently at ", nectarShooter.getCurrentPosition());
-                    telemetry.update();
+                    }
 
 
                 }
+
+
                 nectarSorterServo.setPosition(1);
-                runtime.reset();
-
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (nectarShooter.isBusy())) {
-                    telemetry.addData("Running to", " %7d", newTarget);
-                    telemetry.addData("Currently at ", nectarShooter.getCurrentPosition());
-                    telemetry.update();
 
 
+                set_pollenShooter_zero();
+            }
+        }
+
+
+            public void turn ( double speed,
+            double ticks,
+            double timeoutS){
+                int newTarget;
+                if (opModeIsActive()) {
+                    newTarget = fLD.getCurrentPosition() - (int) (ticks);
+                    fLD.setTargetPosition(newTarget);
+                    newTarget = fRD.getCurrentPosition() + (int) (ticks);
+                    fRD.setTargetPosition(newTarget);
+                    newTarget = bLD.getCurrentPosition() - (int) (ticks);
+                    bLD.setTargetPosition(newTarget);
+                    newTarget = bRD.getCurrentPosition() + (int) (ticks);
+                    bRD.setTargetPosition(newTarget);
+
+                    fLD.setMode(RUN_TO_POSITION);
+                    fRD.setMode(RUN_TO_POSITION);
+                    bLD.setMode(RUN_TO_POSITION);
+                    bRD.setMode(RUN_TO_POSITION);
+                    runtime.reset();
+
+                    fLD.setPower(Math.abs(speed));
+                    fRD.setPower(Math.abs(speed));
+                    bLD.setPower(Math.abs(speed));
+                    bRD.setPower(Math.abs(speed));
+
+                    while (opModeIsActive() &&
+                            (runtime.seconds() < timeoutS) &&
+                            (fLD.isBusy())) {
+                        telemetry.addData("Running to", " %7d", newTarget);
+                        telemetry.addData("Currently at ", fLD.getCurrentPosition());
+                        telemetry.update();
+                    }
+                    set_all_motors_zero();
 
 
                 }
@@ -438,54 +498,6 @@ import com.qualcomm.robotcore.util.Range;
 
             }
 
-
-            nectarSorterServo.setPosition(0);
-
-
-            set_pollenShooter_zero();
-        }
-
-
-        public void turn(double speed,
-                         double ticks,
-                         double timeoutS) {
-            int newTarget;
-            if (opModeIsActive()) {
-                newTarget = fLD.getCurrentPosition() - (int) (ticks);
-                fLD.setTargetPosition(newTarget);
-                newTarget = fRD.getCurrentPosition() + (int) (ticks);
-                fRD.setTargetPosition(newTarget);
-                newTarget = bLD.getCurrentPosition() - (int) (ticks);
-                bLD.setTargetPosition(newTarget);
-                newTarget = bRD.getCurrentPosition() + (int) (ticks);
-                bRD.setTargetPosition(newTarget);
-
-                fLD.setMode(RUN_TO_POSITION);
-                fRD.setMode(RUN_TO_POSITION);
-                bLD.setMode(RUN_TO_POSITION);
-                bRD.setMode(RUN_TO_POSITION);
-                runtime.reset();
-
-                fLD.setPower(Math.abs(speed));
-                fRD.setPower(Math.abs(speed));
-                bLD.setPower(Math.abs(speed));
-                bRD.setPower(Math.abs(speed));
-
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (fLD.isBusy())) {
-                    telemetry.addData("Running to", " %7d", newTarget);
-                    telemetry.addData("Currently at ", fLD.getCurrentPosition());
-                    telemetry.update();
-                }
-                set_all_motors_zero();
-
-
-
-            }
-
-
-        }
 
         public void intakemotor(double speed,
                                 double ticks,
