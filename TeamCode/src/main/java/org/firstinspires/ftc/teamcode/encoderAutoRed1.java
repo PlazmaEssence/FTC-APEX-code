@@ -12,11 +12,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class encoderAutoRed1 extends LinearOpMode {
     boolean sense = true;
     boolean toggle;
-    int count = 0;
+    int count = 4;
     private Servo sorter1;
     private Servo sorter2;
     private DcMotor frontLeftDrive = null;
     private DcMotor frontRightDrive = null;
+    private Servo intakeS = null;
+
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
     private AnalogInput laserAnalog;
@@ -40,6 +42,7 @@ public class encoderAutoRed1 extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
         backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
+        intakeS = hardwareMap.get(Servo.class, "InS1");
 //       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
@@ -50,6 +53,7 @@ public class encoderAutoRed1 extends LinearOpMode {
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         pollen.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotor.Direction.FORWARD);
+        intakeS.setDirection(Servo.Direction.REVERSE);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
@@ -69,6 +73,11 @@ public class encoderAutoRed1 extends LinearOpMode {
             sense = true;
 
         }
+        if (count == 4) {
+
+            intakeS.setPosition(0.2);
+            intake.setPower(0);
+        }
         telemetry.addData("Voltage (V)", "%.3f", volts);
         telemetry.addData("Distance (mm)", "%.1f", distanceMM);
         telemetry.addData("Count",count);
@@ -78,6 +87,7 @@ public class encoderAutoRed1 extends LinearOpMode {
         sleep(10000);
         pollen.setPower(1);
         sleep(500);
+        count -= 4;
         forward(0.5, 1000, 10);
         strafeRight(0.5, 2500, 10, 50);
         set_all_motors_zero();

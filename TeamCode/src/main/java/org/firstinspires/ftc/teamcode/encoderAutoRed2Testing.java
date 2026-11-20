@@ -17,7 +17,7 @@ public class encoderAutoRed2Testing {
     public class encoderAutoRed2Duncan extends LinearOpMode {
         boolean sense = true;
         boolean toggle;
-        int count = 0;
+        int count = 4;
 
         private Servo sorter1;
         private Servo sorter2;
@@ -30,6 +30,8 @@ public class encoderAutoRed2Testing {
         private DcMotor pollen = null;
         private DcMotor nectar = null;
         private DcMotor intake = null;
+        private Servo intakeS = null;
+
         // final double strafe;
 
         // {
@@ -67,6 +69,7 @@ public class encoderAutoRed2Testing {
             fRD = hardwareMap.get(DcMotor.class, "frd");
             bLD = hardwareMap.get(DcMotor.class, "bld");
             bRD = hardwareMap.get(DcMotor.class, "brd");
+            intakeS = hardwareMap.get(Servo.class, "InS1");
 //       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
 //        servoLeft = hardwareMap.get(CRServo.class, "sL");
 //        servoRight = hardwareMap.get(CRServo.class, "sR");
@@ -77,6 +80,7 @@ public class encoderAutoRed2Testing {
             bRD.setDirection(DcMotor.Direction.FORWARD);
             pollen.setDirection(DcMotor.Direction.FORWARD);
             intake.setDirection(DcMotor.Direction.FORWARD);
+            intakeS.setDirection(Servo.Direction.REVERSE);
             telemetry.addData("Status", "Ready to run");    //
             telemetry.update();
             waitForStart();
@@ -94,15 +98,20 @@ public class encoderAutoRed2Testing {
                     sense = true;
 
                 }
+            if (count == 4) {
+
+                intakeS.setPosition(0.2);
+                intake.setPower(0);
+            }
             telemetry.addData("Voltage (V)", "%.3f", volts);
             telemetry.addData("Distance (mm)", "%.1f", distanceMM);
             telemetry.addData("Count",count);
             telemetry.update();
             telemetry.addData("count", "");
-
             pollen.setPower(1);
             sleep(5000);
             set_all_motors_zero();
+            count -= 4;
             strafeLeft(0.5, 1000, 10, 50);
             turn(1, 1000, 1);
             intake.setPower(1);
