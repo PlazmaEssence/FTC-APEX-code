@@ -92,8 +92,8 @@ import com.qualcomm.robotcore.util.Range;
             nectarSorterServo = hardwareMap.get(Servo.class, "sorterN");
 
 
-            fLD.setDirection(DcMotor.Direction.REVERSE);
-            fRD.setDirection(DcMotor.Direction.FORWARD);
+            fLD.setDirection(DcMotor.Direction.FORWARD);
+            fRD.setDirection(DcMotor.Direction.REVERSE);
             bLD.setDirection(DcMotor.Direction.FORWARD);
             bRD.setDirection(DcMotor.Direction.FORWARD);
             intake.setDirection(DcMotor.Direction.FORWARD);
@@ -165,26 +165,23 @@ import com.qualcomm.robotcore.util.Range;
 
 
                 if (gamepad1.aWasPressed()) {
-                    intakemotor(5, 208, 2);
+                    intakemotor(0.8, 208, 2);
 
                 } else {
                     set_intake_zero();
 
                 }
 
-                if (gamepad2.rightBumperWasPressed()) {
-                    tShootP = !tShootP;
-
-                }
-                if (tShootP) {// 4984
-                    pollenShooter1(1, 28, 2);
-
-
-                } else {
-                    set_pollenShooter_zero();
+//                if (gamepad2.rightBumperWasPressed()) {
+//
+//                    pollenShooter1(0.8,4890, 2);
+//
+//
+//                } else {
+//                    set_pollenShooter_zero();
 
 
-                }
+    //            }
                 if (gamepad2.leftTriggerWasPressed()) {
                     pShootmanual = !pShootmanual;
                 }
@@ -211,19 +208,7 @@ import com.qualcomm.robotcore.util.Range;
 
                 }
 
-                if (gamepad2.leftBumperWasPressed()) {
 
-                    toggle4 = !toggle4;
-                }
-
-                if (toggle4) {
-                    necterShooter1(0.6, 28, 3);
-
-
-                } else {
-
-                    setNectarzero();
-                }
 
                 if (gamepad1.right_trigger > 0.5) {
                     slowmotor();
@@ -253,23 +238,46 @@ import com.qualcomm.robotcore.util.Range;
                 }
 
                 if (gamepad2.yWasPressed()) {
-                    tNS = !tNS;
-                }
-                if (tNS) {
-                    nectarSorterServo.setPosition(0);
-                } else {
-                    nectarSorterServo.setPosition(1);
+
+                    pollenSorterServo.setPosition(0.2);
+
+                } else if(gamepad2.rightBumperWasPressed()) {
+
+                    pollenShooter1(0.8,4890, 2);
+
+
+
                 }
 
+                if (gamepad2.dpad_left) {
+
+                    pollenSorterServo.setPosition(0.8);
+                }
+
+
                 if (gamepad2.xWasPressed()) {
-                    tPS = !tPS;
-                }
-                if (tPS) {
-                    pollenSorterServo.setPosition(0);
+
+                    nectarSorterServo.setPosition(0.2);
+
+                } else if(gamepad2.leftBumperWasPressed()) {
+
+                    necterShooter1(1, 4890, 3);
+
+
                 } else {
-                    pollenSorterServo.setPosition(1);
+
+                    setNectarzero();
+                    nectarSorterServo.setPosition(0.8);
+
                 }
-            }
+                if (gamepad2.dpad_down) {
+
+                    nectarSorterServo.setPosition(0.8);
+                }
+
+                }
+
+
 
 
 // TODO       public void forward(double speed,
@@ -362,9 +370,8 @@ import com.qualcomm.robotcore.util.Range;
             if (opModeIsActive()) {
                 int newTarget;
                 //todo    if (opModeIsActive()) {
-                newTarget = pollenShooter.getCurrentPosition() - (int) (ticks);
                 if (opModeIsActive()) {
-                    newTarget = pollenShooter.getCurrentPosition() + (int) (ticks);
+                    newTarget = pollenShooter.getCurrentPosition() - (int) (ticks);
                     pollenShooter.setTargetPosition(newTarget);
 
                     pollenShooter.setMode(RUN_TO_POSITION);
@@ -387,10 +394,11 @@ import com.qualcomm.robotcore.util.Range;
 
                     while (opModeIsActive() &&
                             (runtime.seconds() < timeoutS) &&
-                            (nectarShooter.isBusy())) {
+                            (pollenShooter.isBusy())) {
                         telemetry.addData("Running to", " %7d", newTarget);
-                        telemetry.addData("Currently at ", nectarShooter.getCurrentPosition());
+                        telemetry.addData("Currently at ", pollenShooter.getCurrentPosition());
                         telemetry.update();
+
 
 
                     }
@@ -398,7 +406,9 @@ import com.qualcomm.robotcore.util.Range;
 
                 }
 
-                pollenSorterServo.setPosition(1);
+              //  pollenSorterServo.setPosition(1);
+
+
 
 
                 set_pollenShooter_zero();
