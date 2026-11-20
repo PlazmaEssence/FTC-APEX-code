@@ -173,11 +173,8 @@ import com.qualcomm.robotcore.util.Range;
                 }
 
                 if (gamepad2.rightBumperWasPressed()) {
-                    tShootP = !tShootP;
 
-                }
-                if (tShootP) {// 4984
-                    pollenShooter1(1, 28, 2);
+                    pollenShooter1(0.5, 28, 2);
 
 
                 } else {
@@ -256,18 +253,18 @@ import com.qualcomm.robotcore.util.Range;
                     tNS = !tNS;
                 }
                 if (tNS) {
-                    nectarSorterServo.setPosition(0);
+                    nectarSorterServo.setPosition(0.2);
                 } else {
-                    nectarSorterServo.setPosition(1);
+                    nectarSorterServo.setPosition(0.8);
                 }
 
                 if (gamepad2.xWasPressed()) {
                     tPS = !tPS;
                 }
                 if (tPS) {
-                    pollenSorterServo.setPosition(0);
+                    pollenSorterServo.setPosition(0.2);
                 } else {
-                    pollenSorterServo.setPosition(1);
+                    pollenSorterServo.setPosition(0.8);
                 }
             }
 
@@ -387,9 +384,9 @@ import com.qualcomm.robotcore.util.Range;
 
                     while (opModeIsActive() &&
                             (runtime.seconds() < timeoutS) &&
-                            (nectarShooter.isBusy())) {
+                            (pollenShooter.isBusy())) {
                         telemetry.addData("Running to", " %7d", newTarget);
-                        telemetry.addData("Currently at ", nectarShooter.getCurrentPosition());
+                        telemetry.addData("Currently at ", pollenShooter.getCurrentPosition());
                         telemetry.update();
 
 
@@ -399,6 +396,8 @@ import com.qualcomm.robotcore.util.Range;
                 }
 
                 pollenSorterServo.setPosition(1);
+
+            }else{
 
 
                 set_pollenShooter_zero();
