@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -40,18 +41,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-/*
- * This file contains a minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
+
 
 @TeleOp(name="Basic: teleop", group="Linear OpMode")
 //@Disabled
@@ -115,7 +105,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
         bkLDrive.setDirection(DcMotor.Direction.FORWARD);
         bkRDrive.setDirection(DcMotor.Direction.FORWARD);
         ftLDrive.setDirection(DcMotor.Direction.REVERSE);
-        ftRDrive.setDirection(DcMotor.Direction.FORWARD);
+        ftRDrive.setDirection(DcMotor.Direction.REVERSE);
         intake.setDirection(DcMotor.Direction.FORWARD);
         intakeS.setDirection(Servo.Direction.REVERSE);
         shooterP.setDirection(DcMotor.Direction.REVERSE);
@@ -244,7 +234,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
                 toggle = !toggle;
             }
             if (toggle) {
-                intake.setPower(0.8);
+                intake.setPower(0.7);
             } else {
                 intake.setPower(0);
             }
@@ -260,9 +250,9 @@ public class BasicOpMode_teleop extends LinearOpMode {
             }
 
             if (gamepad2.right_trigger > 0) {
-                sorterN.setPosition(0.2);
+                sorterN.setPosition(1);
             } else {
-                sorterN.setPosition(0.9);
+                sorterN.setPosition(0);
             }
 
                 if (gamepad2.leftStickButtonWasPressed()) {
