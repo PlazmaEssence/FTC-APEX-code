@@ -20,6 +20,8 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
     private Servo sorter1;
     private Servo sorter2;
     private AnalogInput laserAnalog;
+    private Servo intakeS = null;
+
 
     private DcMotor fLD = null;
     private DcMotor fRD = null;
@@ -45,11 +47,13 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
         fRD = hardwareMap.get(DcMotor.class, "FRD");
         bLD = hardwareMap.get(DcMotor.class, "BLD");
         bRD = hardwareMap.get(DcMotor.class, "BRD");
+        intakeS = hardwareMap.get(Servo.class, "InS1");
         fLD.setDirection(DcMotor.Direction.FORWARD);
         fRD.setDirection(DcMotor.Direction.REVERSE);
         bLD.setDirection(DcMotor.Direction.FORWARD);
         bRD.setDirection(DcMotor.Direction.REVERSE);
         pollen.setDirection(DcMotor.Direction.FORWARD);
+        intakeS.setDirection(Servo.Direction.REVERSE);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
@@ -73,6 +77,11 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
         } else {
             sense = true;
 
+        }
+        if (count == 4) {
+
+            intakeS.setPosition(0.2);
+            intake.setPower(0);
         }
         telemetry.addData("Voltage (V)", "%.3f", volts);
         telemetry.addData("Distance (mm)", "%.1f", distanceMM);
