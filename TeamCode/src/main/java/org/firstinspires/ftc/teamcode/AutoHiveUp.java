@@ -125,7 +125,15 @@ public class AutoHiveUp extends LinearOpMode {
 
       //  shooter();
        // forward(0.1, 538, 10);
-        forwardBasic(0.2, 4);
+
+
+
+
+
+strafeRight(1,0.7);
+  forward(1,0.5);
+
+
 
 
 
@@ -185,16 +193,16 @@ public class AutoHiveUp extends LinearOpMode {
 //
 //        }
   //  }
-    public void forwardBasic(double speed,
+    public void forward(double speed,
                         double driveTime) {
 
         //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
         if (opModeIsActive()) {
 
-            fLD.setPower(-Math.abs(speed));
-            fRD.setPower(-Math.abs(speed));
-            bLD.setPower(-Math.abs(speed));
-            bRD.setPower(-Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
 
             fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
