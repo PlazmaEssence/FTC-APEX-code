@@ -141,10 +141,10 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
             }
 
-            if (number == 4) {
-
-                intakeS.setPosition(0.2);
-            }
+//            if (number == 4) {
+//
+//                intakeS.setPosition(0.2);
+//            }
             // todo if true cant be true again until it has been false.
 
             // Telemetry
@@ -255,37 +255,37 @@ public class BasicOpMode_teleop extends LinearOpMode {
                 sorterN.setPosition(0);
             }
 
-                if (gamepad2.leftStickButtonWasPressed()) {
-                    toggle7 = !toggle7;
-                }
+            if (gamepad2.leftStickButtonWasPressed()) {
+                toggle7 = !toggle7;
+            }
 
-                if (toggle7) {
-                    intakeS.setPosition(0.8);
-                }
-
-
-                if (gamepad2.right_stick_button) {
-                    toggle8 = !toggle8;
-                }
-
-                if (toggle8) {
-                    intakeS.setPosition(0.5);
+            if (toggle7) {
+                intakeS.setPosition(0.8);
+            }
 
 
-                }
+            if (gamepad2.right_stick_button) {
+                toggle8 = !toggle8;
+            }
 
-
-                if (gamepad2.bWasPressed()) {
-                    toggle6 = !toggle6;
-                }
-
-                if (toggle6) {
-                    intakeS.setPosition(0.2);
-                }
+            if (toggle8) {
+                intakeS.setPosition(0.5);
 
 
             }
 
 
+            if (gamepad2.bWasPressed()) {
+                toggle6 = !toggle6;
+            }
+
+            if (toggle6) {
+                intakeS.setPosition(0.2);
+            }
+
+
         }
+
+
     }
+}
