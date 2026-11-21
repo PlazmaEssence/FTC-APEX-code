@@ -129,9 +129,8 @@ public class auto_hive_down extends LinearOpMode {
 
 
 
-        forward(0.2,0.2);
-        strafeleft(1,0.7);
-        forward(1,0.3);
+
+        forward(1,0.15);
 
 
 
