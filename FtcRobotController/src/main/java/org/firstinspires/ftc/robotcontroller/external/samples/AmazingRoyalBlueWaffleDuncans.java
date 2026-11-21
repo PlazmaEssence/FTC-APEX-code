@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
-
+@Disabled
 @TeleOp(name = "AmazingRoyalBlueWaffle")
 public class AmazingRoyalBlueWaffleDuncans extends LinearOpMode {
     private DcMotor Intakemotor;

@@ -224,7 +224,7 @@ public class auto_hive_down extends LinearOpMode {
 
 
     public void shooter() {
-        pollenShooter.setPower(0.8);
+        pollenShooter.setPower(1);
         sleep(1000);
         pollenSorterServo.setPosition(0.2);
         sleep(3000);

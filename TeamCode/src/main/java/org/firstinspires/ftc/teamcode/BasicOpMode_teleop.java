@@ -234,7 +234,7 @@ public class BasicOpMode_teleop extends LinearOpMode {
                 toggle = !toggle;
             }
             if (toggle) {
-                intake.setPower(0.7);
+                intake.setPower(0.8);
             } else {
                 intake.setPower(0);
             }
@@ -282,6 +282,24 @@ public class BasicOpMode_teleop extends LinearOpMode {
             if (toggle6) {
                 intakeS.setPosition(0.2);
             }
+
+
+
+//            if (gamepad2.xWasPressed()) {
+//                toggle = !toggle;
+//            }
+//            if (toggle) {
+//                intake.setPower(-0.8);
+//            } else {
+//                intake.setPower(0);
+//            }
+
+
+
+
+
+
+
 
 
         }

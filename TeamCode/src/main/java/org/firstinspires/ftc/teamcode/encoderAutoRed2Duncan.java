@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="red_Duncan2", group="Robot")
+@Disabled
 public class encoderAutoRed2Duncan extends LinearOpMode {
     boolean sense = true;
     boolean toggle;

@@ -123,11 +123,12 @@ public class AutoHiveUp extends LinearOpMode {
 //        telemetry.addData("Count", count);
 //        telemetry.update();
 
-      // shooter();
+      shooter();
         forward(0.4,0.6);
         strafeleft(0.5,1.4);
-        forward(0.5,2.8);
+        forward(0.5,2.7);
         strafeleft(0.5,0.8);
+        straferight(0.2,0.4);
 
     }
 
@@ -217,10 +218,26 @@ public class AutoHiveUp extends LinearOpMode {
 
 
     public void shooter() {
-        pollenShooter.setPower(0.8);
-        sleep(1000);
+        pollenShooter.setPower(1);
+        sleep(2000);
         pollenSorterServo.setPosition(0.2);
-        sleep(3000);
+       sleep(3000);
+        //sleep(500);
+        //pollenSorterServo.setPosition(0.8);
+        //sleep(1000);
+        // pollenSorterServo.setPosition(0.2);
+        //  sleep(500);
+        //  pollenSorterServo.setPosition(0.8);
+        //     sleep(1000);
+        // pollenSorterServo.setPosition(0.2);
+        //  sleep(500);
+        //  pollenSorterServo.setPosition(0.8);
+        //     sleep(1000);
+        // pollenSorterServo.setPosition(0.2);
+        //  sleep(500);
+        //  pollenSorterServo.setPosition(0.8);
+        //     sleep(1000);
+        // pollenSorterServo.setPosition(0.2);
         pollenShooter.setPower(0);
         pollenSorterServo.setPosition(0.8);
 
@@ -240,18 +257,15 @@ public class AutoHiveUp extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            fLD.setPower(speed);
-            fRD.setPower(-speed);
-            bLD.setPower(-speed);
-            bRD.setPower(speed);
+            fLD.setPower(-Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(-Math.abs(speed));
 
-            /*
             fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-             */
-
             runtime.reset();
             while (opModeIsActive() &&
                     (runtime.seconds() < driveTime)) {
@@ -260,6 +274,7 @@ public class AutoHiveUp extends LinearOpMode {
 
             }
             set_all_motors_zero();
+
 
 
         }

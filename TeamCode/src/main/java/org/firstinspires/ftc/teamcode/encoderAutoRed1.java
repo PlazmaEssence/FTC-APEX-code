@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="red_1", group="Robot")
-
+@Disabled
 public class encoderAutoRed1 extends LinearOpMode {
     boolean sense = true;
     boolean toggle;

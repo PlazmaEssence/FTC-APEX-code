@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+@Disabled
     @TeleOp(name = "starter_bot_code")
     public class starter_bot_codeDuncan extends LinearOpMode {
         private DcMotor RightDrive;

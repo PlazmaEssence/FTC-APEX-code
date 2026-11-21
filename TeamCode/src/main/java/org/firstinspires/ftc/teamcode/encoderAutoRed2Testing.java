@@ -11,10 +11,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class encoderAutoRed2Testing {
-    @Autonomous(name = "red_2Testing", group = "Robot")
+@Autonomous(name = "red_2Testing", group = "Robot")
+@Disabled
+public class encoderAutoRed2Testing extends LinearOpMode{
 
-    public class encoderAutoRed2Duncan extends LinearOpMode {
+    //public class encoderAutoRed2Duncan extends LinearOpMode {
         boolean sense = true;
         boolean toggle;
         int count = 4;
@@ -317,4 +318,3 @@ public class encoderAutoRed2Testing {
             }
         }
     }
-}
