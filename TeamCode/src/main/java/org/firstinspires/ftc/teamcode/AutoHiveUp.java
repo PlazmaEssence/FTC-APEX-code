@@ -123,16 +123,22 @@ public class AutoHiveUp extends LinearOpMode {
 //        telemetry.addData("Count", count);
 //        telemetry.update();
 
-      shooter();
-        forward(0.4,0.6);
-        strafeleft(0.5,1.4);
-        forward(0.5,2.7);
-        strafeleft(0.5,0.8);
-        straferight(0.2,0.4);
+
+
+
+
+        //Auto_flower();
+        //Auto();
+        shooter();
+        forward(0.4, 0.6);
+        strafeleft(0.5, 1.4);
+        forward(0.5, 2.7);
+        strafeleft(0.5, 0.8);
+        straferight(0.2, 0.4);
 
     }
 
-//    public void forward(double speed,
+    //    public void forward(double speed,
 //                        double ticks,
 //                        double timeoutS) {
 //        int newTarget;
@@ -185,7 +191,7 @@ public class AutoHiveUp extends LinearOpMode {
 //           set_all_motors_zero();
 //
 //        }
-  //  }
+    //  }
     public void forward(double speed,
                         double driveTime) {
 
@@ -214,14 +220,11 @@ public class AutoHiveUp extends LinearOpMode {
     }
 
 
-
-
-
     public void shooter() {
         pollenShooter.setPower(1);
         sleep(2000);
         pollenSorterServo.setPosition(0.2);
-       sleep(3000);
+        sleep(3000);
         //sleep(500);
         //pollenSorterServo.setPosition(0.8);
         //sleep(1000);
@@ -251,9 +254,9 @@ public class AutoHiveUp extends LinearOpMode {
         fRD.setPower(0);
         bRD.setPower(0);
         bLD.setPower(0);
-}
+    }
 
-    public void straferight(double speed,double driveTime) {
+    public void straferight(double speed, double driveTime) {
 
         if (opModeIsActive()) {
 
@@ -276,11 +279,10 @@ public class AutoHiveUp extends LinearOpMode {
             set_all_motors_zero();
 
 
-
         }
     }
 
-    public void strafeleft(double speed,double driveTime) {
+    public void strafeleft(double speed, double driveTime) {
 
         if (opModeIsActive()) {
 
@@ -303,51 +305,170 @@ public class AutoHiveUp extends LinearOpMode {
             set_all_motors_zero();
 
 
-
+        }
     }
-//    public void turn1 ( double speed,
-//                       double ticks,
-//                       double timeoutS){
-//        int newTarget;
-//
-//            newTarget = fLD.getCurrentPosition() - (int) (ticks);
-//            fLD.setTargetPosition(newTarget);
-//            newTarget = fRD.getCurrentPosition() + (int) (ticks);
-//            fRD.setTargetPosition(newTarget);
-//            newTarget = bLD.getCurrentPosition() - (int) (ticks);
-//            bLD.setTargetPosition(newTarget);
-//            newTarget = bRD.getCurrentPosition() + (int) (ticks);
-//            bRD.setTargetPosition(newTarget);
-//
-//            fLD.setMode(RUN_TO_POSITION);
-//            fRD.setMode(RUN_TO_POSITION);
-//            bLD.setMode(RUN_TO_POSITION);
-//            bRD.setMode(RUN_TO_POSITION);
-//            runtime.reset();
-//
-//            fLD.setPower(Math.abs(speed));
-//            fRD.setPower(Math.abs(speed));
-//            bLD.setPower(Math.abs(speed));
-//            bRD.setPower(Math.abs(speed));
-//
-//            while (opModeIsActive() &&
-//                    (runtime.seconds() < timeoutS) &&
-//                    (fLD.isBusy())) {
-//                telemetry.addData("Running to", " %7d", newTarget);
-//                telemetry.addData("Currently at ", fLD.getCurrentPosition());
-//                telemetry.update();
-//            }
-//            set_all_motors_zero();
-//
-//
-//        }
 
-//        public void flower( double speed,
-//                            double ticks,
-//                            double timeoutS){
-//        turn1(0,0,0);
+    public void turnLeft(double speed,
+                         double driveTime) {
+   //todo idk if works yet.
+
+
+            fLD.setPower(-Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(-Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
+
+            fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            runtime.reset();
+            while (opModeIsActive() &&
+                    (runtime.seconds() < driveTime)) {
+                telemetry.addData("Runtime", runtime.milliseconds());
+                telemetry.update();
+
+            }
+            set_all_motors_zero();
+
+
         }
 
+
+        public void Auto() {
+                //todo idk if works
+
+             shooter();
+        forward(0.4, 0.6);
+        strafeleft(0.5, 1.4);
+        forward(0.5, 2.7);
+        strafeleft(0.5, 0.8);
+        straferight(0.2, 0.4);
+
+
+    }
+
+
+
+        public void Auto_flower () {
+            //todo idk if works
+            shooter();
+            forward(0.4, 0.6);
+            strafeleft(0.5, 1.4);
+            sleep(2000);
+            turnLeft(0.3, 0.4);
+            sleep(2000);
+            //todo idk if intakeS1.setPosition(0.2); is the right one it might be intakeS1.setPosition(0.8); btw i am writing this and peting my dog
+            intakeS1.setPosition(0.2);
+            //  intakeS1.setPosition(0.8);
+            sleep(2000);
+            forwardintake(0.5,0.3);
+            sleep(2000);
+            intakevoid();
+            forward(0.5,0.3);
+            sleep(2000);
+            turnRight(0.3,0.4);
+            sleep(2000);
+            forward(0.5, 2.7);
+            strafeleft(0.5, 0.8);
+            straferight(0.2, 0.4);
+        }
+    public void intakevoid() {
+        //todo idk if works yet.
+
+        intake.setPower(1);
+        sleep(2000);
+        intake.setPower(0);
+
+
+    }
+    public void turnRight(double speed,
+                         double driveTime) {
+        //todo idk if works yet.
+
+
+        fLD.setPower(Math.abs(speed));
+        fRD.setPower(-Math.abs(speed));
+        bLD.setPower(Math.abs(speed));
+        bRD.setPower(-Math.abs(speed));
+
+        fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        runtime.reset();
+        while (opModeIsActive() &&
+                (runtime.seconds() < driveTime)) {
+            telemetry.addData("Runtime", runtime.milliseconds());
+            telemetry.update();
+
+        }
+        set_all_motors_zero();
+
+
+    }
+    public void forwardintake(double speed,
+                         double driveTime) {
+        //todo idk if works yet.
+
+
+        fLD.setPower(Math.abs(speed));
+        fRD.setPower(Math.abs(speed));
+        bLD.setPower(Math.abs(speed));
+        bRD.setPower(Math.abs(speed));
+
+        fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        runtime.reset();
+        while (opModeIsActive() &&
+                (runtime.seconds() < driveTime)) {
+            telemetry.addData("Runtime", runtime.milliseconds());
+            telemetry.update();
+
+        }
+        set_all_motors_zero();
+
+
+    }
+    public void Auto_flower_shoot_again () {
+        //todo idk if works
+        shooter();
+        forward(0.4, 0.6);
+        strafeleft(0.5, 1.4);
+        sleep(2000);
+        turnLeft(0.3, 0.4);
+        sleep(2000);
+        //todo idk if intakeS1.setPosition(0.2); is the right one it might be intakeS1.setPosition(0.8);
+        intakeS1.setPosition(0.2);
+        //  intakeS1.setPosition(0.8);
+        sleep(2000);
+        forwardintake(0.5,0.3);
+        sleep(2000);
+        intakevoid();
+        forward(0.5,0.3);
+        sleep(2000);
+        turnRight(0.3,0.4);
+        sleep(2000);
+        straferight(0.5, 1.4);
+        forwardintake(0.4, 0.6);
+        sleep(2000);
+        shooter();
+        sleep(2000);
+        forward(0.4, 0.6);
+        strafeleft(0.5, 1.4);
+        forwardintake(0.5, 2.7);
+        strafeleft(0.5, 0.8);
+        straferight(0.2, 0.4);
+    }
 }
+
+
+
+
+
+
+
 
 
