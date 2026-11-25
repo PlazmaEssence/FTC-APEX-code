@@ -61,6 +61,7 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
 
         waitForStart();
 
+
         double volts = laserAnalog.getVoltage();
         double distanceMM = (volts / MAX_VOLTS) * MAX_DISTANCE_MM;
         if (distanceMM < 150)
@@ -89,6 +90,18 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
         telemetry.addData("Count",count);
         telemetry.update();
 
+        pollen.setPower(1);
+        sleep(500);
+        set_all_motors_zero();
+        strafeLeft(0.5, 1000, 10, 50);
+        turn(1, 1000, 1);
+        intake.setPower(1);
+        forward(1 ,500 , 1);
+        sleep(1000);
+        intake.setPower(0);
+        forward(1 ,-500 , 1);
+        turn(1, -1000, 1);
+        strafeRight(0.5, 1000, 10, 50);
         pollen.setPower(1);
         sleep(500);
         set_all_motors_zero();
@@ -216,6 +229,48 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
                 telemetry.update();
             }
             set_all_motors_zero();
+
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
+            sleep(250);
+        }
+    }
+    public void turn(double speed,
+                     double ticks,
+                     double timeoutS) {
+        int newTarget;
+        if (opModeIsActive()) {
+            newTarget = fLD.getCurrentPosition() - (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() + (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() - (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() + (int) (ticks);
+            bRD.setTargetPosition(newTarget);
+
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
+            runtime.reset();
+
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
+
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (fLD.isBusy())) {
+                telemetry.addData("Running to", " %7d", newTarget);
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
+                telemetry.update();
+            }
+            set_all_motors_zero();
+
 
             fLD.setPower(0);
             fRD.setPower(0);
