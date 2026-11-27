@@ -12,25 +12,26 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="red_Duncan2", group="Robot")
-@Disabled
 public class encoderAutoRed2Duncan extends LinearOpMode {
     boolean sense = true;
     boolean toggle;
     int count = 4;
 
-    private Servo sorter1;
-    private Servo sorter2;
+//    private Servo sorter1;
+//    private Servo sorter2;
     private AnalogInput laserAnalog;
-    private Servo intakeS = null;
+//    private Servo intakeS1 = null;
+//    private Servo intakeS2 = null;
 
 
     private DcMotor fLD = null;
     private DcMotor fRD = null;
     private DcMotor bLD = null;
     private DcMotor bRD = null;
-    private DcMotor pollen = null;
-    private DcMotor nectar = null;
-    private DcMotor intake = null;
+//    private DcMotor pollen = null;
+//    private DcMotor nectar = null;
+//    private DcMotor intake = null;
+//
     private ElapsedTime runtime = new ElapsedTime();
     static final double FORWARD_SPEED = 0.5;
     static final double TURN_SPEED = 0.4;
@@ -38,23 +39,25 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
     private static final double MAX_DISTANCE_MM = 1000.0;
 
     public void runOpMode() {
-        pollen = hardwareMap.get(DcMotor.class, "pollen");
-        nectar = hardwareMap.get(DcMotor.class, "nectar");
-        intake = hardwareMap.get(DcMotor.class, "intake");
-        sorter1 = hardwareMap.get(Servo.class, "sorter1");
-        sorter2 = hardwareMap.get(Servo.class, "sorter2");
+//        pollen = hardwareMap.get(DcMotor.class, "pollen");
+//        nectar = hardwareMap.get(DcMotor.class, "nectar");
+//        intake = hardwareMap.get(DcMotor.class, "intake");
+//        sorter1 = hardwareMap.get(Servo.class, "sorter1");
+//        sorter2 = hardwareMap.get(Servo.class, "sorter2");
         laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
-        fLD = hardwareMap.get(DcMotor.class, "FLD");
-        fRD = hardwareMap.get(DcMotor.class, "FRD");
-        bLD = hardwareMap.get(DcMotor.class, "BLD");
-        bRD = hardwareMap.get(DcMotor.class, "BRD");
-        intakeS = hardwareMap.get(Servo.class, "InS1");
+        fLD = hardwareMap.get(DcMotor.class, "fld");
+        fRD = hardwareMap.get(DcMotor.class, "frd");
+        bLD = hardwareMap.get(DcMotor.class, "bld");
+        bRD = hardwareMap.get(DcMotor.class, "brd");
+//        intakeS1 = hardwareMap.get(Servo.class, "InS1");
+//        intakeS2 = hardwareMap.get(Servo.class, "InS2");
         fLD.setDirection(DcMotor.Direction.FORWARD);
         fRD.setDirection(DcMotor.Direction.REVERSE);
         bLD.setDirection(DcMotor.Direction.FORWARD);
         bRD.setDirection(DcMotor.Direction.REVERSE);
-        pollen.setDirection(DcMotor.Direction.FORWARD);
-        intakeS.setDirection(Servo.Direction.REVERSE);
+//        pollen.setDirection(DcMotor.Direction.FORWARD);
+//        intakeS1.setDirection(Servo.Direction.REVERSE);
+//        intakeS2.setDirection(Servo.Direction.REVERSE);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
@@ -81,28 +84,27 @@ public class encoderAutoRed2Duncan extends LinearOpMode {
 
         }
         if (count == 4) {
-
-            intakeS.setPosition(0.2);
-            intake.setPower(0);
+//
+//            intakeS1.setPosition(0.2);
+//            intakeS2.setPosition(0.2);
+//            intake.setPower(0);
         }
         telemetry.addData("Voltage (V)", "%.3f", volts);
         telemetry.addData("Distance (mm)", "%.1f", distanceMM);
         telemetry.addData("Count",count);
         telemetry.update();
-
-        pollen.setPower(1);
-        sleep(500);
-        set_all_motors_zero();
+     sleep(500);
+     set_all_motors_zero();
         strafeLeft(0.5, 1000, 10, 50);
         turn(1, 1000, 1);
-        intake.setPower(1);
+  //      intake.setPower(1);
         forward(1 ,500 , 1);
         sleep(1000);
-        intake.setPower(0);
+  //      intake.setPower(0);
         forward(1 ,-500 , 1);
         turn(1, -1000, 1);
         strafeRight(0.5, 1000, 10, 50);
-        pollen.setPower(1);
+  //      pollen.setPower(1);
         sleep(500);
         set_all_motors_zero();
         strafeLeft(0.5, 1000, 10, 50);
