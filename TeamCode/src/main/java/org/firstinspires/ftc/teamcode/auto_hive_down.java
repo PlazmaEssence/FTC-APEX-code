@@ -86,8 +86,8 @@ public class auto_hive_down extends LinearOpMode {
 
 
         fLD.setDirection(DcMotor.Direction.REVERSE);
-        fRD.setDirection(DcMotor.Direction.REVERSE);
-        bLD.setDirection(DcMotor.Direction.FORWARD);
+        fRD.setDirection(DcMotor.Direction.FORWARD);
+        bLD.setDirection(DcMotor.Direction.REVERSE);
         bRD.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotor.Direction.FORWARD);
         pollenShooter.setDirection(DcMotor.Direction.REVERSE);
@@ -127,13 +127,8 @@ public class auto_hive_down extends LinearOpMode {
         // forward(0.1, 538, 10);
 
 
-
-
-
-        forward(1,0.15);
-
-
-
+        movment(0.2, 1500,5
+        );
 
 
     }
@@ -193,7 +188,7 @@ public class auto_hive_down extends LinearOpMode {
 //        }
     //  }
     public void forward(double speed,
-                        double driveTime) {
+                        double ticks, double driveTime) {
 
         //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
         if (opModeIsActive()) {
@@ -220,9 +215,6 @@ public class auto_hive_down extends LinearOpMode {
     }
 
 
-
-
-
     public void shooter() {
         pollenShooter.setPower(1);
         sleep(1000);
@@ -240,7 +232,7 @@ public class auto_hive_down extends LinearOpMode {
     }
 
 
-    public void strafeleft(double speed,double driveTime) {
+    public void strafeleft(double speed, double driveTime) {
 
         if (opModeIsActive()) {
 
@@ -266,8 +258,7 @@ public class auto_hive_down extends LinearOpMode {
         }
     }
 
-    public void strafeRight(double speed,double driveTime) {
-
+    public void strafeRight(double speed, double driveTime) {
 
 
         if (opModeIsActive()) {
@@ -292,51 +283,100 @@ public class auto_hive_down extends LinearOpMode {
         }
 
 
-
     }
-    public void turn1 ( double speed,
+
+//    public void turn1(double speed,
+//                      double ticks,
+//                      double timeoutS) {
+//        int newTarget;
+//
+//        newTarget = fLD.getCurrentPosition() - (int) (ticks);
+//        fLD.setTargetPosition(newTarget);
+//        newTarget = fRD.getCurrentPosition() + (int) (ticks);
+//        fRD.setTargetPosition(newTarget);
+//        newTarget = bLD.getCurrentPosition() - (int) (ticks);
+//        bLD.setTargetPosition(newTarget);
+//        newTarget = bRD.getCurrentPosition() + (int) (ticks);
+//        bRD.setTargetPosition(newTarget);
+//
+//        fLD.setMode(RUN_TO_POSITION);
+//        fRD.setMode(RUN_TO_POSITION);
+//        bLD.setMode(RUN_TO_POSITION);
+//        bRD.setMode(RUN_TO_POSITION);
+//        runtime.reset();
+//
+//        fLD.setPower(Math.abs(speed));
+//        fRD.setPower(Math.abs(speed));
+//        bLD.setPower(Math.abs(speed));
+//        bRD.setPower(Math.abs(speed));
+//
+//        while (opModeIsActive() &&
+//                (runtime.seconds() < timeoutS) &&
+//                (fLD.isBusy())) {
+//            telemetry.addData("Running to", " %7d", newTarget);
+//            telemetry.addData("Currently at ", fLD.getCurrentPosition());
+//            telemetry.update();
+//        }
+//        set_all_motors_zero();
+//
+//
+//    }
+
+
+
+
+    //  pollenSorterServo.setPosition(1);
+
+
+    public void movment(double speed,
                         double ticks,
-                        double timeoutS){
+                        double timeoutS
+                        ) {
         int newTarget;
+        if (opModeIsActive()) {
+            newTarget = fLD.getCurrentPosition() + (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() + (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() + (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() + (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
-        newTarget = fLD.getCurrentPosition() - (int) (ticks);
-        fLD.setTargetPosition(newTarget);
-        newTarget = fRD.getCurrentPosition() + (int) (ticks);
-        fRD.setTargetPosition(newTarget);
-        newTarget = bLD.getCurrentPosition() - (int) (ticks);
-        bLD.setTargetPosition(newTarget);
-        newTarget = bRD.getCurrentPosition() + (int) (ticks);
-        bRD.setTargetPosition(newTarget);
 
-        fLD.setMode(RUN_TO_POSITION);
-        fRD.setMode(RUN_TO_POSITION);
-        bLD.setMode(RUN_TO_POSITION);
-        bRD.setMode(RUN_TO_POSITION);
-        runtime.reset();
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
+            runtime.reset();
 
-        fLD.setPower(Math.abs(speed));
-        fRD.setPower(Math.abs(speed));
-        bLD.setPower(Math.abs(speed));
-        bRD.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (fLD.isBusy())) {
+                telemetry.addData("Running to", " %7d", newTarget);
+                telemetry.addData("fLD postion", fLD.getCurrentPosition());
+                telemetry.addData("fRD postion", fRD.getCurrentPosition());
+                telemetry.addData("bRD postion", bRD.getCurrentPosition());
+                telemetry.addData("bLD postion ", bLD.getCurrentPosition());
+                telemetry.update();
 
-        while (opModeIsActive() &&
-                (runtime.seconds() < timeoutS) &&
-                (fLD.isBusy())) {
-            telemetry.addData("Running to", " %7d", newTarget);
-            telemetry.addData("Currently at ", fLD.getCurrentPosition());
-            telemetry.update();
+
+            }
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
+            sleep(250);
+
+
         }
-        set_all_motors_zero();
-
 
     }
 
-    public void flower( double speed,
-                        double ticks,
-                        double timeoutS){
-        turn1(0,0,0);
-    }
+
 
 }
-
-
