@@ -128,16 +128,20 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
 
             if (distanceMM < 190) {
+            toggle5 = !toggle5;
+            }
 
-                if (toggle5 == true) {
+                if (toggle5 = true) {
                     number += 1;
                     toggle5 = false;
-                    //   servo.setPosition(1);
                 }
-                if (toggle5 == false) ;
+        if (number == 4){
+            intakeS.setPosition(0.4);
+            number = 0;
+        }
 
-            } else {
-                toggle5 = true;
+        else {
+                toggle5 = false;
 
             }
 
@@ -251,25 +255,11 @@ public class BasicOpMode_teleop extends LinearOpMode {
 
             if (gamepad2.right_trigger > 0) {
                 sorterN.setPosition(1);
+                intakeS.setPosition(0.8);
             } else {
                 sorterN.setPosition(0);
             }
 
-            if (gamepad2.leftStickButtonWasPressed()) {
-                toggle7 = !toggle7;
-            }
-
-            if (toggle7) {
-                intakeS.setPosition(0.8);
-            }
-
-
-            if (gamepad2.right_stick_button) {
-                toggle8 = !toggle8;
-            }
-
-            if (toggle8) {
-                intakeS.setPosition(0.5);
 
 
             }
@@ -282,7 +272,6 @@ public class BasicOpMode_teleop extends LinearOpMode {
             if (toggle6) {
                 intakeS.setPosition(0.2);
             }
-
 
 
 //            if (gamepad2.xWasPressed()) {
