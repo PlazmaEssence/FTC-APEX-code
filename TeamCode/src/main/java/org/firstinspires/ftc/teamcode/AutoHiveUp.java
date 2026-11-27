@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 //todo the line that is the same as the hive fram.
 public class AutoHiveUp extends LinearOpMode {
+//todo 1053 forward
+//    strafeRight 960 about one field tile.
+//   strafeLeft 951
 
 
     boolean sense = true;
@@ -86,17 +89,14 @@ public class AutoHiveUp extends LinearOpMode {
 
 
         fLD.setDirection(DcMotor.Direction.REVERSE);
-        fRD.setDirection(DcMotor.Direction.REVERSE);
-        bLD.setDirection(DcMotor.Direction.FORWARD);
+        fRD.setDirection(DcMotor.Direction.FORWARD);
+        bLD.setDirection(DcMotor.Direction.REVERSE);
         bRD.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotor.Direction.FORWARD);
         pollenShooter.setDirection(DcMotor.Direction.REVERSE);
         nectarShooter.setDirection(DcMotor.Direction.FORWARD);
 
-        fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        
 
         waitForStart();
 
@@ -129,12 +129,13 @@ public class AutoHiveUp extends LinearOpMode {
 
         //Auto_flower();
         //Auto();
-        shooter();
-        forward(0.4, 0.6);
-        strafeleft(0.5, 1.4);
-        forward(0.5, 2.7);
-        strafeleft(0.5, 0.8);
-        straferight(0.2, 0.4);
+//        shooter();
+//        back(0.4, 538,3);
+//        strafeleft(0.5,);
+//        back(0.5, 538,3);
+//        strafeleft(0.5, 0.8);
+//        straferight(0.2, 0.4);
+        forward(0.2, 179,3);
 
     }
 
@@ -192,32 +193,32 @@ public class AutoHiveUp extends LinearOpMode {
 //
 //        }
     //  }
-    public void forward(double speed,
-                        double driveTime) {
-
-        //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
-        if (opModeIsActive()) {
-
-            fLD.setPower(-Math.abs(speed));
-            fRD.setPower(-Math.abs(speed));
-            bLD.setPower(-Math.abs(speed));
-            bRD.setPower(-Math.abs(speed));
-
-            fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            runtime.reset();
-            while (opModeIsActive() &&
-                    (runtime.seconds() < driveTime)) {
-                telemetry.addData("Runtime", runtime.milliseconds());
-                telemetry.update();
-
-            }
-            set_all_motors_zero();
-
-        }
-    }
+//    public void forward(double speed,
+//                        double driveTime) {
+//
+//        //DcMotor.RunMode runToPosition = RUN_TO_POSITION;
+//        if (opModeIsActive()) {
+//
+//            fLD.setPower(-Math.abs(speed));
+//            fRD.setPower(-Math.abs(speed));
+//            bLD.setPower(-Math.abs(speed));
+//            bRD.setPower(-Math.abs(speed));
+//
+//            fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            runtime.reset();
+//            while (opModeIsActive() &&
+//                    (runtime.seconds() < driveTime)) {
+//                telemetry.addData("Runtime", runtime.milliseconds());
+//                telemetry.update();
+//
+//            }
+//            set_all_motors_zero();
+//
+//        }
+    //}
 
 
     public void shooter() {
@@ -256,57 +257,80 @@ public class AutoHiveUp extends LinearOpMode {
         bLD.setPower(0);
     }
 
-    public void straferight(double speed, double driveTime) {
+    public void straferight(double ticks,
+        double speed,
+        double timeoutS){
+        int newTarget;
 
-        if (opModeIsActive()) {
+        newTarget = fLD.getCurrentPosition() + (int) (ticks);
+        fLD.setTargetPosition(newTarget);
+        newTarget = fRD.getCurrentPosition() + (int) (ticks);
+        fRD.setTargetPosition(newTarget);
+        newTarget = bLD.getCurrentPosition() + (int) (ticks);
+        bLD.setTargetPosition(newTarget);
+        newTarget = bRD.getCurrentPosition() + (int) (ticks);
+        bRD.setTargetPosition(newTarget);
 
-            fLD.setPower(-Math.abs(speed));
-            fRD.setPower(Math.abs(speed));
-            bLD.setPower(Math.abs(speed));
-            bRD.setPower(-Math.abs(speed));
+        fLD.setMode(RUN_TO_POSITION);
+        fRD.setMode(RUN_TO_POSITION);
+        bLD.setMode(RUN_TO_POSITION);
+        bRD.setMode(RUN_TO_POSITION);
+        runtime.reset();
 
-            fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            runtime.reset();
-            while (opModeIsActive() &&
-                    (runtime.seconds() < driveTime)) {
-                telemetry.addData("Runtime", runtime.milliseconds());
-                telemetry.update();
+        fLD.setPower(Math.abs(speed));
+        fRD.setPower(Math.abs(speed));
+        bLD.setPower(Math.abs(speed));
+        bRD.setPower(Math.abs(speed));
 
-            }
-            set_all_motors_zero();
-
-
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS) &&
+                (fLD.isBusy())) {
+            telemetry.addData("Running to", " %7d", newTarget);
+            telemetry.addData("Currently at ", fLD.getCurrentPosition());
+            telemetry.update();
         }
+        set_all_motors_zero();
+
+
     }
 
-    public void strafeleft(double speed, double driveTime) {
 
-        if (opModeIsActive()) {
+    public void strafeleft(double speed,double ticks,
+    double timeoutS){
+        int newTarget;
 
-            fLD.setPower(Math.abs(speed));
-            fRD.setPower(-Math.abs(speed));
-            bLD.setPower(-Math.abs(speed));
-            bRD.setPower(Math.abs(speed));
+        newTarget = fLD.getCurrentPosition() + (int) (ticks);
+        fLD.setTargetPosition(newTarget);
+        newTarget = fRD.getCurrentPosition() + (int) (ticks);
+        fRD.setTargetPosition(newTarget);
+        newTarget = bLD.getCurrentPosition() + (int) (ticks);
+        bLD.setTargetPosition(newTarget);
+        newTarget = bRD.getCurrentPosition() + (int) (ticks);
+        bRD.setTargetPosition(newTarget);
 
-            fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            runtime.reset();
-            while (opModeIsActive() &&
-                    (runtime.seconds() < driveTime)) {
-                telemetry.addData("Runtime", runtime.milliseconds());
-                telemetry.update();
+        fLD.setMode(RUN_TO_POSITION);
+        fRD.setMode(RUN_TO_POSITION);
+        bLD.setMode(RUN_TO_POSITION);
+        bRD.setMode(RUN_TO_POSITION);
+        runtime.reset();
 
-            }
-            set_all_motors_zero();
+        fLD.setPower(Math.abs(speed));
+        fRD.setPower(Math.abs(speed));
+        bLD.setPower(Math.abs(speed));
+        bRD.setPower(Math.abs(speed));
 
-
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS) &&
+                (fLD.isBusy())) {
+            telemetry.addData("Running to", " %7d", newTarget);
+            telemetry.addData("Currently at ", fLD.getCurrentPosition());
+            telemetry.update();
         }
+        set_all_motors_zero();
+
+
     }
+
 
     public void turnLeft(double speed,
                          double driveTime) {
@@ -335,44 +359,44 @@ public class AutoHiveUp extends LinearOpMode {
         }
 
 
-        public void Auto() {
-                //todo idk if works
+//        public void Auto() {
+//                //todo idk if works
+//
+//             shooter();
+//        forward(0.4, 0.6);
+//        strafeleft(0.5, 1.4);
+//        forward(0.5, 2.7);
+//        strafeleft(0.5, 0.8);
+//        straferight(0.2, 0.4);
+//
+//
+//    }
 
-             shooter();
-        forward(0.4, 0.6);
-        strafeleft(0.5, 1.4);
-        forward(0.5, 2.7);
-        strafeleft(0.5, 0.8);
-        straferight(0.2, 0.4);
 
 
-    }
-
-
-
-        public void Auto_flower () {
-            //todo idk if works
-            shooter();
-            forward(0.4, 0.6);
-            strafeleft(0.5, 1.4);
-            sleep(2000);
-            turnLeft(0.3, 0.4);
-            sleep(2000);
-            //todo idk if intakeS1.setPosition(0.2); is the right one it might be intakeS1.setPosition(0.8); btw i am writing this and peting my dog
-            intakeS1.setPosition(0.2);
-            //  intakeS1.setPosition(0.8);
-            sleep(2000);
-            forwardintake(0.5,0.3);
-            sleep(2000);
-            intakevoid();
-            forward(0.5,0.3);
-            sleep(2000);
-            turnRight(0.3,0.4);
-            sleep(2000);
-            forward(0.5, 2.7);
-            strafeleft(0.5, 0.8);
-            straferight(0.2, 0.4);
-        }
+//        public void Auto_flower () {
+//            //todo idk if works
+//            shooter();
+//            forward(0.4, 0.6);
+//            strafeleft(0.5, 1.4);
+//            sleep(2000);
+//            turnLeft(0.3, 0.4);
+//            sleep(2000);
+//            //todo idk if intakeS1.setPosition(0.2); is the right one it might be intakeS1.setPosition(0.8); btw i am writing this and peting my dog
+//            intakeS1.setPosition(0.2);
+//            //  intakeS1.setPosition(0.8);
+//            sleep(2000);
+//            forward(0.5,0.3);
+//            sleep(2000);
+//            intakevoid();
+//            forward(0.5,538,3);
+//            sleep(2000);
+//            turnRight(0.3,0.4);
+//            sleep(2000);
+//            forward(0.5, 538,3);
+//            strafeleft(0.5, 0.8);
+//            straferight(0.2, 0.4);
+     //   }
     public void intakevoid() {
         //todo idk if works yet.
 
@@ -407,60 +431,111 @@ public class AutoHiveUp extends LinearOpMode {
 
 
     }
-    public void forwardintake(double speed,
-                         double driveTime) {
-        //todo idk if works yet.
+    public void back(double speed,
+                              double ticks,
+                              double timeoutS){
+        int newTarget;
 
+        newTarget = fLD.getCurrentPosition() + (int) (ticks);
+        fLD.setTargetPosition(newTarget);
+        newTarget = fRD.getCurrentPosition() + (int) (ticks);
+        fRD.setTargetPosition(newTarget);
+        newTarget = bLD.getCurrentPosition() + (int) (ticks);
+        bLD.setTargetPosition(newTarget);
+        newTarget = bRD.getCurrentPosition() + (int) (ticks);
+        bRD.setTargetPosition(newTarget);
+
+        fLD.setMode(RUN_TO_POSITION);
+        fRD.setMode(RUN_TO_POSITION);
+        bLD.setMode(RUN_TO_POSITION);
+        bRD.setMode(RUN_TO_POSITION);
+        runtime.reset();
 
         fLD.setPower(Math.abs(speed));
         fRD.setPower(Math.abs(speed));
         bLD.setPower(Math.abs(speed));
         bRD.setPower(Math.abs(speed));
 
-        fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        runtime.reset();
         while (opModeIsActive() &&
-                (runtime.seconds() < driveTime)) {
-            telemetry.addData("Runtime", runtime.milliseconds());
+                (runtime.seconds() < timeoutS) &&
+                (fLD.isBusy())) {
+            telemetry.addData("Running to", " %7d", newTarget);
+            telemetry.addData("Currently at ", fLD.getCurrentPosition());
             telemetry.update();
-
         }
         set_all_motors_zero();
 
 
     }
-    public void Auto_flower_shoot_again () {
-        //todo idk if works
-        shooter();
-        forward(0.4, 0.6);
-        strafeleft(0.5, 1.4);
-        sleep(2000);
-        turnLeft(0.3, 0.4);
-        sleep(2000);
-        //todo idk if intakeS1.setPosition(0.2); is the right one it might be intakeS1.setPosition(0.8);
-        intakeS1.setPosition(0.2);
-        //  intakeS1.setPosition(0.8);
-        sleep(2000);
-        forwardintake(0.5,0.3);
-        sleep(2000);
-        intakevoid();
-        forward(0.5,0.3);
-        sleep(2000);
-        turnRight(0.3,0.4);
-        sleep(2000);
-        straferight(0.5, 1.4);
-        forwardintake(0.4, 0.6);
-        sleep(2000);
-        shooter();
-        sleep(2000);
-        forward(0.4, 0.6);
-        strafeleft(0.5, 1.4);
-        forwardintake(0.5, 2.7);
-        strafeleft(0.5, 0.8);
-        straferight(0.2, 0.4);
+//    public void Auto_flower_shoot_again () {
+//        //todo idk if works
+//        shooter();
+//        forward(0.4, 0.6);
+//        strafeleft(0.5, 1.4);
+//        sleep(2000);
+//        turnLeft(0.3, 0.4);
+//        sleep(2000);
+//        //todo idk if intakeS1.setPosition(0.2); is the right one it might be intakeS1.setPosition(0.8);
+//        intakeS1.setPosition(0.2);
+//        //  intakeS1.setPosition(0.8);
+//        sleep(2000);
+//        forward(0.5,0.3,3);
+//        sleep(2000);
+//        intakevoid();
+//        forward(0.2,538,3);
+//        sleep(2000);
+//        turnRight(0.3,0.4);
+//        sleep(2000);
+//        straferight(0.5, 1.4);
+//        forward(0.2, 0.6,3);
+//        sleep(2000);
+//        shooter();
+//        sleep(2000);
+//        forward(0.2,538,3);
+//        strafeleft(0.5, 1.4);
+//        forward(0.5, 538,3);
+//        strafeleft(0.5, 0.8);
+//        straferight(0.2, 0.4);
+//    }
+   public void forward(double speed,
+    double ticks,
+    double timeoutS){
+        int newTarget;
+
+        newTarget = fLD.getCurrentPosition() + (int) (ticks);
+        fLD.setTargetPosition(newTarget);
+        newTarget = fRD.getCurrentPosition() - (int) (ticks);
+        fRD.setTargetPosition(newTarget);
+        newTarget = bLD.getCurrentPosition() + (int) (ticks);
+        bLD.setTargetPosition(newTarget);
+        newTarget = bRD.getCurrentPosition() - (int) (ticks);
+        bRD.setTargetPosition(newTarget);
+
+        fLD.setMode(RUN_TO_POSITION);
+        fRD.setMode(RUN_TO_POSITION);
+        bLD.setMode(RUN_TO_POSITION);
+        bRD.setMode(RUN_TO_POSITION);
+        runtime.reset();
+
+        fLD.setPower(Math.abs(speed));
+        fRD.setPower(Math.abs(speed));
+        bLD.setPower(Math.abs(speed));
+        bRD.setPower(Math.abs(speed));
+
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS) &&
+                (fLD.isBusy())) {
+            telemetry.addData("Running to", " %7d", newTarget);
+            telemetry.addData("Currently at ", fLD.getCurrentPosition());
+            telemetry.addData("Currently at ", fRD.getCurrentPosition());
+            telemetry.addData("Currently at ", bLD.getCurrentPosition());
+            telemetry.addData("Currently at ", bRD.getCurrentPosition());
+            telemetry.update();
+            telemetry.update();
+        }
+        set_all_motors_zero();
+
+
     }
 }
 

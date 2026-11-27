@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="AutoHiveUp4", group="Robot")
+@Autonomous(name="Push", group="Robot")
 
 public class push extends LinearOpMode {
     boolean sense = true;
@@ -88,12 +88,16 @@ public class push extends LinearOpMode {
         pollenShooter.setDirection(DcMotor.Direction.REVERSE);
         nectarShooter.setDirection(DcMotor.Direction.FORWARD);
 
+        fLD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fRD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bLD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bRD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         waitForStart();
 
 
 
-        while (toggle3) {
+        while (opModeIsActive()) {
         fLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fRD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bLD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
