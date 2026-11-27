@@ -92,7 +92,11 @@ public class testEncoder  extends LinearOpMode {
             telemetry.addData("Count",count);
             telemetry.update();
            forward(1, 500, 1);
+           sleep(5000);
            strafeLeft(1, 500, 1, 50);
+           sleep(5000);
+           strafeRight(1, 500, 1, 50);
+           sleep(5000);
            turn(1, 500, 1);
         }
 
