@@ -8,52 +8,50 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="red_1", group="Robot")
-@Disabled
 public class encoderAutoRed1 extends LinearOpMode {
     boolean sense = true;
     boolean toggle;
     int count = 4;
-    private Servo sorter1;
-    private Servo sorter2;
-    private DcMotor frontLeftDrive = null;
-    private DcMotor frontRightDrive = null;
-    private Servo intakeS = null;
 
-    private DcMotor backLeftDrive = null;
-    private DcMotor backRightDrive = null;
+    //    private Servo sorter1;
+//    private Servo sorter2;
     private AnalogInput laserAnalog;
-    private DcMotor pollen = null;
-    private DcMotor nectar = null;
-    private DcMotor intake = null;
-    private ElapsedTime runtime = new ElapsedTime();
+//    private Servo intakeS1 = null;
+//    private Servo intakeS2 = null;
 
-    private static final double MAX_VOLTS = 3.3;
-    private static final double MAX_DISTANCE_MM = 1000.0;
+
+    private DcMotor fLD = null;
+    private DcMotor fRD = null;
+    private DcMotor bLD = null;
+    private DcMotor bRD = null;
+    //    private DcMotor pollen = null;
+//    private DcMotor nectar = null;
+//    private DcMotor intake = null;
+//    
+    private ElapsedTime runtime = new ElapsedTime();
     static final double FORWARD_SPEED = 0.5;
     static final double TURN_SPEED = 0.4;
+    private static final double MAX_VOLTS = 3.3;
+    private static final double MAX_DISTANCE_MM = 1000.0;
     public void runOpMode() {
-        pollen = hardwareMap.get(DcMotor.class, "pS");
-        nectar = hardwareMap.get(DcMotor.class, "nS");
-        intake = hardwareMap.get(DcMotor.class, "intake");
-        sorter1 = hardwareMap.get(Servo.class, "sorterP");
-        sorter2 = hardwareMap.get(Servo.class, "sorterN");
+        //pollen = hardwareMap.get(DcMotor.class, "pollen");
+        //intake = hardwareMap.get(DcMotor.class, "intake");
+        //sorter1 = hardwareMap.get(Servo.class, "sorter1");
+        //sorter2 = hardwareMap.get(Servo.class, "sorter2");
         laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
-        backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
-        backRightDrive = hardwareMap.get(DcMotor.class, "brd");
-        intakeS = hardwareMap.get(Servo.class, "InS1");
-//       todo intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
-//        servoLeft = hardwareMap.get(CRServo.class, "sL");
-//        servoRight = hardwareMap.get(CRServo.class, "sR");
-
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        pollen.setDirection(DcMotor.Direction.FORWARD);
-        intake.setDirection(DcMotor.Direction.FORWARD);
-        intakeS.setDirection(Servo.Direction.REVERSE);
+        fLD = hardwareMap.get(DcMotor.class, "fld");
+        fRD = hardwareMap.get(DcMotor.class, "frd");
+        bLD = hardwareMap.get(DcMotor.class, "bld");
+        bRD = hardwareMap.get(DcMotor.class, "brd");
+        //intakeS1 = hardwareMap.get(Servo.class, "InS1");
+        //intakeS2 = hardwareMap.get(Servo.class, "InS2");
+        fLD.setDirection(DcMotor.Direction.REVERSE);
+        fRD.setDirection(DcMotor.Direction.FORWARD);
+        bLD.setDirection(DcMotor.Direction.REVERSE);
+        bRD.setDirection(DcMotor.Direction.FORWARD);
+        //pollen.setDirection(DcMotor.Direction.FORWARD);
+        //intakeS1.setDirection(Servo.Direction.REVERSE);
+        //intakeS2.setDirection(Servo.Direction.REVERSE);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
@@ -75,8 +73,9 @@ public class encoderAutoRed1 extends LinearOpMode {
         }
         if (count == 4) {
 
-            intakeS.setPosition(0.2);
-            intake.setPower(0);
+            //intakeS1.setPosition(0.2);
+            //intakeS2.setPosition(0.2);
+            //intake.setPower(0);
         }
         telemetry.addData("Voltage (V)", "%.3f", volts);
         telemetry.addData("Distance (mm)", "%.1f", distanceMM);
@@ -85,7 +84,7 @@ public class encoderAutoRed1 extends LinearOpMode {
         telemetry.addData("count", "");
 
         sleep(10000);
-        pollen.setPower(1);
+        //pollen.setPower(1);
         sleep(500);
         count -= 4;
         forward(0.5, 1000, 10);
@@ -94,10 +93,10 @@ public class encoderAutoRed1 extends LinearOpMode {
     }
 
     public void set_all_motors_zero() {
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
+        fRD.setPower(0);
+        fLD.setPower(0);
+        bRD.setPower(0);
+        bLD.setPower(0);
     }
 
 
@@ -106,39 +105,39 @@ public class encoderAutoRed1 extends LinearOpMode {
                         double timeoutS) {
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
-            frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
-            frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
-            backLeftDrive.setTargetPosition(newTarget);
-            newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
-            backRightDrive.setTargetPosition(newTarget);
+            newTarget = fLD.getCurrentPosition() + (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() + (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() + (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() + (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
 
-            frontLeftDrive.setMode(RUN_TO_POSITION);
-            frontRightDrive.setMode(RUN_TO_POSITION);
-            backLeftDrive.setMode(RUN_TO_POSITION);
-            backRightDrive.setMode(RUN_TO_POSITION);
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
             runtime.reset();
 
-            frontLeftDrive.setPower(Math.abs(speed));
-            frontRightDrive.setPower(Math.abs(speed));
-            backLeftDrive.setPower(Math.abs(speed));
-            backRightDrive.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeftDrive.isBusy())) {
+                    (fLD.isBusy())) {
                 telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
                 telemetry.update();
 
 
             }
-            frontLeftDrive.setPower(0);
-            frontRightDrive.setPower(0);
-            backLeftDrive.setPower(0);
-            backRightDrive.setPower(0);
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
 
 
@@ -153,39 +152,39 @@ public class encoderAutoRed1 extends LinearOpMode {
                            double strafe) {
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = frontLeftDrive.getCurrentPosition() + (int) (ticks);
-            frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() - (int) (ticks);
-            frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
-            backLeftDrive.setTargetPosition(newTarget);
-            newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
-            backRightDrive.setTargetPosition(newTarget);
+            newTarget = fLD.getCurrentPosition() - (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() + (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() + (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() - (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
-            frontLeftDrive.setMode(RUN_TO_POSITION);
-            frontRightDrive.setMode(RUN_TO_POSITION);
-            backLeftDrive.setMode(RUN_TO_POSITION);
-            backRightDrive.setMode(RUN_TO_POSITION);
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
             runtime.reset();
 
-            frontLeftDrive.setPower(Math.abs(speed));
-            frontRightDrive.setPower(Math.abs(speed));
-            backLeftDrive.setPower(Math.abs(speed));
-            backRightDrive.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
 
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeftDrive.isBusy())) {
+                    (fLD.isBusy())) {
                 telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
                 telemetry.update();
             }
             set_all_motors_zero();
 
-            frontLeftDrive.setPower(0);
-            frontRightDrive.setPower(0);
-            backLeftDrive.setPower(0);
-            backRightDrive.setPower(0);
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
         }
         }
@@ -195,39 +194,39 @@ public class encoderAutoRed1 extends LinearOpMode {
         double strafe){
             int newTarget;
             if (opModeIsActive()) {
-                newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
-                frontLeftDrive.setTargetPosition(newTarget);
-                newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
-                frontRightDrive.setTargetPosition(newTarget);
-                newTarget = backLeftDrive.getCurrentPosition() + (int) (ticks);
-                backLeftDrive.setTargetPosition(newTarget);
-                newTarget = backRightDrive.getCurrentPosition() - (int) (ticks);
-                backRightDrive.setTargetPosition(newTarget);
+                newTarget = fLD.getCurrentPosition() - (int) (ticks);
+                fLD.setTargetPosition(newTarget);
+                newTarget = fRD.getCurrentPosition() + (int) (ticks);
+                fRD.setTargetPosition(newTarget);
+                newTarget = bLD.getCurrentPosition() - (int) (ticks);
+                bLD.setTargetPosition(newTarget);
+                newTarget = bRD.getCurrentPosition() + (int) (ticks);
+                bRD.setTargetPosition(newTarget);
 
-                frontLeftDrive.setMode(RUN_TO_POSITION);
-                frontRightDrive.setMode(RUN_TO_POSITION);
-                backLeftDrive.setMode(RUN_TO_POSITION);
-                backRightDrive.setMode(RUN_TO_POSITION);
+                fLD.setMode(RUN_TO_POSITION);
+                fRD.setMode(RUN_TO_POSITION);
+                bLD.setMode(RUN_TO_POSITION);
+                bRD.setMode(RUN_TO_POSITION);
                 runtime.reset();
 
-                frontLeftDrive.setPower(Math.abs(speed));
-                frontRightDrive.setPower(Math.abs(speed));
-                backLeftDrive.setPower(Math.abs(speed));
-                backRightDrive.setPower(Math.abs(speed));
+                fLD.setPower(Math.abs(speed));
+                fRD.setPower(Math.abs(speed));
+                bLD.setPower(Math.abs(speed));
+                bRD.setPower(Math.abs(speed));
 
                 while (opModeIsActive() &&
                         (runtime.seconds() < timeoutS) &&
-                        (frontLeftDrive.isBusy())) {
+                        (fLD.isBusy())) {
                     telemetry.addData("Running to", " %7d", newTarget);
-                    telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                    telemetry.addData("Currently at ", fLD.getCurrentPosition());
                     telemetry.update();
                 }
                 set_all_motors_zero();
 
-                frontLeftDrive.setPower(0);
-                frontRightDrive.setPower(0);
-                backLeftDrive.setPower(0);
-                backRightDrive.setPower(0);
+                fLD.setPower(0);
+                fRD.setPower(0);
+                bLD.setPower(0);
+                bRD.setPower(0);
                 sleep(250);
             }
         }
@@ -236,39 +235,39 @@ public class encoderAutoRed1 extends LinearOpMode {
                        double timeoutS){
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = frontLeftDrive.getCurrentPosition() - (int) (ticks);
-            frontLeftDrive.setTargetPosition(newTarget);
-            newTarget = frontRightDrive.getCurrentPosition() + (int) (ticks);
-            frontRightDrive.setTargetPosition(newTarget);
-            newTarget = backLeftDrive.getCurrentPosition() - (int) (ticks);
-            backLeftDrive.setTargetPosition(newTarget);
-            newTarget = backRightDrive.getCurrentPosition() + (int) (ticks);
-            backRightDrive.setTargetPosition(newTarget);
+            newTarget = fLD.getCurrentPosition() + (int) (ticks);
+            fLD.setTargetPosition(newTarget);
+            newTarget = fRD.getCurrentPosition() - (int) (ticks);
+            fRD.setTargetPosition(newTarget);
+            newTarget = bLD.getCurrentPosition() + (int) (ticks);
+            bLD.setTargetPosition(newTarget);
+            newTarget = bRD.getCurrentPosition() - (int) (ticks);
+            bRD.setTargetPosition(newTarget);
 
-            frontLeftDrive.setMode(RUN_TO_POSITION);
-            frontRightDrive.setMode(RUN_TO_POSITION);
-            backLeftDrive.setMode(RUN_TO_POSITION);
-            backRightDrive.setMode(RUN_TO_POSITION);
+            fLD.setMode(RUN_TO_POSITION);
+            fRD.setMode(RUN_TO_POSITION);
+            bLD.setMode(RUN_TO_POSITION);
+            bRD.setMode(RUN_TO_POSITION);
             runtime.reset();
 
-            frontLeftDrive.setPower(Math.abs(speed));
-            frontRightDrive.setPower(Math.abs(speed));
-            backLeftDrive.setPower(Math.abs(speed));
-            backRightDrive.setPower(Math.abs(speed));
+            fLD.setPower(Math.abs(speed));
+            fRD.setPower(Math.abs(speed));
+            bLD.setPower(Math.abs(speed));
+            bRD.setPower(Math.abs(speed));
 
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeftDrive.isBusy())) {
+                    (fLD.isBusy())) {
                 telemetry.addData("Running to", " %7d", newTarget);
-                telemetry.addData("Currently at ", frontLeftDrive.getCurrentPosition());
+                telemetry.addData("Currently at ", fLD.getCurrentPosition());
                 telemetry.update();
             }
             set_all_motors_zero();
 
-            frontLeftDrive.setPower(0);
-            frontRightDrive.setPower(0);
-            backLeftDrive.setPower(0);
-            backRightDrive.setPower(0);
+            fLD.setPower(0);
+            fRD.setPower(0);
+            bLD.setPower(0);
+            bRD.setPower(0);
             sleep(250);
         }
         }

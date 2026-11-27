@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="test", group="Robot")
@@ -17,20 +18,19 @@ public class testEncoder  extends LinearOpMode {
         boolean toggle;
         int count = 4;
 
-        private Servo sorter1;
-        private Servo sorter2;
+        //private Servo sorter1;
+        //private Servo sorter2;
         private AnalogInput laserAnalog;
-        private Servo intakeS1 = null;
-    private Servo intakeS2 = null;
+        //private Servo intakeS1 = null;
+    //private Servo intakeS2 = null;
 
 
         private DcMotor fLD = null;
         private DcMotor fRD = null;
         private DcMotor bLD = null;
         private DcMotor bRD = null;
-        private DcMotor pollen = null;
-        private DcMotor nectar = null;
-        private DcMotor intake = null;
+        //private DcMotor pollen = null;
+        //private DcMotor intake = null;
         private ElapsedTime runtime = new ElapsedTime();
         static final double FORWARD_SPEED = 0.5;
         static final double TURN_SPEED = 0.4;
@@ -38,25 +38,24 @@ public class testEncoder  extends LinearOpMode {
         private static final double MAX_DISTANCE_MM = 1000.0;
 
         public void runOpMode() {
-            pollen = hardwareMap.get(DcMotor.class, "pollen");
-            nectar = hardwareMap.get(DcMotor.class, "nectar");
-            intake = hardwareMap.get(DcMotor.class, "intake");
-            sorter1 = hardwareMap.get(Servo.class, "sorter1");
-            sorter2 = hardwareMap.get(Servo.class, "sorter2");
+            //pollen = hardwareMap.get(DcMotor.class, "pollen");
+            //intake = hardwareMap.get(DcMotor.class, "intake");
+            //sorter1 = hardwareMap.get(Servo.class, "sorter1");
+            //sorter2 = hardwareMap.get(Servo.class, "sorter2");
             laserAnalog = hardwareMap.get(AnalogInput.class, "laserAnalogInput");
-            fLD = hardwareMap.get(DcMotor.class, "FLD");
-            fRD = hardwareMap.get(DcMotor.class, "FRD");
-            bLD = hardwareMap.get(DcMotor.class, "BLD");
-            bRD = hardwareMap.get(DcMotor.class, "BRD");
-            intakeS1 = hardwareMap.get(Servo.class, "InS1");
-            intakeS2 = hardwareMap.get(Servo.class, "InS2");
-            fLD.setDirection(DcMotor.Direction.FORWARD);
-            fRD.setDirection(DcMotor.Direction.REVERSE);
-            bLD.setDirection(DcMotor.Direction.FORWARD);
-            bRD.setDirection(DcMotor.Direction.REVERSE);
-            pollen.setDirection(DcMotor.Direction.FORWARD);
-            intakeS1.setDirection(Servo.Direction.REVERSE);
-            intakeS2.setDirection(Servo.Direction.REVERSE);
+            fLD = hardwareMap.get(DcMotor.class, "fld");
+            fRD = hardwareMap.get(DcMotor.class, "frd");
+            bLD = hardwareMap.get(DcMotor.class, "bld");
+            bRD = hardwareMap.get(DcMotor.class, "brd");
+            //intakeS1 = hardwareMap.get(Servo.class, "InS1");
+            //intakeS2 = hardwareMap.get(Servo.class, "InS2");
+            fLD.setDirection(DcMotor.Direction.REVERSE);
+            fRD.setDirection(DcMotor.Direction.FORWARD);
+            bLD.setDirection(DcMotor.Direction.REVERSE);
+            bRD.setDirection(DcMotor.Direction.FORWARD);
+            //pollen.setDirection(DcMotor.Direction.FORWARD);
+            //intakeS1.setDirection(Servo.Direction.REVERSE);
+            //intakeS2.setDirection(Servo.Direction.REVERSE);
             telemetry.addData("Status", "Ready to run");
             telemetry.update();
 
@@ -83,21 +82,27 @@ public class testEncoder  extends LinearOpMode {
 
             }
             if (count == 4) {
-
-                intakeS1.setPosition(0.2);
-                intake.setPower(0);
+                //intakeS1.setPosition(0.2);
+                //intake.setPower(0);
             }
-            telemetry.addData("Voltage (V)", "%.3f", volts);
-            telemetry.addData("Distance (mm)", "%.1f", distanceMM);
-            telemetry.addData("Count",count);
+            telemetry.addData("Currently at fLD", fLD.getCurrentPosition());
+            telemetry.addData("Currently at fRD", fRD.getCurrentPosition());
+            telemetry.addData("Currently at bLD", bLD.getCurrentPosition());
+            telemetry.addData("Currently at bRD", bRD.getCurrentPosition());
+            //telemetry.addData("Voltage (V)", "%.3f", volts);
+            //telemetry.addData("Distance (mm)", "%.1f", distanceMM);
+            //telemetry.addData("Count",count);
             telemetry.update();
            forward(1, 500, 1);
-           sleep(5000);
+           sleep(500);
            strafeLeft(1, 500, 1, 50);
-           sleep(5000);
+           sleep(500);
            strafeRight(1, 500, 1, 50);
-           sleep(5000);
-           turn(1, 500, 1);
+           sleep(500);
+           turn(1, 1000000000, 1);
+            turn(1, 1000000000, 1);
+            turn(1, 1000000000, 1);
+            turn(1, 1000000000, 1);
         }
 
         public void set_all_motors_zero() {
@@ -111,13 +116,13 @@ public class testEncoder  extends LinearOpMode {
                             double timeoutS) {
             int newTarget;
             if (opModeIsActive()) {
-                newTarget = fLD.getCurrentPosition() - (int) (ticks);
+                newTarget = fLD.getCurrentPosition() + (int) (ticks);
                 fLD.setTargetPosition(newTarget);
-                newTarget = fRD.getCurrentPosition() - (int) (ticks);
+                newTarget = fRD.getCurrentPosition() + (int) (ticks);
                 fRD.setTargetPosition(newTarget);
-                newTarget = bLD.getCurrentPosition() - (int) (ticks);
+                newTarget = bLD.getCurrentPosition() + (int) (ticks);
                 bLD.setTargetPosition(newTarget);
-                newTarget = bRD.getCurrentPosition() - (int) (ticks);
+                newTarget = bRD.getCurrentPosition() + (int) (ticks);
                 bRD.setTargetPosition(newTarget);
                 fLD.setMode(RUN_TO_POSITION);
                 fRD.setMode(RUN_TO_POSITION);
